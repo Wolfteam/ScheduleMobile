@@ -3,8 +3,9 @@ package com.wolfteam20.schedulemobile.di.modules;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import com.wolfteam20.schedulemobile.BuildConfig;
 import com.wolfteam20.schedulemobile.data.services.ScheduleService;
-import com.wolfteam20.schedulemobile.di.scopes.ScheduleApplicationScope;
+import com.wolfteam20.schedulemobile.di.scopes.ApplicationScope;
 
 import dagger.Module;
 import dagger.Provides;
@@ -19,23 +20,23 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ScheduleServiceModule {
 
     @Provides
-    @ScheduleApplicationScope
+    @ApplicationScope
     public ScheduleService provideScheduleService(Retrofit retrofit){
         return retrofit.create(ScheduleService.class);
     }
 
     @Provides
-    @ScheduleApplicationScope
+    @ApplicationScope
     public Gson provideGson(){
         GsonBuilder gsonBuilder = new GsonBuilder();
         return gsonBuilder.create();
     }
 
     @Provides
-    @ScheduleApplicationScope
+    @ApplicationScope
     public Retrofit provideRetrofit(OkHttpClient okHttpClient, Gson gson) {
         return new Retrofit.Builder()
-                .baseUrl("https://api.github.com")
+                .baseUrl(BuildConfig.URLBaseAPI)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .client(okHttpClient)
                 .build();

@@ -3,9 +3,11 @@ package com.wolfteam20.schedulemobile.di.modules;
 import android.app.Activity;
 import android.content.Context;
 
+import com.wolfteam20.schedulemobile.data.services.ScheduleService;
 import com.wolfteam20.schedulemobile.di.qualifiers.ActivityContext;
 import com.wolfteam20.schedulemobile.di.scopes.ActivityScope;
-import com.wolfteam20.schedulemobile.ui.login.LoginContract;
+import com.wolfteam20.schedulemobile.ui.login.LoginContractPresenter;
+import com.wolfteam20.schedulemobile.ui.login.LoginContractView;
 import com.wolfteam20.schedulemobile.ui.login.LoginPresenter;
 
 import dagger.Module;
@@ -38,7 +40,7 @@ public class ActivityModule {
 
     @Provides
     @ActivityScope
-    LoginContract.Presenter<LoginContract.View> provideLoginPresenter(LoginPresenter<LoginContract.View> presenter) {
-        return presenter;
+    LoginContractPresenter<LoginContractView> provideLoginPresenter(ScheduleService service) {
+        return new LoginPresenter<>(service);
     }
 }

@@ -11,7 +11,7 @@ import dagger.Component;
  */
 
 @ActivityScope
-@Component(dependencies = ScheduleApplicationComponent.class, modules = ActivityModule.class)
+@Component(dependencies = ApplicationComponent.class, modules = ActivityModule.class)
 public interface ActivityComponent {
     void inject(LoginActivity loginActivity);
 }

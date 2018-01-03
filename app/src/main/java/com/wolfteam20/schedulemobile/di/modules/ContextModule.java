@@ -5,7 +5,7 @@ import android.content.Context;
 
 
 import com.wolfteam20.schedulemobile.di.qualifiers.ApplicationContext;
-import com.wolfteam20.schedulemobile.di.scopes.ScheduleApplicationScope;
+import com.wolfteam20.schedulemobile.di.scopes.ApplicationScope;
 
 import dagger.Module;
 import dagger.Provides;
@@ -23,7 +23,7 @@ public class ContextModule {
     }
 
     @Provides
-    @ScheduleApplicationScope
+    @ApplicationScope
     @ApplicationContext
     public Context provideContext() {
         return mContext;

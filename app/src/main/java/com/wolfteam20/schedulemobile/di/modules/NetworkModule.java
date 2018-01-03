@@ -4,7 +4,7 @@ import android.content.Context;
 
 
 import com.wolfteam20.schedulemobile.di.qualifiers.ApplicationContext;
-import com.wolfteam20.schedulemobile.di.scopes.ScheduleApplicationScope;
+import com.wolfteam20.schedulemobile.di.scopes.ApplicationScope;
 
 import java.io.File;
 
@@ -20,20 +20,20 @@ import okhttp3.OkHttpClient;
 public class NetworkModule {
 
     @Provides
-    @ScheduleApplicationScope
+    @ApplicationScope
     public Cache provideHttpCache(File cacheFile) {
         long cacheSize = 10 * 1024 * 1024;
         return new Cache(cacheFile, cacheSize);
     }
 
     @Provides
-    @ScheduleApplicationScope
+    @ApplicationScope
     public File provideCacheFile(@ApplicationContext Context context){
         return new File(context.getCacheDir(), "okhttp_cache");
     }
 
     @Provides
-    @ScheduleApplicationScope
+    @ApplicationScope
     public OkHttpClient provideOkHttpClient(Cache cache) {
         return new OkHttpClient.Builder()
                 .cache(cache)
