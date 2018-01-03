@@ -4,9 +4,9 @@ package com.wolfteam20.schedulemobile.ui.base;
  * Created by Efrain Bastidas on 1/2/2018.
  */
 
-public class BasePresenter<V extends BaseContract.View> implements BaseContract.Presenter<V> {
+public class BasePresenter<V extends BaseContractView> implements BaseContractPresenter<V> {
 
-    private V mBaseView = null;
+    private V mBaseView;
 
     @Override
     public void onAttach(V view) {
