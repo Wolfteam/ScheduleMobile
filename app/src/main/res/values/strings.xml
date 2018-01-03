@@ -1,3 +1,16 @@
 <resources>
+
+    <string name="iniciarSession">Iniciar Sesion</string>
+    <!--Hints-->
+    <string name="username_hint">Introduzca su usuario..</string>
+    <string name="password_hint">Introduzca su password..</string>
+
+    <!--Buttons-->
+    <string name="sign_in">Sign In</string>
+
     <string name="app_name">ScheduleMobile</string>
+
+
+    <string name="copyright_a">© Copyright 2017</string>
+    <string name="copyright_b">Wolfteam20. All rights reserved.</string>
 </resources>

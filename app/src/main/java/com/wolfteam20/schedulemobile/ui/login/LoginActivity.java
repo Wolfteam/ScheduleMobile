@@ -21,9 +21,9 @@ import butterknife.OnClick;
 
 public class LoginActivity extends BaseActivity implements LoginContractView {
 
-    @BindView(R.id.username)
+    @BindView(R.id.editTextUsername)
     EditText textViewUsername;
-    @BindView(R.id.password)
+    @BindView(R.id.editTextPassword)
     EditText textViewPassword;
 
     @Inject
