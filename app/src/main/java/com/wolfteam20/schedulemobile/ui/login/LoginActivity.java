@@ -2,7 +2,10 @@ package com.wolfteam20.schedulemobile.ui.login;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.wolfteam20.schedulemobile.R;
@@ -21,16 +24,15 @@ import butterknife.OnClick;
 
 public class LoginActivity extends BaseActivity implements LoginContractView {
 
-    @BindView(R.id.editTextUsername)
-    EditText textViewUsername;
-    @BindView(R.id.editTextPassword)
-    EditText textViewPassword;
+    @BindView(R.id.editTextUsername) EditText textViewUsername;
+    @BindView(R.id.editTextPassword) EditText textViewPassword;
+    @BindView(R.id.loginProgressBar) ProgressBar mProgressBar;
+    @BindView(R.id.btnSignIn) Button mBtnSignin;
 
     @Inject
     LoginContractPresenter<LoginContractView> mPresenter;
     @Inject
     ScheduleService mScheduleService;
-    //private static MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,12 +56,14 @@ public class LoginActivity extends BaseActivity implements LoginContractView {
 
     @Override
     public void showLoading() {
-        Toast.makeText(this, "Autenticando...", Toast.LENGTH_SHORT).show();
+        mProgressBar.setVisibility(View.VISIBLE);
+        setEnabledViews(false);
     }
 
     @Override
     public void hideLoading() {
-        Toast.makeText(this, "Listo!!!", Toast.LENGTH_SHORT).show();
+        mProgressBar.setVisibility(View.INVISIBLE);
+        setEnabledViews(true);
     }
 
     @Override
@@ -75,5 +79,12 @@ public class LoginActivity extends BaseActivity implements LoginContractView {
     @Override
     public void intentToEventActivity() {
 
+    }
+
+    @Override
+    public void setEnabledViews(boolean enabled){
+        textViewPassword.setEnabled(enabled);
+        textViewUsername.setEnabled(enabled);
+        mBtnSignin.setEnabled(enabled);
     }
 }

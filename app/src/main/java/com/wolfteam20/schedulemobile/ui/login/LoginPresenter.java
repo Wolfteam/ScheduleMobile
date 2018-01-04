@@ -27,9 +27,11 @@ public class LoginPresenter<V extends LoginContractView>
 
     @Override
     public void onLoginClick(String username, String password) {
+        getView().showLoading();
         mScheduleService.getToken(username, password).enqueue(new Callback<TokenDTO>() {
             @Override
             public void onResponse(Call<TokenDTO> call, Response<TokenDTO> response) {
+                getView().hideLoading();
                 if (response.isSuccessful()) {
                     String username = response.body().getUsername();
                     TokenDTO token = response.body();
@@ -41,6 +43,7 @@ public class LoginPresenter<V extends LoginContractView>
 
             @Override
             public void onFailure(Call<TokenDTO> call, Throwable t) {
+                getView().hideLoading();
                 getView().showError("Ocurrio un error al comunicarse con la API");
             }
         });

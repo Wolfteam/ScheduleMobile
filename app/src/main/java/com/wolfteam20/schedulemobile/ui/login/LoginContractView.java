@@ -17,4 +17,5 @@ public interface LoginContractView extends BaseContractView {
 
     void intentToEventActivity();
 
+    void setEnabledViews(boolean enabled);
 }
