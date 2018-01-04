@@ -12,12 +12,12 @@ android {
     }
     buildTypes {
         release {
-            buildConfigField "String", "URLBaseAPI", "\"http:/192.168.1.102/ScheduleAPI/\""
+            buildConfigField "String", "URLBaseAPI", "\"http://192.168.1.102/ScheduleAPI/\""
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
-            buildConfigField "String", "URLBaseAPI", "\"http:/192.168.189.130/ScheduleAPI/\""
+            buildConfigField "String", "URLBaseAPI", "\"http://192.168.1.102/ScheduleAPI/\""
         }
     }
 }
