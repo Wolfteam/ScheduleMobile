@@ -49,6 +49,11 @@ public class LoginActivity extends BaseActivity implements LoginContractView {
 
     @OnClick(R.id.btnSignIn)
     public void login() {
+        boolean isNetworkAvailble = isNetworkAvailable();
+        if (!isNetworkAvailble){
+            showError("No hay red disponible.");
+            return;
+        }
         String username = textViewUsername.getText().toString();
         String password = textViewPassword.getText().toString();
         mPresenter.onLoginClick(username, password);
