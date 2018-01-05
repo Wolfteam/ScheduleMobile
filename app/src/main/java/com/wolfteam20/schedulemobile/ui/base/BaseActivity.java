@@ -9,6 +9,7 @@ import com.wolfteam20.schedulemobile.di.components.ActivityComponent;
 //import com.wolfteam20.schedulemobile.di.components.DaggerActivityComponent;
 import com.wolfteam20.schedulemobile.di.components.DaggerActivityComponent;
 import com.wolfteam20.schedulemobile.di.modules.ActivityModule;
+import com.wolfteam20.schedulemobile.utils.NetworkUtilities;
 
 /**
  * Created by Efrain Bastidas on 1/2/2018.
@@ -30,7 +31,7 @@ public class BaseActivity extends AppCompatActivity implements BaseContractView 
 
     @Override
     public boolean isNetworkAvailable() {
-        return false;
+        return NetworkUtilities.isNetworkAvailable(App.getApplication(this));
     }
 
     public ActivityComponent getActivityComponent(){

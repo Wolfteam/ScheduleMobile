@@ -5,5 +5,9 @@ package com.wolfteam20.schedulemobile.ui.base;
  */
 
 public interface BaseContractView {
+    /**
+     * Indica si la red esta disponible para su uso
+     * @return True en caso de estarlo
+     */
     boolean isNetworkAvailable();
 }
