@@ -12,14 +12,18 @@
         android:background="@color/greyDarken4"
         android:gravity="center"
         android:orientation="horizontal">
-
+        <ImageView
+            android:contentDescription="@string/app_name"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@mipmap/ic_launcher"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/app_name"
             android:textAlignment="center"
             android:textColor="@android:color/background_light"
-            android:textSize="40sp" />
+            android:textSize="30sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -113,4 +117,5 @@
                 android:textColor="@android:color/background_light"
                 android:textSize="15sp" />
     </LinearLayout>
+
 </RelativeLayout>
