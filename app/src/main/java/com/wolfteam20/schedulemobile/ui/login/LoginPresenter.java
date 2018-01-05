@@ -1,6 +1,7 @@
 package com.wolfteam20.schedulemobile.ui.login;
 
 import com.wolfteam20.schedulemobile.data.models.TokenDTO;
+import com.wolfteam20.schedulemobile.data.preferences.PreferencesHelperContract;
 import com.wolfteam20.schedulemobile.data.services.ScheduleService;
 import com.wolfteam20.schedulemobile.ui.base.BasePresenter;
 
@@ -19,10 +20,12 @@ public class LoginPresenter<V extends LoginContractView>
         implements LoginContractPresenter<V> {
 
     private ScheduleService mScheduleService;
+    private PreferencesHelperContract mPreferenceHelper;
 
     @Inject
-    public LoginPresenter(ScheduleService scheduleService) {
+    public LoginPresenter(ScheduleService scheduleService, PreferencesHelperContract preferencesHelper) {
         mScheduleService = scheduleService;
+        mPreferenceHelper = preferencesHelper;
     }
 
     @Override
@@ -35,6 +38,7 @@ public class LoginPresenter<V extends LoginContractView>
                 if (response.isSuccessful()) {
                     String username = response.body().getUsername();
                     TokenDTO token = response.body();
+                    mPreferenceHelper.storeAccessToken(token.getAuthenticationToken());
                     getView().showSuccess("Autenticado el usuario: " + username + ". Su Token fue creado: " + token.getCreateDate());
                 }else{
                     getView().showError("Usuario o clave invalidas");

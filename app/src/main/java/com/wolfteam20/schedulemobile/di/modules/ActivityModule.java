@@ -3,6 +3,7 @@ package com.wolfteam20.schedulemobile.di.modules;
 import android.app.Activity;
 import android.content.Context;
 
+import com.wolfteam20.schedulemobile.data.preferences.PreferencesHelperContract;
 import com.wolfteam20.schedulemobile.data.services.ScheduleService;
 import com.wolfteam20.schedulemobile.di.qualifiers.ActivityContext;
 import com.wolfteam20.schedulemobile.di.scopes.ActivityScope;
@@ -29,18 +30,18 @@ public class ActivityModule {
     @Provides
     @ActivityContext
     @ActivityScope
-    Context provideContext()  {
+    Context provideContext() {
         return mActivity;
     }
 
     @Provides
-    Activity provideActivity(){
+    Activity provideActivity() {
         return mActivity;
     }
 
     @Provides
     @ActivityScope
-    LoginContractPresenter<LoginContractView> provideLoginPresenter(ScheduleService service) {
-        return new LoginPresenter<>(service);
+    LoginContractPresenter<LoginContractView> provideLoginPresenter(ScheduleService service, PreferencesHelperContract prefs) {
+        return new LoginPresenter<>(service, prefs);
     }
 }
