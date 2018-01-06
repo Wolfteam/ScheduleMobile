@@ -1,5 +1,6 @@
 package com.wolfteam20.schedulemobile.ui.login;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.Toast;
 import com.wolfteam20.schedulemobile.R;
 import com.wolfteam20.schedulemobile.data.services.ScheduleService;
 import com.wolfteam20.schedulemobile.ui.base.BaseActivity;
+import com.wolfteam20.schedulemobile.ui.home.HomeActivity;
 
 import javax.inject.Inject;
 
@@ -83,7 +85,8 @@ public class LoginActivity extends BaseActivity implements LoginContractView {
 
     @Override
     public void intentToEventActivity() {
-
+        Intent intent = new Intent(this, HomeActivity.class);
+        startActivity(intent);
     }
 
     @Override

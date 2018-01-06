@@ -40,6 +40,7 @@ public class LoginPresenter<V extends LoginContractView>
                     TokenDTO token = response.body();
                     mPreferenceHelper.storeAccessToken(token.getAuthenticationToken());
                     getView().showSuccess("Autenticado el usuario: " + username + ". Su Token fue creado: " + token.getCreateDate());
+                    getView().intentToEventActivity();
                 }else{
                     getView().showError("Usuario o clave invalidas");
                 }
