@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+    <group>
+        <item
+            android:id="@+id/menu_home"
+            android:icon="@drawable/opticon_home"
+            android:title="@string/drawer_menu_home" />
+        <item
+            android:id="@+id/menu_dispnobilidad"
+            android:icon="@drawable/opticon_server"
+            android:title="@string/drawer_menu_dispnobilidad" />
+        <item android:title="@string/drawer_menu_editar_db">
+            <menu>
+                <item
+                    android:id="@+id/nav_manage"
+                    android:icon="@android:drawable/ic_menu_save"
+                    android:title="@string/drawer_menu_aulas" />
+                <item
+                    android:id="@+id/nav_logout"
+                    android:icon="@android:drawable/ic_menu_save"
+                    android:title="@string/drawer_menu_materias" />
+            </menu>
+        </item>
+    </group>
+    <item
+        android:id="@+id/menu_logout"
+        android:icon="@drawable/opticon_sign_in"
+        android:title="@string/drawer_menu_logout" />
+</menu>

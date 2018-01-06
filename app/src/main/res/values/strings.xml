@@ -10,7 +10,25 @@
 
     <string name="app_name">ScheduleMobile</string>
 
+    <!--Main Drawer Options-->
+    <string name="drawer_menu_home">Home</string>
+    <string name="drawer_menu_dispnobilidad">Disponibilidad</string>
+    <string name="drawer_menu_editar_db">Editar DB</string>
+    <string name="drawer_menu_aulas">Aulas</string>
+    <string name="drawer_menu_materias">Materias</string>
+    <string name="drawer_menu_periodos">Periodos Academicos</string>
+    <string name="drawer_menu_profesores">Profesores</string>
+    <string name="drawer_menu_profesores_materias">Profesores Materias</string>
+    <string name="drawer_menu_secciones">Secciones</string>
+    <string name="drawer_menu_logout">Cerrar Sesion</string>
 
+    <!--Login Footer-->
     <string name="copyright_a">© Copyright 2017</string>
     <string name="copyright_b">Wolfteam20. All rights reserved.</string>
+    <string name="title_activity_ejemplo">ejemplo</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
 </resources>
