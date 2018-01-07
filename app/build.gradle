@@ -49,4 +49,20 @@ dependencies {
 
     //TextInputLayout
     compile 'com.android.support:design:26.1.0'
+
+    //JWTDecode.Android
+    //compile 'com.auth0.android:jwtdecode:1.1.1'
+
+    //
+    compile 'io.jsonwebtoken:jjwt:0.9.0'
+
+//    compile 'org.bitbucket.b_c:jose4j:0.6.3'
+
+    //MaterialDrawer
+    implementation("com.mikepenz:materialdrawer:6.0.2@aar") {
+        transitive = true
+    }
+    implementation "com.android.support:recyclerview-v7:26.1.0"
+    implementation "com.android.support:support-annotations:26.1.0"
+    implementation 'com.mikepenz:octicons-typeface:3.2.0.4@aar'
 }
