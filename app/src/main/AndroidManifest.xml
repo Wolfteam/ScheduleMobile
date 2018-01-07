@@ -23,7 +23,7 @@
         </activity>
         <activity
             android:name=".ui.home.HomeActivity"
-            android:label="@string/title_activity_ejemplo"
+            android:label="@string/home_activity"
             android:theme="@style/AppTheme">
         </activity>
     </application>

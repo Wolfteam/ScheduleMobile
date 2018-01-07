@@ -7,4 +7,14 @@
     <color name="greyLighten1">#bdbdbd</color>
     <color name="greyDarken1">#757575</color>
     <color name="greyDarken4">#212121</color>
+
+    <color name="greenDarken1">#43a047</color>
+    <color name="greenDarken4">#1b5e20</color>
+
+    <color name="brownDarken4">#3e2723</color>
+
+    <color name="blueDarken4">#0d47a1</color>
+
+    <color name="redDarken4">#b71c1c</color>
+
 </resources>

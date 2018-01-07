@@ -25,10 +25,16 @@
     <!--Login Footer-->
     <string name="copyright_a">© Copyright 2017</string>
     <string name="copyright_b">Wolfteam20. All rights reserved.</string>
-    <string name="title_activity_ejemplo">ejemplo</string>
 
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="navigation_drawer_open">Abir barra de navegacion</string>
+    <string name="navigation_drawer_close">Cerrar barra de navegacion</string>
 
-    <string name="action_settings">Settings</string>
+    <string name="drawer_menu_about">Acerca de</string>
+
+    <!--Cerrar Sesion-->
+    <string name="cerrar_sesion">Cerrar Sesion</string>
+    <string name="cerrar_sesion_msg">¿Esta seguro que desea salir?</string>
+
+    <!--Activities-->
+    <string name="home_activity">Home</string>
 </resources>
