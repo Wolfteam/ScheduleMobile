@@ -29,18 +29,18 @@ public class LoginPresenter<V extends LoginContractView>
     }
 
     @Override
-    public void onLoginClick(String username, String password) {
+    public void onBtnSignInClick(String username, String password) {
         getView().showLoading();
         mScheduleService.getToken(username, password).enqueue(new Callback<TokenDTO>() {
             @Override
             public void onResponse(Call<TokenDTO> call, Response<TokenDTO> response) {
                 getView().hideLoading();
                 if (response.isSuccessful()) {
-                    String username = response.body().getUsername();
                     TokenDTO token = response.body();
                     mPreferenceHelper.storeAccessToken(token.getAuthenticationToken());
-                    getView().showSuccess("Autenticado el usuario: " + username + ". Su Token fue creado: " + token.getCreateDate());
-                    getView().intentToEventActivity();
+                    mPreferenceHelper.storeUserRole();
+                    getView().showSuccess("Autenticado el usuario: " + token.getUsername() + ". Su Token fue creado: " + token.getCreateDate());
+                    getView().intentToHomeActivity();
                 }else{
                     getView().showError("Usuario o clave invalidas");
                 }
@@ -52,5 +52,11 @@ public class LoginPresenter<V extends LoginContractView>
                 getView().showError("Ocurrio un error al comunicarse con la API");
             }
         });
+    }
+
+    @Override
+    public void subscribe() {
+        if (!mPreferenceHelper.getToken().isEmpty())
+            getView().intentToHomeActivity();
     }
 }
