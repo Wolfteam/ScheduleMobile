@@ -24,8 +24,8 @@ public class BasePresenter<V extends BaseContractView> implements BaseContractPr
     }
 
     public V getView(){
-//        if (mBaseView == null)
-//            return new NullPointerException("La vista no puede ser nula");
+        if (mBaseView == null)
+            throw new NullPointerException("La vista no puede ser nula");
         return mBaseView;
     }
 }

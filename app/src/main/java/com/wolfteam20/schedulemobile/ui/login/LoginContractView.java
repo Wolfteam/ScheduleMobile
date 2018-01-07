@@ -7,15 +7,17 @@ import com.wolfteam20.schedulemobile.ui.base.BaseContractView;
  */
 
 public interface LoginContractView extends BaseContractView {
-    void showLoading();
-
     void hideLoading();
 
-    void showSuccess(String msg);
+    void intentToHomeActivity();
+
+    void onBtnSignInClick();
+
+    void setEnabledViews(boolean enabled);
 
     void showError(String error);
 
-    void intentToEventActivity();
+    void showLoading();
 
-    void setEnabledViews(boolean enabled);
+    void showSuccess(String msg);
 }

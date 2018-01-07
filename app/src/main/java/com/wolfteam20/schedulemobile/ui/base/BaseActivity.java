@@ -29,12 +29,12 @@ public class BaseActivity extends AppCompatActivity implements BaseContractView 
                 .build();
     }
 
+    public ActivityComponent getActivityComponent(){
+        return mActivityComponent;
+    }
+
     @Override
     public boolean isNetworkAvailable() {
         return NetworkUtilities.isNetworkAvailable(App.getApplication(this));
-    }
-
-    public ActivityComponent getActivityComponent(){
-        return mActivityComponent;
     }
 }

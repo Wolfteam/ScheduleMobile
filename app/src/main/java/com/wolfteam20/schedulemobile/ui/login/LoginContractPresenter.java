@@ -8,12 +8,12 @@ import com.wolfteam20.schedulemobile.ui.base.BaseContractPresenter;
  */
 
 
-//@ActivityScope
+@ActivityScope
 public interface LoginContractPresenter<V extends LoginContractView> extends BaseContractPresenter<V> {
 
-    //void subscribe()
+    void onBtnSignInClick(String username, String pass);
 
-    void onLoginClick(String username, String pass);
+    void subscribe();
 
     //Uri getFirstStepUri();
 
