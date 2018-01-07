@@ -7,6 +7,7 @@ import com.wolfteam20.schedulemobile.di.qualifiers.ApplicationContext;
 import com.wolfteam20.schedulemobile.di.scopes.ApplicationScope;
 
 import java.io.File;
+import java.util.concurrent.TimeUnit;
 
 import dagger.Module;
 import dagger.Provides;
@@ -37,6 +38,9 @@ public class NetworkModule {
     public OkHttpClient provideOkHttpClient(Cache cache) {
         return new OkHttpClient.Builder()
                 .cache(cache)
+                .connectTimeout(60, TimeUnit.SECONDS)
+                .writeTimeout(60, TimeUnit.SECONDS)
+                .readTimeout(60, TimeUnit.SECONDS)
                 .build();
     }
 }
