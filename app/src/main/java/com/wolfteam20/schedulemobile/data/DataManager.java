@@ -12,19 +12,13 @@ import javax.inject.Inject;
  */
 
 public class DataManager implements DataManagerContract {
-
     private Context mContext;
     private PreferencesHelperContract mPreferencesHelper;
 
     @Inject
-    public DataManager(@ApplicationContext Context context, PreferencesHelperContract preferencesHelper) {
+    DataManager(@ApplicationContext Context context, PreferencesHelperContract preferencesHelper) {
         mContext = context;
         mPreferencesHelper = preferencesHelper;
-    }
-
-    @Override
-    public void storeAccessToken(String token) {
-        mPreferencesHelper.storeAccessToken(token);
     }
 
     @Override
@@ -40,5 +34,20 @@ public class DataManager implements DataManagerContract {
     @Override
     public String getFullname() {
         return mPreferencesHelper.getFullname();
+    }
+
+    @Override
+    public boolean isUserAdmin() {
+        return mPreferencesHelper.isUserAdmin();
+    }
+
+    @Override
+    public void storeAccessToken(String token) {
+        mPreferencesHelper.storeAccessToken(token);
+    }
+
+    @Override
+    public void storeUserRole() {
+        mPreferencesHelper.storeUserRole();
     }
 }

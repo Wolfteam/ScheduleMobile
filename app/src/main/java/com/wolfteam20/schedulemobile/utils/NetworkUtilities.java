@@ -3,8 +3,6 @@ package com.wolfteam20.schedulemobile.utils;
 import android.content.Context;
 import android.net.ConnectivityManager;
 
-import java.io.IOException;
-
 /**
  * Created by Efrain.Bastidas on 1/4/2018.
  */

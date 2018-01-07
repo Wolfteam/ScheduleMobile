@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.wolfteam20.schedulemobile.di.qualifiers.ApplicationContext;
+import com.wolfteam20.schedulemobile.utils.Constants;
+import com.wolfteam20.schedulemobile.utils.JWTUtilities;
 
 import javax.inject.Inject;
 
@@ -12,13 +14,6 @@ import javax.inject.Inject;
  */
 
 public class PreferencesHelper implements PreferencesHelperContract {
-
-    private static final String PREF_KEY_ACCESS_TOKEN = "PREF_KEY_ACCESS_TOKEN";
-    private static final String PREF_KEY_FULLNAME= "PREF_KEY_FULLNAME";
-    private static final String PREF_KEY_USERNAME = "PREF_KEY_USERNAME";
-//    private static final String PREF_KEY_EMAIL = "PREF_KEY_EMAIL";
-//    private static final String PREF_KEY_THEME = "PREF_KEY_THEME";
-
     private Context mContext;
     private SharedPreferences mPrefs;
 
@@ -30,25 +25,36 @@ public class PreferencesHelper implements PreferencesHelperContract {
     }
 
     @Override
-    public void storeAccessToken(String token) {
-        mPrefs.edit().putString(PREF_KEY_ACCESS_TOKEN, token).apply();
-    }
-
-    @Override
     public String getToken() {
         String token = "";
-        if (mPrefs.getString(PREF_KEY_ACCESS_TOKEN, null) != null)
-            token = mPrefs.getString(PREF_KEY_ACCESS_TOKEN, null);
+        if (mPrefs.getString(Constants.PREF_KEY_ACCESS_TOKEN, null) != null)
+            token = mPrefs.getString(Constants.PREF_KEY_ACCESS_TOKEN, null);
         return token;
     }
 
     @Override
+    public boolean isUserAdmin() {
+        return mPrefs.getBoolean(Constants.PREF_IS_USER_ADMIN, false);
+    }
+
+    @Override
     public String getUsername() {
-        return mPrefs.getString(PREF_KEY_USERNAME, null);
+        return mPrefs.getString(Constants.PREF_KEY_USERNAME, null);
     }
 
     @Override
     public String getFullname() {
-        return mPrefs.getString(PREF_KEY_FULLNAME, null);
+        return mPrefs.getString(Constants.PREF_KEY_FULLNAME, null);
+    }
+
+    @Override
+    public void storeAccessToken(String token) {
+        mPrefs.edit().putString(Constants.PREF_KEY_ACCESS_TOKEN, token).apply();
+    }
+
+    @Override
+    public void storeUserRole() {
+        boolean isUserAdmin = JWTUtilities.isUserAdmin(getToken());
+        mPrefs.edit().putBoolean(Constants.PREF_IS_USER_ADMIN, isUserAdmin).apply();
     }
 }
