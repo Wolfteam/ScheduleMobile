@@ -1,11 +1,134 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.SwipeRefreshLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/home_fragment_swipe_to_refresh"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <TextView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Estas en el home" />
-</LinearLayout>
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                card_view:cardCornerRadius="10dp"
+                card_view:contentPadding="10dp"
+                card_view:cardBackgroundColor="@color/greyDarken4"
+                card_view:cardElevation="15dp"
+                card_view:cardUseCompatPadding="true"
+                card_view:cardPreventCornerOverlap="false">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/home_descargas"
+                        android:textColor="@color/orangeAccent4"
+                        android:textSize="25sp"
+                        android:background="@color/greyDarken4"
+                        android:paddingStart="5dp"
+                        android:paddingEnd="5dp"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/home_descargas_info"
+                        android:textColor="@color/white"
+                        android:textSize="15sp"
+                        android:padding="5dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center">
+
+                        <android.support.v7.widget.AppCompatButton
+                            android:id="@+id/btnPlanificacionAcademica"
+                            android:text="@string/home_descargas_paca"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/greyDarken4"
+                            android:textColor="@color/orangeAccent4"
+                            android:textAllCaps="false"
+                            android:textSize="15sp"/>
+
+                        <android.support.v7.widget.AppCompatButton
+                            android:id="@+id/btnPlanificacionAulas"
+                            android:text="@string/home_descargas_pa"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/greyDarken4"
+                            android:textColor="@color/orangeAccent4"
+                            android:textAllCaps="false"
+                            android:textSize="15sp"/>
+
+                        <android.support.v7.widget.AppCompatButton
+                            android:id="@+id/btnPlanificacionHorario"
+                            android:text="@string/home_descargas_ph"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/greyDarken4"
+                            android:textColor="@color/orangeAccent4"
+                            android:textAllCaps="false"
+                            android:textSize="15sp"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                card_view:cardCornerRadius="10dp"
+                card_view:contentPadding="10dp"
+                card_view:cardBackgroundColor="@color/greyDarken4"
+                card_view:cardElevation="15dp"
+                card_view:cardUseCompatPadding="true"
+                card_view:cardPreventCornerOverlap="false">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="@string/home_periodo_acad"
+                        android:textColor="@color/orangeAccent4"
+                        android:textSize="25sp"
+                        android:background="@color/greyDarken4"
+                        android:paddingStart="5dp"
+                        android:paddingEnd="5dp"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="@string/home_periodo_act"
+                        android:textColor="@color/white"
+                        android:textSize="15sp"
+                        android:padding="5dp"/>
+
+                    <TextView
+                        android:id="@+id/home_fragment_periodo_actual"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:textColor="@color/white"
+                        android:textSize="21sp"
+                        android:textAlignment="center" />
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+        </LinearLayout>
+    </ScrollView>
+</android.support.v4.widget.SwipeRefreshLayout>

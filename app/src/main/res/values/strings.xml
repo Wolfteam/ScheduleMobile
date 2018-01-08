@@ -37,4 +37,12 @@
 
     <!--Activities-->
     <string name="home_activity">Home</string>
+    <string name="home_descargas">Descargas</string>
+    <string name="home_descargas_info">Aqui encontrara los links a las planificaciones del semestre actual.</string>
+    <string name="home_descargas_paca">Planificacion Academica</string>
+    <string name="home_descargas_pa">Planificacion Aulas</string>
+    <string name="home_descargas_ph">Planificacion Horario</string>
+    <string name="home_periodo_acad">Periodo Academico</string>
+    <string name="home_periodo_act">Actualmente el periodo academico es:</string>
+
 </resources>
