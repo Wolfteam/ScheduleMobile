@@ -1,8 +1,7 @@
 package com.wolfteam20.schedulemobile.ui.login;
 
+import com.wolfteam20.schedulemobile.data.DataManagerContract;
 import com.wolfteam20.schedulemobile.data.models.TokenDTO;
-import com.wolfteam20.schedulemobile.data.preferences.PreferencesHelperContract;
-import com.wolfteam20.schedulemobile.data.services.ScheduleService;
 import com.wolfteam20.schedulemobile.ui.base.BasePresenter;
 
 import javax.inject.Inject;
@@ -19,27 +18,24 @@ public class LoginPresenter<V extends LoginContractView>
         extends BasePresenter<V>
         implements LoginContractPresenter<V> {
 
-    private ScheduleService mScheduleService;
-    private PreferencesHelperContract mPreferenceHelper;
+    private final DataManagerContract mDataManager;
 
     @Inject
-    public LoginPresenter(ScheduleService scheduleService, PreferencesHelperContract preferencesHelper) {
-        mScheduleService = scheduleService;
-        mPreferenceHelper = preferencesHelper;
+    LoginPresenter(DataManagerContract dataManager) {
+        mDataManager = dataManager;
     }
 
     @Override
     public void onBtnSignInClick(String username, String password) {
         getView().showLoading();
-        mScheduleService.getToken(username, password).enqueue(new Callback<TokenDTO>() {
+        mDataManager.getToken(username, password).enqueue(new Callback<TokenDTO>() {
             @Override
             public void onResponse(Call<TokenDTO> call, Response<TokenDTO> response) {
                 getView().hideLoading();
                 if (response.isSuccessful()) {
                     TokenDTO token = response.body();
-                    mPreferenceHelper.storeAccessToken(token.getAuthenticationToken());
-                    mPreferenceHelper.storeUserRole();
-                    getView().showSuccess("Autenticado el usuario: " + token.getUsername() + ". Su Token fue creado: " + token.getCreateDate());
+                    mDataManager.storeAccessToken(token.getAuthenticationToken());
+                    mDataManager.storeUserRole();
                     getView().intentToHomeActivity();
                 }else{
                     getView().showError("Usuario o clave invalidas");
@@ -56,7 +52,7 @@ public class LoginPresenter<V extends LoginContractView>
 
     @Override
     public void subscribe() {
-        if (!mPreferenceHelper.getToken().isEmpty())
+        if (!mDataManager.getToken().isEmpty())
             getView().intentToHomeActivity();
     }
 }

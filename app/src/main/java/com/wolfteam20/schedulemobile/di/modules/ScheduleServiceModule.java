@@ -2,7 +2,6 @@ package com.wolfteam20.schedulemobile.di.modules;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
 import com.wolfteam20.schedulemobile.BuildConfig;
 import com.wolfteam20.schedulemobile.data.services.ScheduleService;
 import com.wolfteam20.schedulemobile.di.scopes.ApplicationScope;
@@ -21,20 +20,20 @@ public class ScheduleServiceModule {
 
     @Provides
     @ApplicationScope
-    public ScheduleService provideScheduleService(Retrofit retrofit){
+    ScheduleService provideScheduleService(Retrofit retrofit) {
         return retrofit.create(ScheduleService.class);
     }
 
     @Provides
     @ApplicationScope
-    public Gson provideGson(){
-        GsonBuilder gsonBuilder = new GsonBuilder();
+    Gson provideGson() {
+        GsonBuilder gsonBuilder = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'hh:mm:ss");
         return gsonBuilder.create();
     }
 
     @Provides
     @ApplicationScope
-    public Retrofit provideRetrofit(OkHttpClient okHttpClient, Gson gson) {
+    Retrofit provideRetrofit(OkHttpClient okHttpClient, Gson gson) {
         return new Retrofit.Builder()
                 .baseUrl(BuildConfig.URLBaseAPI)
                 .addConverterFactory(GsonConverterFactory.create(gson))

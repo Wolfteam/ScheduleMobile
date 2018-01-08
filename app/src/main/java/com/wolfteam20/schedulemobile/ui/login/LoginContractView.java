@@ -18,6 +18,4 @@ public interface LoginContractView extends BaseContractView {
     void showError(String error);
 
     void showLoading();
-
-    void showSuccess(String msg);
 }

@@ -1,10 +1,14 @@
 package com.wolfteam20.schedulemobile.ui.home;
 
-import com.wolfteam20.schedulemobile.data.preferences.PreferencesHelperContract;
-import com.wolfteam20.schedulemobile.data.services.ScheduleService;
+import com.wolfteam20.schedulemobile.data.DataManagerContract;
+import com.wolfteam20.schedulemobile.data.models.PeriodoAcademicoDTO;
 import com.wolfteam20.schedulemobile.ui.base.BasePresenter;
 
 import javax.inject.Inject;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by Efrain Bastidas on 1/6/2018.
@@ -12,20 +16,44 @@ import javax.inject.Inject;
 
 public class HomePresenter<V extends HomeContractView>
         extends BasePresenter<V>
-        implements HomeContractPresenter<V>{
+        implements HomeContractPresenter<V> {
 
-    private final ScheduleService mScheduleService;
-    private final PreferencesHelperContract mPreferencesHelper;
+    private final DataManagerContract mDataManager;
 
     @Inject
-    public HomePresenter(ScheduleService scheduleService, PreferencesHelperContract preferencesHelper) {
-        mScheduleService = scheduleService;
-        mPreferencesHelper = preferencesHelper;
+    HomePresenter(DataManagerContract dataManager) {
+        mDataManager = dataManager;
+    }
+
+    @Override
+    public void getPlanificacion(int tipoPlanificacion) {
+
+    }
+
+    @Override
+    public void getCurrentPeriodo() {
+        getView().showLoading();
+        mDataManager.getCurrentPeriodoAcademico().enqueue(new Callback<PeriodoAcademicoDTO>() {
+            @Override
+            public void onResponse(Call<PeriodoAcademicoDTO> call, Response<PeriodoAcademicoDTO> response) {
+                if (response.isSuccessful()) {
+                    getView().hideLoading();
+                    getView().showCurrentPeriodo(response.body().getNombrePeriodo());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PeriodoAcademicoDTO> call, Throwable t) {
+                getView().hideLoading();
+                getView().showError("Ocurrio un error al comunicarse con la api. " + t.getMessage());
+            }
+        });
     }
 
     @Override
     public void subscribe() {
-        //obten la data del periodo actual y quizas setea valores por defecto en
-        //el navdrawer
+        getCurrentPeriodo();
     }
+
+
 }

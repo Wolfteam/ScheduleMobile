@@ -18,7 +18,7 @@ import dagger.Provides;
 public class PreferencesModule {
 
     @Provides
-    public PreferencesHelperContract providePreferenceHelper(@ApplicationContext Context context) {
+    PreferencesHelperContract providePreferenceHelper(@ApplicationContext Context context) {
         return new PreferencesHelper(context, Constants.PREFERENCE_NAME);
     }
 }

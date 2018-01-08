@@ -22,20 +22,20 @@ public class NetworkModule {
 
     @Provides
     @ApplicationScope
-    public Cache provideHttpCache(File cacheFile) {
+    Cache provideHttpCache(File cacheFile) {
         long cacheSize = 10 * 1024 * 1024;
         return new Cache(cacheFile, cacheSize);
     }
 
     @Provides
     @ApplicationScope
-    public File provideCacheFile(@ApplicationContext Context context){
+    File provideCacheFile(@ApplicationContext Context context) {
         return new File(context.getCacheDir(), "okhttp_cache");
     }
 
     @Provides
     @ApplicationScope
-    public OkHttpClient provideOkHttpClient(Cache cache) {
+    OkHttpClient provideOkHttpClient(Cache cache) {
         return new OkHttpClient.Builder()
                 .cache(cache)
                 .connectTimeout(60, TimeUnit.SECONDS)

@@ -1,15 +1,15 @@
 package com.wolfteam20.schedulemobile.data.services;
 
+import com.wolfteam20.schedulemobile.data.models.PeriodoAcademicoDTO;
 import com.wolfteam20.schedulemobile.data.models.TokenDTO;
 
-import java.util.List;
-
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
-import retrofit2.http.Path;
+import retrofit2.http.Streaming;
 
 /**
  * Created by Efrain.Bastidas on 1/2/2018.
@@ -17,8 +17,8 @@ import retrofit2.http.Path;
 
 public interface ScheduleService {
 
-    @GET("users/{user}/repos")
-    Call<List<String>> listRepos(@Path("user") String user);
+//    @GET("users/{user}/repos")
+//    Call<List<String>> listRepos(@Path("user") String user);
 
     /**
      * Obtiene un token que contiene los privilegiso acorde al usuario
@@ -29,4 +29,23 @@ public interface ScheduleService {
     @FormUrlEncoded
     @POST("token")
     Call<TokenDTO> getToken(@Field("username") String username, @Field("password") String password);
+
+    /**
+     * Obtiene el periodo academico actual
+     * @return PeriodoAcademicoDTO
+     */
+    @GET("api/PeriodoCarrera/Current")
+    Call<PeriodoAcademicoDTO> getCurrentPeriodoAcademico();
+
+    @GET("api/HorarioProfesor/PlanificacionAcademica")
+    @Streaming
+    Call<ResponseBody> getPlanificacionAcademica();
+
+    @GET("api/HorarioProfesor/PlanificacionAulas")
+    @Streaming
+    Call<ResponseBody> getPlanificacionAulas();
+
+    @GET("api/HorarioProfesor/PlanificacionHorario")
+    @Streaming
+    Call<ResponseBody> getPlanificacionHorario();
 }

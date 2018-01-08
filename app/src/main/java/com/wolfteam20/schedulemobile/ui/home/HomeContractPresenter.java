@@ -9,5 +9,7 @@ import com.wolfteam20.schedulemobile.ui.base.BaseContractPresenter;
 
 @ActivityScope
 public interface HomeContractPresenter<V extends HomeContractView> extends BaseContractPresenter<V> {
+    void getPlanificacion(int tipoPlanificacion);
+    void getCurrentPeriodo();
     void subscribe();
 }

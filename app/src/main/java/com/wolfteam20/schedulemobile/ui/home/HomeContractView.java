@@ -1,5 +1,7 @@
 package com.wolfteam20.schedulemobile.ui.home;
 
+import android.view.View;
+
 import com.wolfteam20.schedulemobile.ui.base.BaseContractView;
 
 /**
@@ -7,7 +9,9 @@ import com.wolfteam20.schedulemobile.ui.base.BaseContractView;
  */
 
 public interface HomeContractView extends BaseContractView{
+    void onBtnPlanificacionClick(View view);
     void hideLoading();
     void showCurrentPeriodo(String periodo);
+    void showError(String error);
     void showLoading();
 }

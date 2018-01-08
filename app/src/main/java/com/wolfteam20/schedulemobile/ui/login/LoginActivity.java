@@ -12,7 +12,6 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.wolfteam20.schedulemobile.R;
-import com.wolfteam20.schedulemobile.data.services.ScheduleService;
 import com.wolfteam20.schedulemobile.ui.base.BaseActivity;
 import com.wolfteam20.schedulemobile.ui.home.HomeActivity;
 
@@ -35,8 +34,6 @@ public class LoginActivity extends BaseActivity implements LoginContractView {
 
     @Inject
     LoginContractPresenter<LoginContractView> mPresenter;
-    @Inject
-    ScheduleService mScheduleService;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -67,7 +64,6 @@ public class LoginActivity extends BaseActivity implements LoginContractView {
     public void intentToHomeActivity() {
         startActivity(HomeActivity.getIntent(this));
         finish();
-        overridePendingTransition(0, 0);
     }
 
     @OnClick(R.id.btnSignIn)
@@ -99,10 +95,5 @@ public class LoginActivity extends BaseActivity implements LoginContractView {
     public void showLoading() {
         mProgressBar.setVisibility(View.VISIBLE);
         setEnabledViews(false);
-    }
-
-    @Override
-    public void showSuccess(String msg) {
-        Toast.makeText(this, "Listo!!! " + msg, Toast.LENGTH_SHORT).show();
     }
 }
