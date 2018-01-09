@@ -1,24 +1,25 @@
 package com.wolfteam20.schedulemobile.ui.home;
 
-import android.os.AsyncTask;
 import android.os.Environment;
-import android.util.Log;
 
 import com.wolfteam20.schedulemobile.data.DataManagerContract;
-import com.wolfteam20.schedulemobile.data.models.PeriodoAcademicoDTO;
 import com.wolfteam20.schedulemobile.ui.base.BasePresenter;
+import com.wolfteam20.schedulemobile.utils.Constants;
 
 import java.io.File;
 import java.io.IOException;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.ResponseBody;
 import okio.BufferedSink;
 import okio.Okio;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import timber.log.Timber;
 
 /**
  * Created by Efrain Bastidas on 1/6/2018.
@@ -37,100 +38,71 @@ public class HomePresenter<V extends HomeContractView>
 
     @Override
     public void getPlanificacion(int tipoPlanificacion) {
-        getView().showLoading();
+        if (!getView().isNetworkAvailable()) {
+            getView().showError("No hay conexion.");
+            return;
+        }
+        getView().showDownloadProgressIndicator();
         switch (tipoPlanificacion) {
-            case 1:
-                mDataManager.getPlanificacionAcademica("Bearer " + mDataManager.getToken()).enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, final Response<ResponseBody>  response) {
-                        getView().hideLoading();
-                        if (response.isSuccessful()) {
-                            new AsyncTask<Void, Void, Void>() {
-                                @Override
-                                protected Void doInBackground(Void... voids) {
-                                    String filename = "academica.xlsx";
-                                    File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsoluteFile(), filename);
-                                    try {
-                                        BufferedSink sink = Okio.buffer(Okio.sink(file));
-                                        sink.writeAll(response.body().source());
-                                        sink.close();
-                                    } catch (IOException e) {
-                                        Log.e("Error", e.getMessage());
+            case 1://Planificacion Academica
+                mDataManager.getPlanificacionAcademica()
+                        .flatMap(response ->
+                                Observable.create((ObservableOnSubscribe<String>) emitter ->
+                                {
+                                    if (!response.isSuccessful()) {
+                                        emitter.onComplete();
+                                        return;
                                     }
-                                    return null;
-                                }
-                            }.execute();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        getView().hideLoading();
-                        getView().showError("Ocurrio un error al comunicarse con la api." + t.getMessage());
-                    }
-                });
+                                    saveFile(Constants.PLANIF_ACADE_FILENAME, response.body(), emitter);
+                                })
+                        )
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                success -> getView().showError(success),
+                                throwable -> getView().showError(throwable.getMessage()),
+                                () -> getView().stopDownloadProgressIndicator()
+                        );
                 break;
-            case 2:
-                mDataManager.getPlanificacionAulas("Bearer " + mDataManager.getToken()).enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, final Response<ResponseBody>  response) {
-                        getView().hideLoading();
-                        if (response.isSuccessful()) {
-                            new AsyncTask<Void, Void, Void>() {
-                                @Override
-                                protected Void doInBackground(Void... voids) {
-                                    String filename = "aulas.xlsx";
-                                    File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsoluteFile(), filename);
-                                    try {
-                                        BufferedSink sink = Okio.buffer(Okio.sink(file));
-                                        sink.writeAll(response.body().source());
-                                        sink.close();
-                                    } catch (IOException e) {
-                                        Log.e("Error", e.getMessage());
+            case 2://Planificacion aulas
+                mDataManager.getPlanificacionAulas()
+                        .flatMap(response ->
+                                Observable.create((ObservableOnSubscribe<String>) emitter ->
+                                {
+                                    if (!response.isSuccessful()) {
+                                        emitter.onComplete();
+                                        return;
                                     }
-                                    return null;
-                                }
-                            }.execute();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        getView().hideLoading();
-                        getView().showError("Ocurrio un error al comunicarse con la api." + t.getMessage());
-                    }
-                });
+                                    saveFile(Constants.PLANIF_AULAS_FILENAME, response.body(), emitter);
+                                })
+                        )
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                success -> getView().showError(success),
+                                throwable -> getView().showError(throwable.getMessage()),
+                                () -> getView().stopDownloadProgressIndicator()
+                        );
                 break;
-            case 3:
-                mDataManager.getPlanificacionHorario("Bearer " + mDataManager.getToken()).enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, final Response<ResponseBody>  response) {
-                        getView().hideLoading();
-                        if (response.isSuccessful()) {
-                            new AsyncTask<Void, Void, Void>() {
-                                @Override
-                                protected Void doInBackground(Void... voids) {
-                                    String filename = "horarios.xlsx";
-                                    File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsoluteFile(), filename);
-                                    try {
-                                        BufferedSink sink = Okio.buffer(Okio.sink(file));
-                                        sink.writeAll(response.body().source());
-                                        sink.close();
-                                    } catch (IOException e) {
-                                        Log.e("Error", e.getMessage());
+            case 3://Planificacion horarios
+                mDataManager.getPlanificacionHorario()
+                        .flatMap(response ->
+                                Observable.create((ObservableOnSubscribe<String>) emitter ->
+                                {
+                                    if (!response.isSuccessful()) {
+                                        emitter.onComplete();
+                                        return;
                                     }
-                                    return null;
-                                }
-                            }.execute();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        getView().hideLoading();
-                        getView().showError("Ocurrio un error al comunicarse con la api." + t.getMessage());
-                    }
-                });
+                                    saveFile(Constants.PLANIF_HORAR_FILENAME, response.body(), emitter);
+                                })
+                        )
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                success -> getView().showError(success),
+                                throwable -> getView().showError(throwable.getMessage()),
+                                () -> getView().stopDownloadProgressIndicator()
+                        );
                 break;
         }
     }
@@ -138,27 +110,41 @@ public class HomePresenter<V extends HomeContractView>
     @Override
     public void getCurrentPeriodo() {
         getView().showLoading();
-        mDataManager.getCurrentPeriodoAcademico().enqueue(new Callback<PeriodoAcademicoDTO>() {
-            @Override
-            public void onResponse(Call<PeriodoAcademicoDTO> call, Response<PeriodoAcademicoDTO> response) {
-                if (response.isSuccessful()) {
-                    getView().hideLoading();
-                    getView().showCurrentPeriodo(response.body().getNombrePeriodo());
-                }
-            }
+        mDataManager.getCurrentPeriodoAcademico()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        response ->
+                        {
+                            if (!response.isSuccessful()) {
+                                getView().showError("El token expiro?");
+                                return;
+                            }
+                            getView().showCurrentPeriodo(response.body().getNombrePeriodo());
+                        },
+                        throwable -> getView().showError(throwable.getMessage()),
+                        () -> getView().hideLoading()
+                );
+    }
 
-            @Override
-            public void onFailure(Call<PeriodoAcademicoDTO> call, Throwable t) {
-                getView().hideLoading();
-                getView().showError("Ocurrio un error al comunicarse con la api. " + t.getMessage());
-            }
-        });
+    @Override
+    public void saveFile(String filename, ResponseBody responseBody, ObservableEmitter<String> emitter) {
+        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                .getAbsoluteFile(), filename);
+        try {
+            BufferedSink sink = Okio.buffer(Okio.sink(file));
+            sink.writeAll(responseBody.source());
+            sink.close();
+            emitter.onNext("Archivo " + filename + " descargado");
+            emitter.onComplete();
+        } catch (IOException e) {
+            Timber.e(e);
+            emitter.onError(e);
+        }
     }
 
     @Override
     public void subscribe() {
         getCurrentPeriodo();
     }
-
-
 }

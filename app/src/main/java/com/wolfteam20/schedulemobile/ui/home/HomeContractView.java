@@ -8,10 +8,18 @@ import com.wolfteam20.schedulemobile.ui.base.BaseContractView;
  * Created by Efrain.Bastidas on 1/4/2018.
  */
 
-public interface HomeContractView extends BaseContractView{
+public interface HomeContractView extends BaseContractView {
     void onBtnPlanificacionClick(View view);
+
     void hideLoading();
+
     void showCurrentPeriodo(String periodo);
+
+    void showDownloadProgressIndicator();
+
     void showError(String error);
+
     void showLoading();
+
+    void stopDownloadProgressIndicator();
 }
