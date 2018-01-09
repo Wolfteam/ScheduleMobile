@@ -9,9 +9,16 @@
     </style>
 
 
-    <style name="BtnSignIn" parent="Theme.AppCompat.Light.NoActionBar" >
+    <style name="BtnSignIn" parent="Theme.AppCompat.Light.NoActionBar">
         <!--Creo que esto sobreescribe los colores del tema-->
         <item name="colorButtonNormal">@color/greyDarken4</item>
-        <item name="colorControlHighlight">@color/greyLighten1</item>
+        <item name="colorControlHighlight">@color/greenDarken1</item>
+    </style>
+
+    <style name="BtnHomeFrament">
+        <item name="colorButtonNormal">@color/greyDarken4</item>
+        <item name="colorControlHighlight">@color/white</item>
+        <item name="android:colorBackground">@color/greyDarken4</item>
+        <item name="android:textColor">@color/orangeAccent4</item>
     </style>
 </resources>
