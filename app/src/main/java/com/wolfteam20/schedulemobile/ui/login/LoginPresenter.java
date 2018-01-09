@@ -6,9 +6,8 @@ import com.wolfteam20.schedulemobile.ui.base.BasePresenter;
 
 import javax.inject.Inject;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by Efrain Bastidas on 1/2/2018.
@@ -28,26 +27,22 @@ public class LoginPresenter<V extends LoginContractView>
     @Override
     public void onBtnSignInClick(String username, String password) {
         getView().showLoading();
-        mDataManager.getToken(username, password).enqueue(new Callback<TokenDTO>() {
-            @Override
-            public void onResponse(Call<TokenDTO> call, Response<TokenDTO> response) {
-                getView().hideLoading();
-                if (response.isSuccessful()) {
-                    TokenDTO token = response.body();
-                    mDataManager.storeAccessToken(token.getAuthenticationToken());
-                    mDataManager.storeUserRole();
-                    getView().intentToHomeActivity();
-                }else{
-                    getView().showError("Usuario o clave invalidas");
-                }
-            }
-
-            @Override
-            public void onFailure(Call<TokenDTO> call, Throwable t) {
-                getView().hideLoading();
-                getView().showError("Ocurrio un error al comunicarse con la API");
-            }
-        });
+        mDataManager.getToken(username, password, true)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(response ->
+                        {
+                            if (response.isSuccessful()) {
+                                TokenDTO token = response.body();
+                                mDataManager.storeAccessToken(token.getAuthenticationToken());
+                                mDataManager.storeUserRole();
+                                getView().intentToHomeActivity();
+                            } else {
+                                getView().showError("Usuario o clave invalidas");
+                            }
+                        }, throwable -> getView().showError(throwable.getMessage()),
+                        () -> getView().hideLoading()
+                );
     }
 
     @Override
