@@ -10,8 +10,9 @@ import com.wolfteam20.schedulemobile.di.qualifiers.ApplicationContext;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observable;
 import okhttp3.ResponseBody;
-import retrofit2.Call;
+import retrofit2.Response;
 
 /**
  * Created by Efrain.Bastidas on 1/4/2018.
@@ -30,23 +31,23 @@ public class DataManager implements DataManagerContract {
     }
 
     @Override
-    public Call<PeriodoAcademicoDTO> getCurrentPeriodoAcademico() {
-        return  mScheduleService.getCurrentPeriodoAcademico();
+    public Observable<Response<PeriodoAcademicoDTO>> getCurrentPeriodoAcademico() {
+        return mScheduleService.getCurrentPeriodoAcademico();
     }
 
     @Override
-    public Call<ResponseBody> getPlanificacionAcademica(String token) {
-        return mScheduleService.getPlanificacionAcademica(token);
+    public Observable<Response<ResponseBody>> getPlanificacionAcademica() {
+        return mScheduleService.getPlanificacionAcademica();
     }
 
     @Override
-    public Call<ResponseBody> getPlanificacionAulas(String token) {
-        return mScheduleService.getPlanificacionAulas(token);
+    public Observable<Response<ResponseBody>> getPlanificacionAulas() {
+        return mScheduleService.getPlanificacionAulas();
     }
 
     @Override
-    public Call<ResponseBody> getPlanificacionHorario(String token) {
-        return mScheduleService.getPlanificacionHorario(token);
+    public Observable<Response<ResponseBody>> getPlanificacionHorario() {
+        return mScheduleService.getPlanificacionHorario();
     }
 
     @Override
@@ -55,8 +56,8 @@ public class DataManager implements DataManagerContract {
     }
 
     @Override
-    public Call<TokenDTO> getToken(String username, String password) {
-        return mScheduleService.getToken(username, password);
+    public Observable<Response<TokenDTO>> getToken(String username, String password, Boolean isMobile) {
+        return mScheduleService.getToken(username, password, isMobile);
     }
 
     @Override

@@ -3,12 +3,12 @@ package com.wolfteam20.schedulemobile.data.services;
 import com.wolfteam20.schedulemobile.data.models.PeriodoAcademicoDTO;
 import com.wolfteam20.schedulemobile.data.models.TokenDTO;
 
+import io.reactivex.Observable;
 import okhttp3.ResponseBody;
-import retrofit2.Call;
+import retrofit2.Response;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
-import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Streaming;
 
@@ -29,24 +29,25 @@ public interface ScheduleService {
      */
     @FormUrlEncoded
     @POST("token")
-    Call<TokenDTO> getToken(@Field("username") String username, @Field("password") String password);
+    Observable<Response<TokenDTO>> getToken(@Field("username") String username, @Field("password") String password, @Field("isMobile") Boolean isMobile);
 
     /**
      * Obtiene el periodo academico actual
      * @return PeriodoAcademicoDTO
      */
     @GET("api/PeriodoCarrera/Current")
-    Call<PeriodoAcademicoDTO> getCurrentPeriodoAcademico();
+    Observable<Response<PeriodoAcademicoDTO>> getCurrentPeriodoAcademico();
 
+    //Tiene que ser asi porque el guardado del archivo se debe hacer en otro thread
     @GET("api/HorarioProfesor/PlanificacionAcademica")
     @Streaming
-    Call<ResponseBody> getPlanificacionAcademica(@Header("Authorization") String token);
+    Observable<Response<ResponseBody>> getPlanificacionAcademica();
 
     @GET("api/HorarioProfesor/PlanificacionAulas")
     @Streaming
-    Call<ResponseBody> getPlanificacionAulas(@Header("Authorization") String token);
+    Observable<Response<ResponseBody>> getPlanificacionAulas();
 
     @GET("api/HorarioProfesor/PlanificacionHorario")
     @Streaming
-    Call<ResponseBody> getPlanificacionHorario(@Header("Authorization") String token);
+    Observable<Response<ResponseBody>> getPlanificacionHorario();
 }
