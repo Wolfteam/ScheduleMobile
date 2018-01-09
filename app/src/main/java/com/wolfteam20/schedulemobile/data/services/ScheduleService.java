@@ -8,6 +8,7 @@ import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Streaming;
 
@@ -39,13 +40,13 @@ public interface ScheduleService {
 
     @GET("api/HorarioProfesor/PlanificacionAcademica")
     @Streaming
-    Call<ResponseBody> getPlanificacionAcademica();
+    Call<ResponseBody> getPlanificacionAcademica(@Header("Authorization") String token);
 
     @GET("api/HorarioProfesor/PlanificacionAulas")
     @Streaming
-    Call<ResponseBody> getPlanificacionAulas();
+    Call<ResponseBody> getPlanificacionAulas(@Header("Authorization") String token);
 
     @GET("api/HorarioProfesor/PlanificacionHorario")
     @Streaming
-    Call<ResponseBody> getPlanificacionHorario();
+    Call<ResponseBody> getPlanificacionHorario(@Header("Authorization") String token);
 }

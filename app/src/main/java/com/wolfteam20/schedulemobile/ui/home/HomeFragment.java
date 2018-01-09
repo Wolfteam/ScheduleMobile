@@ -57,12 +57,15 @@ public class HomeFragment extends BaseFragment implements HomeContractView, Swip
         switch (view.getId()){
             case R.id.btnPlanificacionAcademica:
                 Toast.makeText(getContext(),"Academica", Toast.LENGTH_SHORT).show();
+                mPresenter.getPlanificacion(1);
                 break;
             case R.id.btnPlanificacionAulas:
                 Toast.makeText(getContext(),"Aulas", Toast.LENGTH_SHORT).show();
+                mPresenter.getPlanificacion(2);
                 break;
             case R.id.btnPlanificacionHorario:
                 Toast.makeText(getContext(),"Horario", Toast.LENGTH_SHORT).show();
+                mPresenter.getPlanificacion(3);
                 break;
         }
     }

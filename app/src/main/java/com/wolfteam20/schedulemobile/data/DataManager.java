@@ -35,26 +35,26 @@ public class DataManager implements DataManagerContract {
     }
 
     @Override
-    public Call<ResponseBody> getPlanificacionAcademica() {
-        return null;
+    public Call<ResponseBody> getPlanificacionAcademica(String token) {
+        return mScheduleService.getPlanificacionAcademica(token);
     }
 
     @Override
-    public Call<ResponseBody> getPlanificacionAulas() {
-        return null;
+    public Call<ResponseBody> getPlanificacionAulas(String token) {
+        return mScheduleService.getPlanificacionAulas(token);
     }
 
     @Override
-    public Call<ResponseBody> getPlanificacionHorario() {
-        return null;
+    public Call<ResponseBody> getPlanificacionHorario(String token) {
+        return mScheduleService.getPlanificacionHorario(token);
     }
 
     @Override
     public String getToken() {
         return mPreferencesHelper.getToken();
     }
-    @Override
 
+    @Override
     public Call<TokenDTO> getToken(String username, String password) {
         return mScheduleService.getToken(username, password);
     }
