@@ -2,7 +2,7 @@ package com.wolfteam20.schedulemobile.di.modules;
 
 import android.content.Context;
 
-
+import com.wolfteam20.schedulemobile.data.preferences.PreferencesHelperContract;
 import com.wolfteam20.schedulemobile.di.qualifiers.ApplicationContext;
 import com.wolfteam20.schedulemobile.di.scopes.ApplicationScope;
 
@@ -13,13 +13,14 @@ import dagger.Module;
 import dagger.Provides;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import okhttp3.logging.HttpLoggingInterceptor;
 import timber.log.Timber;
 
 /**
  * Created by Efrain.Bastidas on 1/2/2018.
  */
-@Module(includes = ContextModule.class)
+@Module(includes = {ContextModule.class, PreferencesModule.class})
 public class NetworkModule {
 
     @Provides
@@ -37,9 +38,16 @@ public class NetworkModule {
 
     @Provides
     @ApplicationScope
-    OkHttpClient provideOkHttpClient(Cache cache, HttpLoggingInterceptor httpLoggingInterceptor) {
+    OkHttpClient provideOkHttpClient(Cache cache, HttpLoggingInterceptor httpLoggingInterceptor, PreferencesHelperContract prefs) {
         return new OkHttpClient.Builder()
                 .cache(cache)
+                .addInterceptor(chain -> {
+                    String token = prefs.getToken();
+                    Request newRequest  = chain.request().newBuilder()
+                            .addHeader("Authorization", "Bearer " + token)
+                            .build();
+                    return chain.proceed(newRequest);
+                })
                 .addInterceptor(httpLoggingInterceptor)
                 .connectTimeout(60, TimeUnit.SECONDS)
                 .writeTimeout(60, TimeUnit.SECONDS)
@@ -49,14 +57,8 @@ public class NetworkModule {
 
     @Provides
     HttpLoggingInterceptor provideHttpLoggingInterceptor(){
-        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger(){
-            @Override
-            public void log(String message) {
-                Timber.i(message);
-            }
-        });
-        interceptor.setLevel(HttpLoggingInterceptor.Level.HEADERS);
-
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor(message -> Timber.i(message));
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);
         return interceptor;
     }
 }
