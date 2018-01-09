@@ -16,4 +16,12 @@ public class Constants {
     public static final String ROLE_CLAIM = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role";
     public static final String ROLE_ADMIN = "Administrador";
     public static final String SECRET = "MyTokenSecretKey";
+
+    //Permisos
+    public static final int MY_PERMISSIONS_WRITE_EXTERNAL_STORAGE = 10;
+
+    //Nombre Archivos
+    public static final String PLANIF_ACADE_FILENAME = "planificacionAcademica.xlsx";
+    public static final String PLANIF_AULAS_FILENAME = "planificacionAulas.xlsx";
+    public static final String PLANIF_HORAR_FILENAME = "planificacionHorario.xlsx";
 }
