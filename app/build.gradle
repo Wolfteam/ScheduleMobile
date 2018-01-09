@@ -17,7 +17,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
-            buildConfigField "String", "URLBaseAPI", "\"http://192.168.189.130/ScheduleAPI/\""
+            buildConfigField "String", "URLBaseAPI", "\"http://192.168.1.102/ScheduleAPI/\""
         }
     }
 }
@@ -30,32 +30,42 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 
+    //Toasty
+    //implementation 'com.github.GrenderG:Toasty:1.2.5'
+
+    //Okio
+    implementation 'com.squareup.okio:okio:1.13.0'
+
+    //Timber
+    implementation 'com.jakewharton.timber:timber:4.6.0'
+
     //Retrofit
-    compile 'com.squareup.retrofit2:retrofit:2.3.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.2.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
 
     //Okhttp
-    compile 'com.squareup.okhttp3:okhttp:3.9.1'
+ //   compile 'com.squareup.okhttp3:okhttp:3.9.1'
 
     //ButterKnife
-    compile 'com.jakewharton:butterknife:8.8.1'
+    implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 
     //Gson
-    compile 'com.google.code.gson:gson:2.8.2'
+    implementation 'com.google.code.gson:gson:2.8.2'
 
     //Dagger2
-    compile 'com.google.dagger:dagger:2.14.1'
+    implementation 'com.google.dagger:dagger:2.14.1'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.14.1'
 
     //TextInputLayout
-    compile 'com.android.support:design:26.1.0'
+    implementation 'com.android.support:design:26.1.0'
 
     //JWTDecode.Android
     //compile 'com.auth0.android:jwtdecode:1.1.1'
 
     //
-    compile 'io.jsonwebtoken:jjwt:0.9.0'
+    implementation 'io.jsonwebtoken:jjwt:0.9.0'
 
 //    compile 'org.bitbucket.b_c:jose4j:0.6.3'
 

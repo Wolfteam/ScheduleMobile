@@ -7,6 +7,8 @@ import com.wolfteam20.schedulemobile.di.components.ApplicationComponent;
 import com.wolfteam20.schedulemobile.di.components.DaggerApplicationComponent;
 import com.wolfteam20.schedulemobile.di.modules.ContextModule;
 
+import timber.log.Timber;
+
 
 /**
  * Created by Efrain.Bastidas on 1/2/2018.
@@ -19,6 +21,7 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        Timber.plant(new Timber.DebugTree());
         mApplicationComponent = DaggerApplicationComponent
                 .builder()
                 .contextModule(new ContextModule(this))

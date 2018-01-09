@@ -13,6 +13,8 @@ import dagger.Module;
 import dagger.Provides;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
+import timber.log.Timber;
 
 /**
  * Created by Efrain.Bastidas on 1/2/2018.
@@ -23,7 +25,7 @@ public class NetworkModule {
     @Provides
     @ApplicationScope
     Cache provideHttpCache(File cacheFile) {
-        long cacheSize = 10 * 1024 * 1024;
+        long cacheSize = 10 * 1024 * 1024; //10mb cache
         return new Cache(cacheFile, cacheSize);
     }
 
@@ -35,12 +37,26 @@ public class NetworkModule {
 
     @Provides
     @ApplicationScope
-    OkHttpClient provideOkHttpClient(Cache cache) {
+    OkHttpClient provideOkHttpClient(Cache cache, HttpLoggingInterceptor httpLoggingInterceptor) {
         return new OkHttpClient.Builder()
                 .cache(cache)
+                .addInterceptor(httpLoggingInterceptor)
                 .connectTimeout(60, TimeUnit.SECONDS)
                 .writeTimeout(60, TimeUnit.SECONDS)
                 .readTimeout(60, TimeUnit.SECONDS)
                 .build();
+    }
+
+    @Provides
+    HttpLoggingInterceptor provideHttpLoggingInterceptor(){
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger(){
+            @Override
+            public void log(String message) {
+                Timber.i(message);
+            }
+        });
+        interceptor.setLevel(HttpLoggingInterceptor.Level.HEADERS);
+
+        return interceptor;
     }
 }
