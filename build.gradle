@@ -5,7 +5,6 @@ buildscript {
     repositories {
         google()
         maven { url "http://jcenter.bintray.com"}
-        maven { url "http://jitpack.io"}
         mavenCentral()
     }
     dependencies {
@@ -21,6 +20,7 @@ allprojects {
     repositories {
         google()
         maven { url "http://jcenter.bintray.com"}
+        maven { url "http://jitpack.io" }
     }
 }
 
