@@ -12,7 +12,7 @@
     <style name="BtnSignIn" parent="Theme.AppCompat.Light.NoActionBar">
         <!--Creo que esto sobreescribe los colores del tema-->
         <item name="colorButtonNormal">@color/greyDarken4</item>
-        <item name="colorControlHighlight">@color/greenDarken1</item>
+        <item name="colorControlHighlight">@color/greyLighten1</item>
     </style>
 
     <style name="BtnHomeFrament">
