@@ -9,6 +9,8 @@ import android.view.View;
 
 import com.wolfteam20.schedulemobile.di.components.ActivityComponent;
 
+import butterknife.Unbinder;
+
 /**
  * Created by Efrain Bastidas on 1/7/2018.
  */
@@ -16,6 +18,7 @@ import com.wolfteam20.schedulemobile.di.components.ActivityComponent;
 public abstract class BaseFragment extends Fragment implements BaseContractView {
     private BaseActivity mBaseActivity;
     private BaseDrawerActivity mBaseDrawerActivity;
+    private Unbinder mUnBinder;
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -39,6 +42,14 @@ public abstract class BaseFragment extends Fragment implements BaseContractView 
         super.onDetach();
     }
 
+    @Override
+    public void onDestroy() {
+        if (mUnBinder != null) {
+            mUnBinder.unbind();
+        }
+        super.onDestroy();
+    }
+
     public ActivityComponent getActivityComponent(){
         if (mBaseActivity != null)
             return mBaseActivity.getActivityComponent();
@@ -55,6 +66,14 @@ public abstract class BaseFragment extends Fragment implements BaseContractView 
         return mBaseDrawerActivity;
     }
 
+
+    @Override
+    public void hideKeyboard() {
+        if (mBaseActivity != null) {
+            mBaseActivity.hideKeyboard();
+        }
+    }
+
     /**
      * Metodo llamado luego del onViewCreated, aca se debe salvar la vista
      * al presenter, hacerle subscribe,etc
@@ -69,5 +88,16 @@ public abstract class BaseFragment extends Fragment implements BaseContractView 
             return mBaseActivity.isNetworkAvailable();
         else
             return mBaseDrawerActivity.isNetworkAvailable();
+    }
+
+    @Override
+    public void openActivityOnTokenExpire() {
+        if (mBaseActivity != null) {
+            mBaseActivity.openActivityOnTokenExpire();
+        }
+    }
+
+    public void setUnBinder(Unbinder unBinder) {
+        mUnBinder = unBinder;
     }
 }

@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.mikepenz.materialdrawer.AccountHeader;
@@ -31,19 +32,24 @@ import com.wolfteam20.schedulemobile.ui.login.LoginActivity;
 import com.wolfteam20.schedulemobile.utils.Constants;
 import com.wolfteam20.schedulemobile.utils.NetworkUtilities;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * Created by Efrain.Bastidas on 1/5/2018.
  */
 
-public class BaseDrawerActivity extends AppCompatActivity
+public abstract class BaseDrawerActivity extends AppCompatActivity
         implements BaseContractView,
         Drawer.OnDrawerItemClickListener {
 
     private ActivityComponent mActivityComponent;
     @BindView(R.id.toolbar) Toolbar mToolbar;
+    private List<Unbinder> mUnBinder =  new ArrayList<>();
     Drawer mDrawer;
 
     @Override
@@ -63,7 +69,7 @@ public class BaseDrawerActivity extends AppCompatActivity
                 .applicationComponent(App.getApplication(this).getApplicationComponent())
                 .build();
         setContentView(R.layout.base_activity);
-        ButterKnife.bind(this);
+        setUnBinder(ButterKnife.bind(this));
 
         setSupportActionBar(mToolbar);
         initNavigationDrawer();
@@ -74,6 +80,14 @@ public class BaseDrawerActivity extends AppCompatActivity
 
         if (!isUserAdmin)
             mDrawer.removeItems(3);
+    }
+
+    @Override
+    protected void onDestroy() {
+        for (Unbinder u : mUnBinder) {
+            u.unbind();
+        }
+        super.onDestroy();
     }
 
     @Override
@@ -89,10 +103,10 @@ public class BaseDrawerActivity extends AppCompatActivity
         boolean closeDrawer = true;
         switch ((int) drawerItem.getIdentifier()) {
             case 1://Home
-                Toast.makeText(view.getContext(), "Click en Home", Toast.LENGTH_SHORT).show();
+                setFragment(1);
                 break;
             case 2://Disponibilidad
-                Toast.makeText(view.getContext(), "Click en Disponibilidad", Toast.LENGTH_SHORT).show();
+                setFragment(2);
                 break;
             case 3:
                 closeDrawer = false;
@@ -156,6 +170,15 @@ public class BaseDrawerActivity extends AppCompatActivity
 
     public ActivityComponent getActivityComponent() {
         return mActivityComponent;
+    }
+
+    @Override
+    public void hideKeyboard() {
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 
     private void initNavigationDrawer() {
@@ -231,4 +254,16 @@ public class BaseDrawerActivity extends AppCompatActivity
     public boolean isNetworkAvailable() {
         return NetworkUtilities.isNetworkAvailable(this);
     }
+
+    @Override
+    public void openActivityOnTokenExpire() {
+        startActivity(LoginActivity.getIntent(this));
+        finish();
+    }
+
+    public void setUnBinder(Unbinder unBinder) {
+        mUnBinder.add(unBinder);
+    }
+
+    protected abstract void setFragment(int fragment);
 }
