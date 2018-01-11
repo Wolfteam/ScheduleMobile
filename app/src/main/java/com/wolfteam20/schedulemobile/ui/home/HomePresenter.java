@@ -15,6 +15,7 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.ResponseBody;
 import okio.BufferedSink;
@@ -29,11 +30,9 @@ public class HomePresenter<V extends HomeContractView>
         extends BasePresenter<V>
         implements HomeContractPresenter<V> {
 
-    private final DataManagerContract mDataManager;
-
     @Inject
-    HomePresenter(DataManagerContract dataManager) {
-        mDataManager = dataManager;
+    HomePresenter(CompositeDisposable compositeDisposable, DataManagerContract dataManager) {
+        super(compositeDisposable, dataManager);
     }
 
     @Override
@@ -45,7 +44,8 @@ public class HomePresenter<V extends HomeContractView>
         getView().showDownloadProgressIndicator();
         switch (tipoPlanificacion) {
             case 1://Planificacion Academica
-                mDataManager.getPlanificacionAcademica()
+                getCompositeDisposable().add(
+                        getDataManager().getPlanificacionAcademica()
                         .flatMap(response ->
                                 Observable.create((ObservableOnSubscribe<String>) emitter ->
                                 {
@@ -62,10 +62,12 @@ public class HomePresenter<V extends HomeContractView>
                                 success -> getView().showError(success),
                                 throwable -> getView().showError(throwable.getMessage()),
                                 () -> getView().stopDownloadProgressIndicator()
-                        );
+                        )
+                );
                 break;
             case 2://Planificacion aulas
-                mDataManager.getPlanificacionAulas()
+                getCompositeDisposable().add(
+                        getDataManager().getPlanificacionAulas()
                         .flatMap(response ->
                                 Observable.create((ObservableOnSubscribe<String>) emitter ->
                                 {
@@ -82,10 +84,12 @@ public class HomePresenter<V extends HomeContractView>
                                 success -> getView().showError(success),
                                 throwable -> getView().showError(throwable.getMessage()),
                                 () -> getView().stopDownloadProgressIndicator()
-                        );
+                        )
+                );
                 break;
             case 3://Planificacion horarios
-                mDataManager.getPlanificacionHorario()
+                getCompositeDisposable().add(
+                        getDataManager().getPlanificacionHorario()
                         .flatMap(response ->
                                 Observable.create((ObservableOnSubscribe<String>) emitter ->
                                 {
@@ -102,7 +106,8 @@ public class HomePresenter<V extends HomeContractView>
                                 success -> getView().showError(success),
                                 throwable -> getView().showError(throwable.getMessage()),
                                 () -> getView().stopDownloadProgressIndicator()
-                        );
+                        )
+                );
                 break;
         }
     }
@@ -110,7 +115,7 @@ public class HomePresenter<V extends HomeContractView>
     @Override
     public void getCurrentPeriodo() {
         getView().showLoading();
-        mDataManager.getCurrentPeriodoAcademico()
+        getCompositeDisposable().add(getDataManager().getCurrentPeriodoAcademico()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -124,7 +129,8 @@ public class HomePresenter<V extends HomeContractView>
                         },
                         throwable -> getView().showError(throwable.getMessage()),
                         () -> getView().hideLoading()
-                );
+                )
+        );
     }
 
     @Override

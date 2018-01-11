@@ -39,7 +39,7 @@ public class LoginActivity extends BaseActivity implements LoginContractView {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_activity);
-        ButterKnife.bind(this);
+        setUnBinder(ButterKnife.bind(this));
 
         getActivityComponent().inject(this);
 //        mScheduleService = App.getApplication(this)
@@ -47,6 +47,12 @@ public class LoginActivity extends BaseActivity implements LoginContractView {
 //                .getScheduleService();
         mPresenter.onAttach(this);
         mPresenter.subscribe();
+    }
+
+    @Override
+    protected void onDestroy() {
+        mPresenter.onDetach();
+        super.onDestroy();
     }
 
     @NonNull

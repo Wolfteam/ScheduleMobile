@@ -41,10 +41,10 @@ public class HomeFragment extends BaseFragment implements HomeContractView, Swip
 
     @BindView(R.id.home_fragment_swipe_to_refresh) SwipeRefreshLayout mSwipeRefreshLayout;
     @BindView(R.id.home_fragment_periodo_actual) TextView mPeriodoActual;
+    private View mButtonClicked;
 
     private NotificationManager mNotifyManager;
     private NotificationCompat.Builder mBuilder;
-    private boolean hasWriteAccess = true;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,7 +56,7 @@ public class HomeFragment extends BaseFragment implements HomeContractView, Swip
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.home_fragment, container, false);
-        ButterKnife.bind(this, view);
+        setUnBinder(ButterKnife.bind(this, view));
         mSwipeRefreshLayout.setOnRefreshListener(this);
         return view;
     }
@@ -70,10 +70,8 @@ public class HomeFragment extends BaseFragment implements HomeContractView, Swip
     @OnClick({R.id.btnPlanificacionAcademica, R.id.btnPlanificacionAulas, R.id.btnPlanificacionHorario})
     @Override
     public void onBtnPlanificacionClick(View view) {
-        requestWritePermission();
-        //TODO: Arreglar esta validacion que no ta funcando
-        if (!hasWriteAccess) {
-            Toast.makeText(getContext(), "Debe dar permisos de escritura", Toast.LENGTH_SHORT).show();
+        mButtonClicked = view;
+        if (!isWritePermissionGranted()) {
             return;
         }
         switch (view.getId()) {
@@ -89,7 +87,28 @@ public class HomeFragment extends BaseFragment implements HomeContractView, Swip
         }
     }
 
-    public void requestWritePermission() {
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case Constants.MY_PERMISSIONS_WRITE_EXTERNAL_STORAGE:
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    onBtnPlanificacionClick(mButtonClicked);
+                }else {
+                    Toast.makeText(getContext(), getResources().getString(R.string.permisos_write_msg),Toast.LENGTH_LONG).show();
+                }
+                break;
+        }
+    }
+
+    @Override
+    protected void initLayout(View view, Bundle savedInstanceState) {
+        mPresenter.onAttach(this);
+        mPresenter.subscribe();
+    }
+
+    @Override
+    public boolean isWritePermissionGranted() {
         if (ContextCompat.checkSelfPermission(getContext(),
                 Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             // Should we show an explanation?
@@ -103,32 +122,13 @@ public class HomeFragment extends BaseFragment implements HomeContractView, Swip
                 dialog.show();
             } else {
                 // No explanation needed, we can request the permission.
-                ActivityCompat.requestPermissions((Activity) getContext(),
-                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                // Esto varia si es una Activity (ActivityCompat.requestPermissions()) o un Fragment
+                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                         Constants.MY_PERMISSIONS_WRITE_EXTERNAL_STORAGE);
             }
-            hasWriteAccess = false;
+            return false;
         }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case Constants.MY_PERMISSIONS_WRITE_EXTERNAL_STORAGE:
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    hasWriteAccess = true;
-                } else {
-                    hasWriteAccess = false;
-                }
-                break;
-        }
-    }
-
-    @Override
-    protected void initLayout(View view, Bundle savedInstanceState) {
-        mPresenter.onAttach(this);
-        mPresenter.subscribe();
+        return true;
     }
 
     @Override

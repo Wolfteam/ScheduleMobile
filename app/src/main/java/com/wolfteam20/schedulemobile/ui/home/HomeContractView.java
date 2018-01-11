@@ -11,6 +11,13 @@ import com.wolfteam20.schedulemobile.ui.base.BaseContractView;
 public interface HomeContractView extends BaseContractView {
     void onBtnPlanificacionClick(View view);
 
+    /**
+     * Verifica si tiene permisos de escritura, si no los tiene los pide.
+     * Esto se usa para poder guardar el archivo de planificacion
+     * @return True en caso de tenerlos
+     */
+    boolean isWritePermissionGranted();
+
     void hideLoading();
 
     void showCurrentPeriodo(String periodo);

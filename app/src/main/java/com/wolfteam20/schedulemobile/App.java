@@ -5,7 +5,7 @@ import android.app.Application;
 
 import com.wolfteam20.schedulemobile.di.components.ApplicationComponent;
 import com.wolfteam20.schedulemobile.di.components.DaggerApplicationComponent;
-import com.wolfteam20.schedulemobile.di.modules.ContextModule;
+import com.wolfteam20.schedulemobile.di.modules.ApplicationContextModule;
 
 import timber.log.Timber;
 
@@ -24,7 +24,7 @@ public class App extends Application {
         Timber.plant(new Timber.DebugTree());
         mApplicationComponent = DaggerApplicationComponent
                 .builder()
-                .contextModule(new ContextModule(this))
+                .applicationContextModule(new ApplicationContextModule(this))
                 .build();
         mApplicationComponent.inject(this);
     }
