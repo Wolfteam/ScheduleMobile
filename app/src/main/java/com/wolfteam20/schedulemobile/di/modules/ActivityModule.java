@@ -14,6 +14,7 @@ import com.wolfteam20.schedulemobile.ui.login.LoginPresenter;
 
 import dagger.Module;
 import dagger.Provides;
+import io.reactivex.disposables.CompositeDisposable;
 
 /**
  * Created by Efrain Bastidas on 1/2/2018.
@@ -40,6 +41,11 @@ public class ActivityModule {
         return mActivity;
     }
 
+    @Provides
+    CompositeDisposable provideCompositeDisposable(){
+        return new CompositeDisposable();
+    }
+    
     @Provides
     @ActivityScope
     LoginContractPresenter<LoginContractView> provideLoginPresenter(LoginPresenter<LoginContractView> presenter) {

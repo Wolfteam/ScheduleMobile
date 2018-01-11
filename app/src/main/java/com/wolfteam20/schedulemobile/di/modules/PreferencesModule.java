@@ -14,7 +14,7 @@ import dagger.Provides;
  * Created by Efrain.Bastidas on 1/4/2018.
  */
 
-@Module(includes = ContextModule.class)
+@Module(includes = ApplicationContextModule.class)
 public class PreferencesModule {
 
     @Provides

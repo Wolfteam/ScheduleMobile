@@ -1,7 +1,7 @@
-package com.wolfteam20.schedulemobile.data.services;
+package com.wolfteam20.schedulemobile.data.network;
 
-import com.wolfteam20.schedulemobile.data.models.PeriodoAcademicoDTO;
-import com.wolfteam20.schedulemobile.data.models.TokenDTO;
+import com.wolfteam20.schedulemobile.data.network.models.PeriodoAcademicoDTO;
+import com.wolfteam20.schedulemobile.data.network.models.TokenDTO;
 
 import io.reactivex.Observable;
 import okhttp3.ResponseBody;
@@ -16,7 +16,7 @@ import retrofit2.http.Streaming;
  * Created by Efrain.Bastidas on 1/2/2018.
  */
 
-public interface ScheduleService {
+public interface ApiSchedule {
 
 //    @GET("users/{user}/repos")
 //    Call<List<String>> listRepos(@Path("user") String user);

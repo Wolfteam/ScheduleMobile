@@ -1,4 +1,4 @@
-package com.wolfteam20.schedulemobile.data.models;
+package com.wolfteam20.schedulemobile.data.network.models;
 
 import java.util.Date;
 

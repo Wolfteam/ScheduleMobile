@@ -1,11 +1,11 @@
 package com.wolfteam20.schedulemobile.data;
 
 import com.wolfteam20.schedulemobile.data.preferences.PreferencesHelperContract;
-import com.wolfteam20.schedulemobile.data.services.ScheduleService;
+import com.wolfteam20.schedulemobile.data.network.ApiSchedule;
 
 /**
  * Created by Efrain.Bastidas on 1/4/2018.
  */
 
-public interface DataManagerContract extends PreferencesHelperContract, ScheduleService {
+public interface DataManagerContract extends PreferencesHelperContract, ApiSchedule {
 }

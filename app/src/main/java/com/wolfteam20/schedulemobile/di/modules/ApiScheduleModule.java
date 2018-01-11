@@ -3,7 +3,7 @@ package com.wolfteam20.schedulemobile.di.modules;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.wolfteam20.schedulemobile.BuildConfig;
-import com.wolfteam20.schedulemobile.data.services.ScheduleService;
+import com.wolfteam20.schedulemobile.data.network.ApiSchedule;
 import com.wolfteam20.schedulemobile.di.scopes.ApplicationScope;
 
 import dagger.Module;
@@ -17,12 +17,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Created by Efrain.Bastidas on 1/2/2018.
  */
 @Module(includes = NetworkModule.class)
-public class ScheduleServiceModule {
+public class ApiScheduleModule {
 
     @Provides
     @ApplicationScope
-    ScheduleService provideScheduleService(Retrofit retrofit) {
-        return retrofit.create(ScheduleService.class);
+    ApiSchedule provideScheduleService(Retrofit retrofit) {
+        return retrofit.create(ApiSchedule.class);
     }
 
     @Provides

@@ -20,7 +20,7 @@ import timber.log.Timber;
 /**
  * Created by Efrain.Bastidas on 1/2/2018.
  */
-@Module(includes = {ContextModule.class, PreferencesModule.class})
+@Module(includes = {ApplicationContextModule.class, PreferencesModule.class})
 public class NetworkModule {
 
     @Provides
@@ -56,6 +56,7 @@ public class NetworkModule {
     }
 
     @Provides
+    @ApplicationScope
     HttpLoggingInterceptor provideHttpLoggingInterceptor(){
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor(message -> Timber.i(message));
         interceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);

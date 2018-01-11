@@ -2,10 +2,10 @@ package com.wolfteam20.schedulemobile.data;
 
 import android.content.Context;
 
-import com.wolfteam20.schedulemobile.data.models.PeriodoAcademicoDTO;
-import com.wolfteam20.schedulemobile.data.models.TokenDTO;
+import com.wolfteam20.schedulemobile.data.network.models.PeriodoAcademicoDTO;
+import com.wolfteam20.schedulemobile.data.network.models.TokenDTO;
 import com.wolfteam20.schedulemobile.data.preferences.PreferencesHelperContract;
-import com.wolfteam20.schedulemobile.data.services.ScheduleService;
+import com.wolfteam20.schedulemobile.data.network.ApiSchedule;
 import com.wolfteam20.schedulemobile.di.qualifiers.ApplicationContext;
 
 import javax.inject.Inject;
@@ -21,33 +21,33 @@ import retrofit2.Response;
 public class DataManager implements DataManagerContract {
     private Context mContext;
     private PreferencesHelperContract mPreferencesHelper;
-    private ScheduleService mScheduleService;
+    private ApiSchedule mApiSchedule;
 
     @Inject
-    DataManager(@ApplicationContext Context context, PreferencesHelperContract prefs, ScheduleService scheduleService) {
+    DataManager(@ApplicationContext Context context, PreferencesHelperContract prefs, ApiSchedule apiSchedule) {
         mContext = context;
         mPreferencesHelper = prefs;
-        mScheduleService = scheduleService;
+        mApiSchedule = apiSchedule;
     }
 
     @Override
     public Observable<Response<PeriodoAcademicoDTO>> getCurrentPeriodoAcademico() {
-        return mScheduleService.getCurrentPeriodoAcademico();
+        return mApiSchedule.getCurrentPeriodoAcademico();
     }
 
     @Override
     public Observable<Response<ResponseBody>> getPlanificacionAcademica() {
-        return mScheduleService.getPlanificacionAcademica();
+        return mApiSchedule.getPlanificacionAcademica();
     }
 
     @Override
     public Observable<Response<ResponseBody>> getPlanificacionAulas() {
-        return mScheduleService.getPlanificacionAulas();
+        return mApiSchedule.getPlanificacionAulas();
     }
 
     @Override
     public Observable<Response<ResponseBody>> getPlanificacionHorario() {
-        return mScheduleService.getPlanificacionHorario();
+        return mApiSchedule.getPlanificacionHorario();
     }
 
     @Override
@@ -57,7 +57,7 @@ public class DataManager implements DataManagerContract {
 
     @Override
     public Observable<Response<TokenDTO>> getToken(String username, String password, Boolean isMobile) {
-        return mScheduleService.getToken(username, password, isMobile);
+        return mApiSchedule.getToken(username, password, isMobile);
     }
 
     @Override
