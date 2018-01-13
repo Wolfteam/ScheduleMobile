@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.wolfteam20.schedulemobile.R;
 import com.wolfteam20.schedulemobile.ui.base.BaseDrawerActivity;
+import com.wolfteam20.schedulemobile.ui.disponibilidad.DisponibilidadFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -53,7 +54,11 @@ public class HomeActivity extends BaseDrawerActivity {
                         .commit();
                 break;
             case 2://Disponibilidad
-
+                DisponibilidadFragment dispFragment = new DisponibilidadFragment();
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.home_activity, dispFragment, DISP_FRAGMENT_TAG)
+                        .commit();
                 break;
             default:
                 Toast.makeText(this, "No implementado", Toast.LENGTH_LONG).show();
