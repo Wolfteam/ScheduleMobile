@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
+import timber.log.Timber;
 
 /**
  * Created by Efrain Bastidas on 1/2/2018.
@@ -28,21 +29,25 @@ public class LoginPresenter<V extends LoginContractView>
         getView().showLoading();
         getCompositeDisposable().add(
                 getDataManager().getToken(username, password, true)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(response ->
-                        {
-                            if (response.isSuccessful()) {
-                                TokenDTO token = response.body();
-                                getDataManager().storeAccessToken(token.getAuthenticationToken());
-                                getDataManager().storeUserRole();
-                                getView().intentToHomeActivity();
-                            } else {
-                                getView().showError("Usuario o clave invalidas");
-                            }
-                        }, throwable -> getView().showError(throwable.getMessage()),
-                        () -> getView().hideLoading()
-                )
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(response ->
+                                {
+                                    if (response.isSuccessful()) {
+                                        TokenDTO token = response.body();
+                                        getDataManager().storeAccessToken(token.getAuthenticationToken());
+                                        getDataManager().storeUser(token.getAuthenticationToken());
+                                        getView().intentToHomeActivity();
+                                    } else {
+                                        getView().showError("Usuario o clave invalidas");
+                                    }
+                                }, throwable -> {
+                                    getView().hideLoading();
+                                    getView().showError(throwable.getMessage());
+                                    Timber.e(throwable);
+                                },
+                                () -> getView().hideLoading()
+                        )
         );
     }
 

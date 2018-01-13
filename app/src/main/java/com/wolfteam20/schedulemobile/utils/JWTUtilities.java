@@ -1,5 +1,7 @@
 package com.wolfteam20.schedulemobile.utils;
 
+import java.text.MessageFormat;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 
@@ -9,18 +11,41 @@ import io.jsonwebtoken.Jwts;
 
 public class JWTUtilities {
 
+    private String mToken;
+    private Claims mClaims;
 
-    public static boolean isUserAdmin(String token){
-        Claims claims = Jwts.parser()
+    public JWTUtilities(String token) {
+        mToken = token;
+        mClaims = getTokenClaims(token);
+    }
+
+    public String getUsername() {
+        return mClaims.get(Constants.CLAIM_NAME, String.class);
+    }
+
+    public int getCedula() {
+        return Integer.parseInt(mClaims.get(Constants.CLAIM_NAMEIDENTIFIER, String.class));
+    }
+
+    public String getFullName() {
+        String nombre = mClaims.get(Constants.CLAIM_GIVENNAME, String.class);
+        String apellido = mClaims.get(Constants.CLAIM_SURNAME, String.class);
+        return MessageFormat.format("{0} {1}", nombre, apellido);
+    }
+
+    private Claims getTokenClaims(String token) {
+        return Jwts.parser()
                 .setSigningKey(Constants.SECRET.getBytes())
                 .parseClaimsJws(token).getBody();
+    }
 
-        String role =  claims.get(Constants.ROLE_CLAIM, String.class);
+    public boolean isUserAdmin() {
+        String role = mClaims.get(Constants.ROLE_CLAIM, String.class);
         return role.equals(Constants.ROLE_ADMIN);
     }
 }
 
-            //JWT jwt = new JWT();
+//JWT jwt = new JWT();
 //        String claim = jwt.getClaim(ROLE_ADMIN).asString();
 
 
