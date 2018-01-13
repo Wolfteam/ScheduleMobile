@@ -29,7 +29,7 @@ import timber.log.Timber;
 public class HomePresenter<V extends HomeContractView>
         extends BasePresenter<V>
         implements HomeContractPresenter<V> {
-
+    //TODO: REEMPLZAR TODOS LOS throwable CON UN ERROR GENERICO EN TODOS LOS PRESENTER
     @Inject
     HomePresenter(CompositeDisposable compositeDisposable, DataManagerContract dataManager) {
         super(compositeDisposable, dataManager);
@@ -46,67 +46,79 @@ public class HomePresenter<V extends HomeContractView>
             case 1://Planificacion Academica
                 getCompositeDisposable().add(
                         getDataManager().getPlanificacionAcademica()
-                        .flatMap(response ->
-                                Observable.create((ObservableOnSubscribe<String>) emitter ->
-                                {
-                                    if (!response.isSuccessful()) {
-                                        emitter.onComplete();
-                                        return;
-                                    }
-                                    saveFile(Constants.PLANIF_ACADE_FILENAME, response.body(), emitter);
-                                })
-                        )
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(
-                                success -> getView().showError(success),
-                                throwable -> getView().showError(throwable.getMessage()),
-                                () -> getView().stopDownloadProgressIndicator()
-                        )
+                                .flatMap(response ->
+                                        Observable.create((ObservableOnSubscribe<String>) emitter ->
+                                        {
+                                            if (!response.isSuccessful()) {
+                                                emitter.onComplete();
+                                                return;
+                                            }
+                                            saveFile(Constants.PLANIF_ACADE_FILENAME, response.body(), emitter);
+                                        })
+                                )
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(
+                                        success -> getView().showError(success),
+                                        throwable -> {
+                                            getView().hideLoading();
+                                            getView().showError(throwable.getMessage());
+                                            Timber.e(throwable);
+                                        },
+                                        () -> getView().stopDownloadProgressIndicator()
+                                )
                 );
                 break;
             case 2://Planificacion aulas
                 getCompositeDisposable().add(
                         getDataManager().getPlanificacionAulas()
-                        .flatMap(response ->
-                                Observable.create((ObservableOnSubscribe<String>) emitter ->
-                                {
-                                    if (!response.isSuccessful()) {
-                                        emitter.onComplete();
-                                        return;
-                                    }
-                                    saveFile(Constants.PLANIF_AULAS_FILENAME, response.body(), emitter);
-                                })
-                        )
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(
-                                success -> getView().showError(success),
-                                throwable -> getView().showError(throwable.getMessage()),
-                                () -> getView().stopDownloadProgressIndicator()
-                        )
+                                .flatMap(response ->
+                                        Observable.create((ObservableOnSubscribe<String>) emitter ->
+                                        {
+                                            if (!response.isSuccessful()) {
+                                                emitter.onComplete();
+                                                return;
+                                            }
+                                            saveFile(Constants.PLANIF_AULAS_FILENAME, response.body(), emitter);
+                                        })
+                                )
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(
+                                        success -> getView().showError(success),
+                                        throwable -> {
+                                            getView().hideLoading();
+                                            getView().showError(throwable.getMessage());
+                                            Timber.e(throwable);
+                                        },
+                                        () -> getView().stopDownloadProgressIndicator()
+                                )
                 );
                 break;
             case 3://Planificacion horarios
                 getCompositeDisposable().add(
                         getDataManager().getPlanificacionHorario()
-                        .flatMap(response ->
-                                Observable.create((ObservableOnSubscribe<String>) emitter ->
-                                {
-                                    if (!response.isSuccessful()) {
-                                        emitter.onComplete();
-                                        return;
-                                    }
-                                    saveFile(Constants.PLANIF_HORAR_FILENAME, response.body(), emitter);
-                                })
-                        )
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(
-                                success -> getView().showError(success),
-                                throwable -> getView().showError(throwable.getMessage()),
-                                () -> getView().stopDownloadProgressIndicator()
-                        )
+                                .flatMap(response ->
+                                        Observable.create((ObservableOnSubscribe<String>) emitter ->
+                                        {
+                                            if (!response.isSuccessful()) {
+                                                emitter.onComplete();
+                                                return;
+                                            }
+                                            saveFile(Constants.PLANIF_HORAR_FILENAME, response.body(), emitter);
+                                        })
+                                )
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(
+                                        success -> getView().showError(success),
+                                        throwable -> {
+                                            getView().hideLoading();
+                                            getView().showError(throwable.getMessage());
+                                            Timber.e(throwable);
+                                        },
+                                        () -> getView().stopDownloadProgressIndicator()
+                                )
                 );
                 break;
         }
@@ -127,7 +139,11 @@ public class HomePresenter<V extends HomeContractView>
                             }
                             getView().showCurrentPeriodo(response.body().getNombrePeriodo());
                         },
-                        throwable -> getView().showError(throwable.getMessage()),
+                        throwable -> {
+                            getView().hideLoading();
+                            getView().showError(throwable.getMessage());
+                            Timber.e(throwable);
+                        },
                         () -> getView().hideLoading()
                 )
         );

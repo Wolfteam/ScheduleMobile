@@ -1,5 +1,7 @@
 package com.wolfteam20.schedulemobile.ui.base;
 
+import android.support.annotation.NonNull;
+
 import com.wolfteam20.schedulemobile.data.DataManagerContract;
 
 import io.reactivex.disposables.CompositeDisposable;
@@ -14,7 +16,7 @@ public class BasePresenter<V extends BaseContractView> implements BaseContractPr
     private final DataManagerContract mDataManager;
     private V mBaseView;
 
-    public BasePresenter(CompositeDisposable mCompositeDisposable, DataManagerContract mDataManager) {
+    public BasePresenter(@NonNull CompositeDisposable mCompositeDisposable, @NonNull DataManagerContract mDataManager) {
         this.mCompositeDisposable = mCompositeDisposable;
         this.mDataManager = mDataManager;
     }
