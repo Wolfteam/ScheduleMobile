@@ -3,10 +3,14 @@ package com.wolfteam20.schedulemobile.data;
 import android.content.Context;
 
 import com.wolfteam20.schedulemobile.data.network.models.PeriodoAcademicoDTO;
+import com.wolfteam20.schedulemobile.data.network.models.ProfesorDTO;
+import com.wolfteam20.schedulemobile.data.network.models.ProfesorDetailsDTO;
 import com.wolfteam20.schedulemobile.data.network.models.TokenDTO;
 import com.wolfteam20.schedulemobile.data.preferences.PreferencesHelperContract;
 import com.wolfteam20.schedulemobile.data.network.ApiSchedule;
 import com.wolfteam20.schedulemobile.di.qualifiers.ApplicationContext;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -31,6 +35,11 @@ public class DataManager implements DataManagerContract {
     }
 
     @Override
+    public Observable<List<ProfesorDetailsDTO>> getAllProfesores() {
+        return mApiSchedule.getAllProfesores();
+    }
+
+    @Override
     public Observable<Response<PeriodoAcademicoDTO>> getCurrentPeriodoAcademico() {
         return mApiSchedule.getCurrentPeriodoAcademico();
     }
@@ -51,6 +60,11 @@ public class DataManager implements DataManagerContract {
     }
 
     @Override
+    public Observable<ProfesorDTO> getProfesor(int cedula) {
+        return mApiSchedule.getProfesor(cedula);
+    }
+
+    @Override
     public String getToken() {
         return mPreferencesHelper.getToken();
     }
@@ -61,8 +75,13 @@ public class DataManager implements DataManagerContract {
     }
 
     @Override
-    public String getUsername() {
-        return mPreferencesHelper.getUsername();
+    public boolean isUserAdmin() {
+        return mPreferencesHelper.isUserAdmin();
+    }
+
+    @Override
+    public int getCedula() {
+        return mPreferencesHelper.getCedula();
     }
 
     @Override
@@ -71,8 +90,8 @@ public class DataManager implements DataManagerContract {
     }
 
     @Override
-    public boolean isUserAdmin() {
-        return mPreferencesHelper.isUserAdmin();
+    public String getUsername() {
+        return mPreferencesHelper.getUsername();
     }
 
     @Override
@@ -81,7 +100,7 @@ public class DataManager implements DataManagerContract {
     }
 
     @Override
-    public void storeUserRole() {
-        mPreferencesHelper.storeUserRole();
+    public void storeUser(String token) {
+        mPreferencesHelper.storeUser(token);
     }
 }

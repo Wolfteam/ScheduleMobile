@@ -24,6 +24,17 @@ public class PreferencesHelper implements PreferencesHelperContract {
         mPrefs = mContext.getSharedPreferences(preferencesName, Context.MODE_PRIVATE);
     }
 
+
+    @Override
+    public int getCedula() {
+        return mPrefs.getInt(Constants.PREF_KEY_CEDULA, 0);
+    }
+
+    @Override
+    public String getFullname() {
+        return mPrefs.getString(Constants.PREF_KEY_FULLNAME, null);
+    }
+
     @Override
     public String getToken() {
         String token = "";
@@ -33,18 +44,13 @@ public class PreferencesHelper implements PreferencesHelperContract {
     }
 
     @Override
-    public boolean isUserAdmin() {
-        return mPrefs.getBoolean(Constants.PREF_IS_USER_ADMIN, false);
-    }
-
-    @Override
     public String getUsername() {
         return mPrefs.getString(Constants.PREF_KEY_USERNAME, null);
     }
 
     @Override
-    public String getFullname() {
-        return mPrefs.getString(Constants.PREF_KEY_FULLNAME, null);
+    public boolean isUserAdmin() {
+        return mPrefs.getBoolean(Constants.PREF_IS_USER_ADMIN, false);
     }
 
     @Override
@@ -53,8 +59,16 @@ public class PreferencesHelper implements PreferencesHelperContract {
     }
 
     @Override
-    public void storeUserRole() {
-        boolean isUserAdmin = JWTUtilities.isUserAdmin(getToken());
+    public void storeUser(String token) {
+        //TODO: SACAR ESTO DE ACA Y MOVERLO A DI
+        JWTUtilities jwt = new JWTUtilities(token);
+        int cedula = jwt.getCedula();
+        String fullname = jwt.getFullName();
+        String username = jwt.getUsername();
+        boolean isUserAdmin = jwt.isUserAdmin();
         mPrefs.edit().putBoolean(Constants.PREF_IS_USER_ADMIN, isUserAdmin).apply();
+        mPrefs.edit().putInt(Constants.PREF_KEY_CEDULA, cedula).apply();
+        mPrefs.edit().putString(Constants.PREF_KEY_FULLNAME, fullname).apply();
+        mPrefs.edit().putString(Constants.PREF_KEY_USERNAME, username).apply();
     }
 }

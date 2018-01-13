@@ -1,7 +1,11 @@
 package com.wolfteam20.schedulemobile.data.network;
 
 import com.wolfteam20.schedulemobile.data.network.models.PeriodoAcademicoDTO;
+import com.wolfteam20.schedulemobile.data.network.models.ProfesorDTO;
+import com.wolfteam20.schedulemobile.data.network.models.ProfesorDetailsDTO;
 import com.wolfteam20.schedulemobile.data.network.models.TokenDTO;
+
+import java.util.List;
 
 import io.reactivex.Observable;
 import okhttp3.ResponseBody;
@@ -10,6 +14,7 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 import retrofit2.http.Streaming;
 
 /**
@@ -32,6 +37,13 @@ public interface ApiSchedule {
     Observable<Response<TokenDTO>> getToken(@Field("username") String username, @Field("password") String password, @Field("isMobile") Boolean isMobile);
 
     /**
+     * Obtiene una lista con todos los profesores
+     * @return List<ProfesorDetailsDTO>
+     */
+    @GET("api/Profesor")
+    Observable<List<ProfesorDetailsDTO>> getAllProfesores();
+
+    /**
      * Obtiene el periodo academico actual
      * @return PeriodoAcademicoDTO
      */
@@ -50,4 +62,12 @@ public interface ApiSchedule {
     @GET("api/HorarioProfesor/PlanificacionHorario")
     @Streaming
     Observable<Response<ResponseBody>> getPlanificacionHorario();
+
+    /**
+     * Obtiene un profesor en particular
+     * @param cedula Cedula del profesor a obtener
+     * @return ProfesorDTO
+     */
+    @GET("api/Profesor/{cedula}")
+    Observable<ProfesorDTO> getProfesor(@Path("cedula") int cedula);
 }

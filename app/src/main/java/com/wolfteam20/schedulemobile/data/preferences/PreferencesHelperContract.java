@@ -7,20 +7,20 @@ package com.wolfteam20.schedulemobile.data.preferences;
 
 public interface PreferencesHelperContract {
     /**
+     * Obtiene la cedula del usuario autenticado
+     * @return int Cedula del usuario
+     */
+    int getCedula();
+
+    /**
      * Obtiene el nombre completo del usuario autenticado
-     * @return String?
+     * @return String Nombre completo del usuario
      */
     String getFullname();
 
     /**
-     * SGuarda la informacion del usuario autenticado
-     * @param user Usuario autenticado
-     */
-    //void storeUser(User user)
-
-    /**
      * Obtiene el usernmae del usuario autenticado
-     * @return String
+     * @return String Username del usuario
      */
     String getUsername();
 
@@ -43,7 +43,8 @@ public interface PreferencesHelperContract {
     void storeAccessToken(String token);
 
     /**
-     * Guarda una pref. que indica si el usuario es admin o no
+     * Guarda los datos del usuario asociados al token
+     * @param token Token de autenticacion
      */
-    void storeUserRole();
+    void storeUser(String token);
 }
