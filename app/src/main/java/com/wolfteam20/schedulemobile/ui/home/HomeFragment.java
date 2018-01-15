@@ -62,6 +62,12 @@ public class HomeFragment extends BaseFragment implements HomeContractView, Swip
     }
 
     @Override
+    public void onDestroy() {
+        mPresenter.onDetach();
+        super.onDestroy();
+    }
+
+    @Override
     public void onRefresh() {
         mPeriodoActual.setText("");
         mPresenter.getCurrentPeriodo();
