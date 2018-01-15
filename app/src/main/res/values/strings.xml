@@ -44,9 +44,11 @@
     <string name="home_descargas_ph">Planificacion Horario</string>
     <string name="home_periodo_acad">Periodo Academico</string>
     <string name="home_periodo_act">Actualmente el periodo academico es:</string>
+    <string name="disp_activity">Disponibilidad</string>
     <string name="disp_guardar">Guardar Cambios</string>
     <string name="disp_horas_asig">Horas Asignadas</string>
     <string name="disp_horas_rest">Horas Restantes</string>
+
     <!--Permisos-->
     <string name="permisos_title">Permisos Requeridos</string>
     <string name="permisos_write_msg">Se requiere de permisos de escritura para poder guardar los archivos descargados. Por favor habilitelos"</string>
