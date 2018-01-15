@@ -2,12 +2,12 @@ package com.wolfteam20.schedulemobile.data;
 
 import android.content.Context;
 
+import com.wolfteam20.schedulemobile.data.network.ApiSchedule;
+import com.wolfteam20.schedulemobile.data.network.models.DisponibilidadDetailsDTO;
 import com.wolfteam20.schedulemobile.data.network.models.PeriodoAcademicoDTO;
-import com.wolfteam20.schedulemobile.data.network.models.ProfesorDTO;
 import com.wolfteam20.schedulemobile.data.network.models.ProfesorDetailsDTO;
 import com.wolfteam20.schedulemobile.data.network.models.TokenDTO;
 import com.wolfteam20.schedulemobile.data.preferences.PreferencesHelperContract;
-import com.wolfteam20.schedulemobile.data.network.ApiSchedule;
 import com.wolfteam20.schedulemobile.di.qualifiers.ApplicationContext;
 
 import java.util.List;
@@ -45,6 +45,11 @@ public class DataManager implements DataManagerContract {
     }
 
     @Override
+    public Observable<DisponibilidadDetailsDTO> getDisponbilidad(int cedula) {
+        return mApiSchedule.getDisponbilidad(cedula);
+    }
+
+    @Override
     public Observable<Response<ResponseBody>> getPlanificacionAcademica() {
         return mApiSchedule.getPlanificacionAcademica();
     }
@@ -60,7 +65,7 @@ public class DataManager implements DataManagerContract {
     }
 
     @Override
-    public Observable<ProfesorDTO> getProfesor(int cedula) {
+    public Observable<ProfesorDetailsDTO> getProfesor(int cedula) {
         return mApiSchedule.getProfesor(cedula);
     }
 

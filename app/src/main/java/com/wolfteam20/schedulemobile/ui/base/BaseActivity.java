@@ -29,12 +29,11 @@ public class BaseActivity extends AppCompatActivity implements BaseContractView 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
         mActivityComponent = DaggerActivityComponent.builder()
                 .activityModule(new ActivityModule(this))
                 .applicationComponent(App.getApplication(this).getApplicationComponent())
                 .build();
+        super.onCreate(savedInstanceState);
     }
 
     @Override

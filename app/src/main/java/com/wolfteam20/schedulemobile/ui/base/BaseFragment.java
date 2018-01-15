@@ -50,7 +50,7 @@ public abstract class BaseFragment extends Fragment implements BaseContractView 
         super.onDestroy();
     }
 
-    public ActivityComponent getActivityComponent(){
+    public ActivityComponent getActivityComponent() {
         if (mBaseActivity != null)
             return mBaseActivity.getActivityComponent();
         else if (mBaseDrawerActivity != null)
@@ -58,26 +58,28 @@ public abstract class BaseFragment extends Fragment implements BaseContractView 
         return null;
     }
 
-    public BaseActivity getBaseActivity(){
+    public BaseActivity getBaseActivity() {
         return mBaseActivity;
     }
 
-    public BaseDrawerActivity getBaseDrawerActivity(){
+    public BaseDrawerActivity getBaseDrawerActivity() {
         return mBaseDrawerActivity;
     }
 
 
     @Override
     public void hideKeyboard() {
-        if (mBaseActivity != null) {
+        if (mBaseActivity != null)
             mBaseActivity.hideKeyboard();
-        }
+        else if (mBaseDrawerActivity != null)
+            mBaseDrawerActivity.hideKeyboard();
     }
 
     /**
      * Metodo llamado luego del onViewCreated, aca se debe salvar la vista
      * al presenter, hacerle subscribe,etc
-     * @param view View
+     *
+     * @param view               View
      * @param savedInstanceState Bundle
      */
     protected abstract void initLayout(View view, Bundle savedInstanceState);
