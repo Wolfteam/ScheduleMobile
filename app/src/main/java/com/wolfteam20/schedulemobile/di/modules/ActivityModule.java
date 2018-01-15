@@ -5,9 +5,12 @@ import android.content.Context;
 
 import com.wolfteam20.schedulemobile.di.qualifiers.ActivityContext;
 import com.wolfteam20.schedulemobile.di.scopes.ActivityScope;
-import com.wolfteam20.schedulemobile.ui.disponibilidad.DisponibilidadContractPresenter;
-import com.wolfteam20.schedulemobile.ui.disponibilidad.DisponibilidadContractView;
-import com.wolfteam20.schedulemobile.ui.disponibilidad.DisponibilidadPresenter;
+import com.wolfteam20.schedulemobile.ui.disponibilidad.DispContractPresenter;
+import com.wolfteam20.schedulemobile.ui.disponibilidad.DispContractView;
+import com.wolfteam20.schedulemobile.ui.disponibilidad.DispPresenter;
+import com.wolfteam20.schedulemobile.ui.disponibilidad.details.DispDetailsContractPresenter;
+import com.wolfteam20.schedulemobile.ui.disponibilidad.details.DispDetailsContractView;
+import com.wolfteam20.schedulemobile.ui.disponibilidad.details.DispDetailsPresenter;
 import com.wolfteam20.schedulemobile.ui.home.HomeContractPresenter;
 import com.wolfteam20.schedulemobile.ui.home.HomeContractView;
 import com.wolfteam20.schedulemobile.ui.home.HomePresenter;
@@ -63,7 +66,13 @@ public class ActivityModule {
 
     @Provides
     @ActivityScope
-    DisponibilidadContractPresenter<DisponibilidadContractView> provideDisponibilidadPresenter(DisponibilidadPresenter<DisponibilidadContractView> presenter){
+    DispContractPresenter<DispContractView> provideDisponibilidadPresenter(DispPresenter<DispContractView> presenter){
+        return presenter;
+    }
+
+    @Provides
+    @ActivityScope
+    DispDetailsContractPresenter<DispDetailsContractView> provideDisponibilidadDetails(DispDetailsPresenter<DispDetailsContractView> presenter){
         return presenter;
     }
 }
