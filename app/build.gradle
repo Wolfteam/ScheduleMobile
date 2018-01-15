@@ -1,6 +1,11 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+androidExtensions{
+    experimental = true
+}
 
 android {
     compileSdkVersion 26
@@ -19,7 +24,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
-            buildConfigField "String", "URLBaseAPI", "\"http://192.168.189.130/ScheduleAPI/\""
+            buildConfigField "String", "URLBaseAPI", "\"http://192.168.1.102/ScheduleAPI/\""
         }
     }
     compileOptions {
@@ -36,11 +41,11 @@ dependencies {
 
     //ButterKnife
     implementation 'com.jakewharton:butterknife:8.8.1'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    kapt 'com.jakewharton:butterknife-compiler:8.8.1'
 
     //Dagger2
     implementation 'com.google.dagger:dagger:2.14.1'
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.14.1'
+    kapt 'com.google.dagger:dagger-compiler:2.14.1'
 
     //Gson
     implementation 'com.google.code.gson:gson:2.8.2'
@@ -80,7 +85,7 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     //Toasty
-    //implementation 'com.github.GrenderG:Toasty:1.2.8'
+    implementation 'com.github.GrenderG:Toasty:1.2.8'
 
     //JWTDecode.Android
     //compile 'com.auth0.android:jwtdecode:1.1.1'
