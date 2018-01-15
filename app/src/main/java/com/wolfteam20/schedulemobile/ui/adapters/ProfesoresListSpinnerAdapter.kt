@@ -14,34 +14,25 @@ import com.wolfteam20.schedulemobile.data.network.models.ProfesorDetailsDTO
  * Created by Efrain.Bastidas on 1/12/2018.
  */
 class ProfesoresListSpinnerAdapter : ArrayAdapter<ProfesorDetailsDTO> {
-    private var mContext: Context
-    private var mInflater: LayoutInflater
-    private var mProfesores: ArrayList<ProfesorDetailsDTO> = arrayListOf()
+    private val mContext: Context
+    private val mInflater: LayoutInflater
+    private val mProfesores: MutableList<ProfesorDetailsDTO>
+    private val mLayout : Int
 
-    constructor(context: Context, layout: Int, profesores: List<ProfesorDetailsDTO>)
+    constructor(context: Context, layout: Int, profesores: MutableList<ProfesorDetailsDTO>)
             : super(context, layout, profesores) {
         mContext = context
         mInflater = LayoutInflater.from(mContext)
+        mProfesores = profesores
+        mLayout = layout
+    }
+
+    override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup?): View {
+        return createItemView(position, convertView, parent)
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-        val rowView: View
-        val holder: ViewHolder
-
-        if (convertView == null) {
-            rowView = mInflater.inflate(R.layout.disponibilidad_spinner_prof_row, parent, false)
-            holder = ViewHolder()
-            holder.tvNombreProfesor = rowView.findViewById(R.id.profesorFullname) as TextView
-            rowView.tag = holder
-        } else {
-            holder = convertView.tag as ViewHolder
-            rowView = convertView
-        }
-
-        val profesor = mProfesores[position]
-        val fullname = "${profesor.nombre} ${profesor.apellido}"
-        holder.tvNombreProfesor?.text = fullname
-        return rowView
+        return createItemView(position, convertView, parent)
     }
 
     override fun getCount(): Int {
@@ -54,6 +45,26 @@ class ProfesoresListSpinnerAdapter : ArrayAdapter<ProfesorDetailsDTO> {
 
     override fun getItemId(position: Int): Long {
         return mProfesores[position].cedula.toLong()
+    }
+
+    private fun createItemView(position: Int, convertView: View?, parent: ViewGroup?) : View{
+        val rowView: View
+        val holder: ViewHolder
+
+        if (convertView == null) {
+            rowView = mInflater.inflate(mLayout, parent, false)
+            holder = ViewHolder()
+            holder.tvNombreProfesor = rowView.findViewById(R.id.profesorFullname) as TextView
+            rowView.tag = holder
+        } else {
+            holder = convertView.tag as ViewHolder
+            rowView = convertView
+        }
+
+        val profesor = mProfesores[position]
+        val fullname = "${profesor.nombre} ${profesor.apellido}"
+        holder.tvNombreProfesor?.text = fullname
+        return rowView
     }
 
     internal class ViewHolder {

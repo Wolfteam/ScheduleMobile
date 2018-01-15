@@ -2,8 +2,8 @@ package com.wolfteam20.schedulemobile.ui.base;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -28,6 +28,8 @@ import com.wolfteam20.schedulemobile.R;
 import com.wolfteam20.schedulemobile.di.components.ActivityComponent;
 import com.wolfteam20.schedulemobile.di.components.DaggerActivityComponent;
 import com.wolfteam20.schedulemobile.di.modules.ActivityModule;
+import com.wolfteam20.schedulemobile.ui.disponibilidad.DispActivity;
+import com.wolfteam20.schedulemobile.ui.home.HomeActivity;
 import com.wolfteam20.schedulemobile.ui.login.LoginActivity;
 import com.wolfteam20.schedulemobile.utils.Constants;
 import com.wolfteam20.schedulemobile.utils.NetworkUtilities;
@@ -49,8 +51,9 @@ public abstract class BaseDrawerActivity extends AppCompatActivity
 
     private ActivityComponent mActivityComponent;
     @BindView(R.id.toolbar) Toolbar mToolbar;
-    private List<Unbinder> mUnBinder =  new ArrayList<>();
-    Drawer mDrawer;
+    private List<Unbinder> mUnBinder = new ArrayList<>();
+    protected Drawer mDrawer;
+    private final int DRAWER_DELAY = 210;
 
     @Override
     public void onBackPressed() {
@@ -63,11 +66,11 @@ public abstract class BaseDrawerActivity extends AppCompatActivity
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         mActivityComponent = DaggerActivityComponent.builder()
                 .activityModule(new ActivityModule(this))
                 .applicationComponent(App.getApplication(this).getApplicationComponent())
                 .build();
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.base_activity);
         setUnBinder(ButterKnife.bind(this));
 
@@ -103,10 +106,16 @@ public abstract class BaseDrawerActivity extends AppCompatActivity
         boolean closeDrawer = true;
         switch ((int) drawerItem.getIdentifier()) {
             case 1://Home
-                setFragment(1);
+                new Handler().postDelayed(() -> {
+                    startActivity(HomeActivity.getIntent(getApplicationContext()));
+                    finish();
+                }, DRAWER_DELAY);
                 break;
             case 2://Disponibilidad
-                setFragment(2);
+                new Handler().postDelayed(() -> {
+                    startActivity(DispActivity.Companion.getIntent(getApplicationContext()));
+                    finish();
+                }, DRAWER_DELAY);
                 break;
             case 3:
                 closeDrawer = false;
@@ -133,15 +142,12 @@ public abstract class BaseDrawerActivity extends AppCompatActivity
                 AlertDialog dialog = new AlertDialog.Builder(this)
                         .setTitle(R.string.cerrar_sesion)
                         .setMessage(R.string.cerrar_sesion_msg)
-                        .setPositiveButton("Si", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                getApplicationContext()
-                                        .getSharedPreferences(Constants.PREFERENCE_NAME, Context.MODE_PRIVATE)
-                                        .edit().putString("PREF_KEY_ACCESS_TOKEN", "").apply();
-                                startActivity(LoginActivity.getIntent(getApplicationContext()));
-                                finish();
-                            }
+                        .setPositiveButton("Si", (dialogInterface, i) -> {
+                            getApplicationContext()
+                                    .getSharedPreferences(Constants.PREFERENCE_NAME, Context.MODE_PRIVATE)
+                                    .edit().putString("PREF_KEY_ACCESS_TOKEN", "").apply();
+                            startActivity(LoginActivity.getIntent(getApplicationContext()));
+                            finish();
                         })
                         .setNegativeButton("No", null)
                         .create();
@@ -264,6 +270,4 @@ public abstract class BaseDrawerActivity extends AppCompatActivity
     public void setUnBinder(Unbinder unBinder) {
         mUnBinder.add(unBinder);
     }
-
-    protected abstract void setFragment(int fragment);
 }
