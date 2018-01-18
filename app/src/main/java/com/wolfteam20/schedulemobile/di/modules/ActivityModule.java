@@ -8,8 +8,8 @@ import com.wolfteam20.schedulemobile.di.scopes.ActivityScope;
 import com.wolfteam20.schedulemobile.ui.disponibilidad.DispContractPresenter;
 import com.wolfteam20.schedulemobile.ui.disponibilidad.DispContractView;
 import com.wolfteam20.schedulemobile.ui.disponibilidad.DispPresenter;
-import com.wolfteam20.schedulemobile.ui.disponibilidad.details.DispDetailsContractPresenter;
-import com.wolfteam20.schedulemobile.ui.disponibilidad.details.DispDetailsContractView;
+import com.wolfteam20.schedulemobile.ui.disponibilidad.details.DispDetailsPresenterContract;
+import com.wolfteam20.schedulemobile.ui.disponibilidad.details.DispDetailsViewContract;
 import com.wolfteam20.schedulemobile.ui.disponibilidad.details.DispDetailsPresenter;
 import com.wolfteam20.schedulemobile.ui.home.HomeContractPresenter;
 import com.wolfteam20.schedulemobile.ui.home.HomeContractView;
@@ -72,7 +72,7 @@ public class ActivityModule {
 
     @Provides
     @ActivityScope
-    DispDetailsContractPresenter<DispDetailsContractView> provideDisponibilidadDetails(DispDetailsPresenter<DispDetailsContractView> presenter){
+    DispDetailsPresenterContract<DispDetailsViewContract> provideDisponibilidadDetails(DispDetailsPresenter<DispDetailsViewContract> presenter){
         return presenter;
     }
 }
