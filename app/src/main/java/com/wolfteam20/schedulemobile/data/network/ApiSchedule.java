@@ -1,5 +1,6 @@
 package com.wolfteam20.schedulemobile.data.network;
 
+import com.wolfteam20.schedulemobile.data.network.models.DisponibilidadDTO;
 import com.wolfteam20.schedulemobile.data.network.models.DisponibilidadDetailsDTO;
 import com.wolfteam20.schedulemobile.data.network.models.PeriodoAcademicoDTO;
 import com.wolfteam20.schedulemobile.data.network.models.ProfesorDetailsDTO;
@@ -10,6 +11,7 @@ import java.util.List;
 import io.reactivex.Observable;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -54,15 +56,26 @@ public interface ApiSchedule {
     @GET("api/Disponibilidad/{cedula}")
     Observable<DisponibilidadDetailsDTO> getDisponbilidad(@Path("cedula") int cedula);
 
-    //Tiene que ser asi porque el guardado del archivo se debe hacer en otro thread
+    /**
+     * Obtiene la planificacion academica
+     * @return ResponseBody Que contiene los bits del archivo a guardar
+     */
     @GET("api/HorarioProfesor/PlanificacionAcademica")
     @Streaming
     Observable<Response<ResponseBody>> getPlanificacionAcademica();
 
+    /**
+     * Obtiene la planificacion por aulas
+     * @return ResponseBody Que contiene los bits del archivo a guardar
+     */
     @GET("api/HorarioProfesor/PlanificacionAulas")
     @Streaming
     Observable<Response<ResponseBody>> getPlanificacionAulas();
 
+    /**
+     * Obtiene la planificacion por horarios
+     * @return ResponseBody Que contiene los bits del archivo a guardar
+     */
     @GET("api/HorarioProfesor/PlanificacionHorario")
     @Streaming
     Observable<Response<ResponseBody>> getPlanificacionHorario();
@@ -74,4 +87,13 @@ public interface ApiSchedule {
      */
     @GET("api/Profesor/{cedula}")
     Observable<ProfesorDetailsDTO> getProfesor(@Path("cedula") int cedula);
+
+    /**
+     * Guarda la disponibilidades pasadas por parametro
+     * y reescribe las existentes
+     * @param disponibilidades Disponibilidades a guardar
+     * @return ResponseBody
+     */
+    @POST("api/Disponibilidad")
+    Observable<Response<ResponseBody>> postDisponibilidad(@Body List<DisponibilidadDTO> disponibilidades);
 }

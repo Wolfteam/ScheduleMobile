@@ -2,7 +2,9 @@ package com.wolfteam20.schedulemobile.data;
 
 import android.content.Context;
 
+import com.wolfteam20.schedulemobile.data.db.DbHelperContract;
 import com.wolfteam20.schedulemobile.data.network.ApiSchedule;
+import com.wolfteam20.schedulemobile.data.network.models.DisponibilidadDTO;
 import com.wolfteam20.schedulemobile.data.network.models.DisponibilidadDetailsDTO;
 import com.wolfteam20.schedulemobile.data.network.models.PeriodoAcademicoDTO;
 import com.wolfteam20.schedulemobile.data.network.models.ProfesorDetailsDTO;
@@ -26,12 +28,17 @@ public class DataManager implements DataManagerContract {
     private Context mContext;
     private PreferencesHelperContract mPreferencesHelper;
     private ApiSchedule mApiSchedule;
+    private DbHelperContract mDbHelper;
 
     @Inject
-    DataManager(@ApplicationContext Context context, PreferencesHelperContract prefs, ApiSchedule apiSchedule) {
+    DataManager(@ApplicationContext Context context,
+                PreferencesHelperContract prefs,
+                ApiSchedule apiSchedule,
+                DbHelperContract dbHelper) {
         mContext = context;
         mPreferencesHelper = prefs;
         mApiSchedule = apiSchedule;
+        mDbHelper = dbHelper;
     }
 
     @Override
@@ -67,6 +74,11 @@ public class DataManager implements DataManagerContract {
     @Override
     public Observable<ProfesorDetailsDTO> getProfesor(int cedula) {
         return mApiSchedule.getProfesor(cedula);
+    }
+
+    @Override
+    public Observable<Response<ResponseBody>> postDisponibilidad(List<DisponibilidadDTO> disponibilidades) {
+        return mApiSchedule.postDisponibilidad(disponibilidades);
     }
 
     @Override
@@ -107,5 +119,45 @@ public class DataManager implements DataManagerContract {
     @Override
     public void storeUser(String token) {
         mPreferencesHelper.storeUser(token);
+    }
+
+    @Override
+    public Observable<List<DisponibilidadDTO>> getDisponibilidadLocal(int cedula) {
+        return mDbHelper.getDisponibilidadLocal(cedula);
+    }
+
+    @Override
+    public Observable<List<DisponibilidadDTO>> getDisponibilidadLocal(int cedula, int idDia) {
+       return mDbHelper.getDisponibilidadLocal(cedula, idDia);
+    }
+
+    @Override
+    public Observable<DisponibilidadDetailsDTO> getDisponibilidadDetailsLocal(int cedula) {
+        return mDbHelper.getDisponibilidadDetailsLocal(cedula);
+    }
+
+    @Override
+    public void saveDisponibilidadLocal(List<DisponibilidadDTO> disponibilidades) {
+        mDbHelper.saveDisponibilidadLocal(disponibilidades);
+    }
+
+    @Override
+    public void saveDisponibilidadDetailsLocal(DisponibilidadDetailsDTO disponibilidadDetailsDTO) {
+        mDbHelper.saveDisponibilidadDetailsLocal(disponibilidadDetailsDTO);
+    }
+
+    @Override
+    public void removeDisponibilidadLocal(int cedula) {
+        mDbHelper.removeDisponibilidadLocal(cedula);
+    }
+
+    @Override
+    public void removeDisponibilidadLocal(int cedula, int idDia) {
+        mDbHelper.removeDisponibilidadLocal(cedula, idDia);
+    }
+
+    @Override
+    public void removeDisponibilidadDetailsLocal(int cedula) {
+        mDbHelper.removeDisponibilidadDetailsLocal(cedula);
     }
 }
