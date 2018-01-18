@@ -10,6 +10,13 @@
 
     <string name="app_name">ScheduleMobile</string>
 
+    <!--Dialogs-->
+    <string name="save">Guardar</string>
+    <string name="yes">Si</string>
+    <string name="no">No</string>
+    <string name="delete">Borrar</string>
+    <string name="cancelar">Cancelar</string>
+
     <!--Main Drawer Options-->
     <string name="drawer_menu_home">Home</string>
     <string name="drawer_menu_dispnobilidad">Disponibilidad</string>
@@ -48,6 +55,10 @@
     <string name="disp_guardar">Guardar Cambios</string>
     <string name="disp_horas_asig">Horas Asignadas</string>
     <string name="disp_horas_rest">Horas Restantes</string>
+    <string name="disp_details_agregar">Agregar Disponibilidad</string>
+    <string name="disp_details_guardar">Disponibilidad Guardada</string>
+    <string name="disp_details_hora_inicio">Seleccione hora inicio</string>
+    <string name="disp_details_hora_fin">Seleccione hora fin</string>
 
     <!--Permisos-->
     <string name="permisos_title">Permisos Requeridos</string>
