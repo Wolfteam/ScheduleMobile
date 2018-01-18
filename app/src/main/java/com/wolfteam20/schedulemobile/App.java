@@ -3,10 +3,13 @@ package com.wolfteam20.schedulemobile;
 import android.app.Activity;
 import android.app.Application;
 
+import com.wolfteam20.schedulemobile.data.network.models.MyObjectBox;
 import com.wolfteam20.schedulemobile.di.components.ApplicationComponent;
 import com.wolfteam20.schedulemobile.di.components.DaggerApplicationComponent;
 import com.wolfteam20.schedulemobile.di.modules.ApplicationContextModule;
 
+import io.objectbox.BoxStore;
+import io.objectbox.android.AndroidObjectBrowser;
 import timber.log.Timber;
 
 
@@ -17,6 +20,7 @@ import timber.log.Timber;
 public class App extends Application {
 
     private ApplicationComponent mApplicationComponent;
+    private BoxStore mBoxStore;
 
     @Override
     public void onCreate() {
@@ -26,6 +30,11 @@ public class App extends Application {
                 .builder()
                 .applicationContextModule(new ApplicationContextModule(this))
                 .build();
+        mBoxStore = MyObjectBox.builder().androidContext(this).build();
+        if (BuildConfig.DEBUG) {
+            new AndroidObjectBrowser(mBoxStore).start(this);
+        }
+        Timber.d("Using ObjectBox " + BoxStore.getVersion() + " (" + BoxStore.getVersionNative() + ")");
         mApplicationComponent.inject(this);
     }
 
@@ -35,5 +44,9 @@ public class App extends Application {
 
     public static App getApplication(Activity activity){
         return (App) activity.getApplication();
+    }
+
+    public BoxStore getBoxStore() {
+        return mBoxStore;
     }
 }
