@@ -1,0 +1,50 @@
+{
+  "_note1": "KEEP THIS FILE! Check it into a version control system (VCS) like git.",
+  "_note2": "ObjectBox manages crucial IDs for your object model. See docs for details.",
+  "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
+  "entities": [
+    {
+      "id": "1:2408667967769117913",
+      "lastPropertyId": "6:4923077281168534128",
+      "name": "DisponibilidadDTO",
+      "properties": [
+        {
+          "id": "1:863574880608421359",
+          "name": "idDia"
+        },
+        {
+          "id": "2:1394917977074854859",
+          "name": "idHoraInicio"
+        },
+        {
+          "id": "3:2700877686400610311",
+          "name": "idHoraFin"
+        },
+        {
+          "id": "4:3775972753841019621",
+          "name": "idPeriodo"
+        },
+        {
+          "id": "5:317613071287140085",
+          "name": "id"
+        },
+        {
+          "id": "6:4923077281168534128",
+          "name": "cedula"
+        }
+      ],
+      "relations": []
+    }
+  ],
+  "lastEntityId": "1:2408667967769117913",
+  "lastIndexId": "0:0",
+  "lastRelationId": "0:0",
+  "lastSequenceId": "0:0",
+  "modelVersion": 4,
+  "modelVersionParserMinimum": 4,
+  "retiredEntityUids": [],
+  "retiredIndexUids": [],
+  "retiredPropertyUids": [],
+  "retiredRelationUids": [],
+  "version": 1
+}

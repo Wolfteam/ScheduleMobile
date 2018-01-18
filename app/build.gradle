@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'io.objectbox'
 
 androidExtensions{
     experimental = true
@@ -24,7 +25,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
-            buildConfigField "String", "URLBaseAPI", "\"http://192.168.1.102/ScheduleAPI/\""
+            buildConfigField "String", "URLBaseAPI", "\"http://192.168.189.130/ScheduleAPI/\""
         }
     }
     compileOptions {
@@ -84,8 +85,9 @@ dependencies {
     implementation 'com.jakewharton.timber:timber:4.6.0'
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
+    implementation "io.objectbox:objectbox-kotlin:1.4.0"
     //Toasty
-    implementation 'com.github.GrenderG:Toasty:1.2.8'
+    //implementation 'com.github.GrenderG:Toasty:1.2.8'
 
     //JWTDecode.Android
     //compile 'com.auth0.android:jwtdecode:1.1.1'
