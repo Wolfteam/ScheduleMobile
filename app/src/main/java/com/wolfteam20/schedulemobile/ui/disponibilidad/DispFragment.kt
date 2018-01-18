@@ -1,6 +1,6 @@
 package com.wolfteam20.schedulemobile.ui.disponibilidad
 
-import android.content.Context
+import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,24 +11,23 @@ import android.widget.Toast
 import butterknife.ButterKnife
 import butterknife.OnClick
 import com.wolfteam20.schedulemobile.R
-import com.wolfteam20.schedulemobile.data.network.models.DisponibilidadDetailsDTO
 import com.wolfteam20.schedulemobile.data.network.models.ProfesorDetailsDTO
 import com.wolfteam20.schedulemobile.ui.adapters.ProfesoresListSpinnerAdapter
 import com.wolfteam20.schedulemobile.ui.base.BaseFragment
-import com.wolfteam20.schedulemobile.ui.disponibilidad.details.DispDetailsFragment
-import es.dmoral.toasty.Toasty
+import com.wolfteam20.schedulemobile.ui.disponibilidad.details.DispDetailsActivity
 import kotlinx.android.synthetic.main.disponibilidad_fragment.*
 import javax.inject.Inject
+
+
 
 
 /**
  * Created by Efrain.Bastidas on 1/11/2018.
  */
 class DispFragment : BaseFragment(), DispContractView, AdapterView.OnItemSelectedListener {
-
     @Inject
     lateinit var mPresenter: DispContractPresenter<DispContractView>
-
+        //TODO: RENOMBRAR LOS CONTRACT, EG: DispDetailsViewContract
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activityComponent.inject(this)
@@ -45,7 +44,27 @@ class DispFragment : BaseFragment(), DispContractView, AdapterView.OnItemSelecte
         super.onDestroy()
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                val edited = data?.getBooleanExtra("Edited", false)
+                val cedula = disp_prof_dropdown.selectedItemId.toInt()
+
+                edited?.let {
+                    if (cedula != -1)
+                        mPresenter.onHorasUpdatedLocal(cedula)
+                }
+            }
+        }
+    }
+
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        if (id.toInt() == -1) {
+            updateHoras(0, 0)
+            enableAllButtons(false)
+            return
+        }
+        enableAllButtons(true)
         mPresenter.onProfesorSelected(id.toInt())
     }
 
@@ -59,6 +78,7 @@ class DispFragment : BaseFragment(), DispContractView, AdapterView.OnItemSelecte
             it.setDisplayShowHomeEnabled(true)
             it.title = resources.getString(R.string.disp_activity)
         }
+        enableAllButtons(false)
         mPresenter.onAttach(this)
         mPresenter.subscribe()
     }
@@ -81,25 +101,23 @@ class DispFragment : BaseFragment(), DispContractView, AdapterView.OnItemSelecte
 
     @OnClick(R.id.btnGuardarCambios)
     override fun onBtnGuardarCambiosClick() {
-        //El intent de disponibilidad details debe pedir la lista de prof
-        Toasty.success(baseDrawerActivity, "Cambios guardados", Toast.LENGTH_SHORT).show()
+        val horasRestantes = horas_restantes.text.toString().toInt()
+        if (horasRestantes == 0)
+            mPresenter.saveDisponibilidad(disp_prof_dropdown.selectedItemId.toInt())
+        else
+            Toast.makeText(baseDrawerActivity, "Aun queda $horasRestantes horas", Toast.LENGTH_LONG).show()
     }
 
-    override fun showDetailsFragment(disponibilidad: DisponibilidadDetailsDTO, idDia: Int) {
-        val fragment = DispDetailsFragment()
-        val bundle = Bundle()
-        bundle.putParcelable("Disponibilidad", disponibilidad)
-        bundle.putInt("IdDia", idDia)
-        fragment.arguments = bundle
-        baseDrawerActivity.supportFragmentManager
-                .beginTransaction()
-                .addToBackStack(null)
-                .replace(R.id.disponibilidad_activity, fragment, "DISP_DETAILS_FRAGMENT_TAG")
-                .commit()
+    override fun startDetailsActivity(idDia: Int) {
+        val intent = DispDetailsActivity.getIntent(context)
+        intent.putExtra("Cedula", disp_prof_dropdown.selectedItemId.toInt())
+        intent.putExtra("IdDia", idDia)
+        startActivityForResult(intent,1)
     }
 
     override fun showError(error: String) {
-        Toasty.error(baseDrawerActivity, error, Toast.LENGTH_LONG).show()
+        //Toasty.error(baseDrawerActivity, error, Toast.LENGTH_LONG).show()
+        Toast.makeText(baseDrawerActivity, error, Toast.LENGTH_LONG).show()
     }
 
     override fun showLoading() {
@@ -112,9 +130,11 @@ class DispFragment : BaseFragment(), DispContractView, AdapterView.OnItemSelecte
             showError("No se encontraron profesores")
             return
         }
+        profesores.add(0, ProfesorDetailsDTO(-1, "Seleccione una opcion", "", null))
         val adapter = ProfesoresListSpinnerAdapter(baseDrawerActivity, R.layout.disponibilidad_spinner_prof_row, profesores)
         disp_prof_dropdown.adapter = adapter
         disp_prof_dropdown.onItemSelectedListener = this
+        disp_prof_dropdown.setSelection(0)
     }
 
     override fun updateHoras(horasACumplir: Int, horasRestantes: Int) {
@@ -122,9 +142,13 @@ class DispFragment : BaseFragment(), DispContractView, AdapterView.OnItemSelecte
         horas_restantes.setText(horasRestantes.toString())
     }
 
-    companion object {
-        fun getIntent(context: Context): Intent {
-            return Intent(context, DispFragment::class.java)
-        }
+    private fun enableAllButtons(enable: Boolean) {
+        btn_lunes.isEnabled = enable
+        btn_martes.isEnabled = enable
+        btn_miercoles.isEnabled = enable
+        btn_jueves.isEnabled = enable
+        btn_viernes.isEnabled = enable
+        btn_sabado.isEnabled = enable
+        btnGuardarCambios.isEnabled = enable
     }
 }

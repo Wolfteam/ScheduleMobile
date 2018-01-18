@@ -16,24 +16,87 @@ import javax.inject.Inject
 /**
  * Created by Efrain.Bastidas on 1/12/2018.
  */
-class DispPresenter<V : DispContractView>
-    : BasePresenter<V>, DispContractPresenter<V> {
+class DispPresenter<V : DispContractView> : BasePresenter<V>, DispContractPresenter<V> {
 
     private var mProfesores: MutableList<ProfesorDetailsDTO> = mutableListOf()
-
-    //Esta disponibilidad es de un profesor en particular
-    private var mDisponibilidad: DisponibilidadDetailsDTO? = null
-
 
     @Inject
     constructor(mCompositeDisposable: CompositeDisposable, mDataManager: DataManagerContract)
             : super(mCompositeDisposable, mDataManager)
 
     override fun onDiaClicked(idDia: Int) {
-        view.showDetailsFragment(mDisponibilidad, idDia)
+        view.startDetailsActivity(idDia)
+    }
+
+    override fun onHorasUpdatedLocal(cedula: Int) {
+        compositeDisposable.add(dataManager.getDisponibilidadDetailsLocal(cedula)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        { details ->
+                            view.updateHoras(details.horasACumplir, details.horasACumplir - details.horasAsignadas)
+                        }
+                )
+        )
+    }
+
+    override fun onProfesorSelected(cedula: Int) {
+        view.showLoading()
+        compositeDisposable.add(dataManager.getDisponbilidad(cedula)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        { disp ->
+                            dataManager.removeDisponibilidadDetailsLocal(cedula)
+                            dataManager.removeDisponibilidadLocal(cedula)
+                            dataManager.saveDisponibilidadLocal(disp.disponibilidad)
+                            dataManager.saveDisponibilidadDetailsLocal(DisponibilidadDetailsDTO(0, cedula, null, disp.horasAsignadas, disp.horasACumplir))
+                            //mDisponibilidad = disp
+                            //ESTA VALIDACION creo que sobra
+//                            if (disp.disponibilidad == null)
+//                                view.updateHoras(disp.horasACumplir, disp.horasACumplir)
+//                            else
+                            view.updateHoras(disp.horasACumplir, disp.horasACumplir - disp.horasAsignadas)
+                        },
+                        { throwable ->
+                            view.hideLoading()
+                            view.showError(throwable.message)
+                            Timber.e(throwable)
+                        },
+                        { view.hideLoading() }
+                )
+
+        )
+    }
+
+    override fun saveDisponibilidad(cedula: Int) {
+        if (!view.isNetworkAvailable) {
+            view.showError("No hay conexion a internet")
+            return
+        }
+        compositeDisposable.add(dataManager.getDisponibilidadLocal(cedula)
+                .flatMap { disp -> return@flatMap dataManager.postDisponibilidad(disp) }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        { response ->
+                            if (response.isSuccessful)
+                                view.showError("Disponibilidad guardada en la base de datos")
+                            else
+                                view.showError("No fue posible guardar la disponibilidad")
+                        },
+                        { error ->
+                            Timber.e(error)
+                            view.showError("Ocurrio un error: ${error.localizedMessage}")
+                        })
+        )
     }
 
     override fun subscribe() {
+        if (mProfesores.size != 0) {
+            view.showProfesores(mProfesores)
+            return
+        }
         val isAdmin = dataManager.isUserAdmin
         view.showLoading()
         if (isAdmin)
@@ -75,29 +138,5 @@ class DispPresenter<V : DispContractView>
                             { view.hideLoading() }
                     )
             )
-    }
-
-    override fun onProfesorSelected(cedula: Int) {
-        view.showLoading()
-        compositeDisposable.add(dataManager.getDisponbilidad(cedula)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        { disp ->
-                            mDisponibilidad = disp
-                            if (disp.disponibilidad == null)
-                                view.updateHoras(disp.horasACumplir, disp.horasACumplir)
-                            else
-                                view.updateHoras(disp.horasACumplir, disp.horasACumplir - disp.horasAsignadas)
-                        },
-                        { throwable ->
-                            view.hideLoading()
-                            view.showError(throwable.message)
-                            Timber.e(throwable)
-                        },
-                        { view.hideLoading() }
-                )
-
-        )
     }
 }

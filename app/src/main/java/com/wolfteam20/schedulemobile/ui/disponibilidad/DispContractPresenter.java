@@ -10,15 +10,21 @@ import com.wolfteam20.schedulemobile.ui.base.BaseContractPresenter;
 @ActivityScope
 public interface DispContractPresenter<V extends DispContractView> extends BaseContractPresenter<V> {
 
+    /**
+     * Inicia la activity Details pasandole el dia incado
+     * @param dia Dia en donde se hizo click
+     */
     void onDiaClicked(int dia);
 
     /**
-     * Evento que ocurre al seleccionar un profesor del dropdown.
-     * Obtiene la disponibilidad del prof.
-     *
+     * Obtiene la disponibilidad del prof. seleccionado en el dropdown y actualiza la vista
      * @param cedula Cedula del prof. indicado
      */
     void onProfesorSelected(int cedula);
+
+    void onHorasUpdatedLocal(int cedula);
+
+    void saveDisponibilidad(int cedula);
 
     void subscribe();
 }

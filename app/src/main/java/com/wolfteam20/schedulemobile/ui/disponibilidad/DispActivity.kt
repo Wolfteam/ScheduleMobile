@@ -7,12 +7,14 @@ import com.wolfteam20.schedulemobile.R
 import com.wolfteam20.schedulemobile.ui.base.BaseDrawerActivity
 import kotlinx.android.synthetic.main.base_activity.*
 
+
 /**
  * Created by Efrain Bastidas on 1/13/2018.
  */
 class DispActivity : BaseDrawerActivity() {
     private val DISP_FRAGMENT_TAG = "DISP_FRAGMENT_TAG"
     private val DISP_DETAILS_FRAGMENT_TAG = "DISP_DETAILS_FRAGMENT_TAG"
+    private var fragment: DispFragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,13 +31,14 @@ class DispActivity : BaseDrawerActivity() {
         mDrawer.setSelection(2, false)
     }
 
-    override fun onBackPressed() {
-        val detailsFragment = supportFragmentManager.findFragmentByTag(DISP_DETAILS_FRAGMENT_TAG)
-        if (detailsFragment.childFragmentManager.backStackEntryCount != 0)
-            detailsFragment.childFragmentManager.popBackStack()
-        else
-            super.onBackPressed()
-    }
+//    override fun onBackPressed() {
+//        val detailsFragment = supportFragmentManager.findFragmentByTag(DISP_DETAILS_FRAGMENT_TAG)
+//        if (detailsFragment.childFragmentManager.backStackEntryCount != 0)
+//            detailsFragment.childFragmentManager.popBackStack()
+//        else
+//            super.onBackPressed()
+//    }
+
     companion object {
         fun getIntent(context: Context): Intent {
             return Intent(context, DispActivity::class.java)
