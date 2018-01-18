@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/disp_details_pickers_ll"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.GridLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:alignmentMode="alignBounds"
+        app:columnCount="2"
+        app:rowOrderPreserved="false"
+        app:useDefaultMargins="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/disp_details_hora_inicio"
+            android:textAlignment="center"
+            android:textSize="14sp"
+            app:layout_column="0"
+            app:layout_columnSpan="1"
+            app:layout_columnWeight="1" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/disp_details_hora_fin"
+            android:textAlignment="center"
+            android:textSize="14sp"
+            app:layout_column="1"
+            app:layout_columnSpan="1"
+            app:layout_columnWeight="1" />
+
+        <NumberPicker
+            android:id="@+id/disp_details_hora_inicio"
+            android:layout_width="0dp"
+            android:layout_height="110dp"
+            android:descendantFocusability="blocksDescendants"
+            app:layout_column="0"
+            app:layout_columnSpan="1"
+            app:layout_columnWeight="1"
+            app:layout_gravity="fill_horizontal" />
+
+        <NumberPicker
+            android:id="@+id/disp_details_hora_fin"
+            android:layout_width="0dp"
+            android:layout_height="110dp"
+            android:descendantFocusability="blocksDescendants"
+            app:layout_column="1"
+            app:layout_columnSpan="1"
+            app:layout_columnWeight="1"
+            app:layout_gravity="fill_horizontal" />
+    </android.support.v7.widget.GridLayout>
+</LinearLayout>
