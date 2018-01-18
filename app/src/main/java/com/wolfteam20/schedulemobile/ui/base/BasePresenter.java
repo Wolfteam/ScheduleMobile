@@ -31,7 +31,7 @@ public class BasePresenter<V extends BaseContractView> implements BaseContractPr
 
     public V getView(){
         if (mBaseView == null)
-            throw new NullPointerException("La vista no puede ser nula");
+            throw new NullPointerException("La view del presenter no puede ser nula. Hiciste el onAttach?");
         return mBaseView;
     }
 

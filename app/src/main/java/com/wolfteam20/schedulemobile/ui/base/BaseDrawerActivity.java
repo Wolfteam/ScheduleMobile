@@ -50,7 +50,7 @@ public abstract class BaseDrawerActivity extends AppCompatActivity
         Drawer.OnDrawerItemClickListener {
 
     private ActivityComponent mActivityComponent;
-    @BindView(R.id.toolbar) Toolbar mToolbar;
+    @BindView(R.id.toolbar) protected Toolbar mToolbar;
     private List<Unbinder> mUnBinder = new ArrayList<>();
     protected Drawer mDrawer;
     private final int DRAWER_DELAY = 210;
@@ -102,7 +102,6 @@ public abstract class BaseDrawerActivity extends AppCompatActivity
 
     @Override
     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-        //TODO: Arreglar el beta de que no se pueda presionar varias veces en el mismo item
         boolean closeDrawer = true;
         switch ((int) drawerItem.getIdentifier()) {
             case 1://Home
@@ -254,6 +253,13 @@ public abstract class BaseDrawerActivity extends AppCompatActivity
                 .withInnerShadow(true)
                 .withOnDrawerItemClickListener(this)
                 .build();
+        mDrawer.getAdapter().withOnPreClickListener((v, adapter, item, position) -> {
+                            if (item.isSelected()){
+                                mDrawer.closeDrawer();
+                                return true;
+                            }
+                            return false;
+                        });
     }
 
     @Override
