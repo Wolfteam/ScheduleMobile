@@ -25,7 +25,6 @@ class DispDetailsFragment : BaseFragment(), DispDetailsViewContract {
     private val mHoras = arrayOf("7:00 am", "7:50 am", "8:40 am", "9:30 am", "10:20 am", "11:10 am",
             "12:00 pm", "1:00 pm", "1:50 pm", "2:40 pm", "3:30 pm", "4:20 pm", "5:10 pm", "6:00 pm")
     private var mAdapter = DispDetailsListAdapter(mHoras)
-    val horaInicio = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
