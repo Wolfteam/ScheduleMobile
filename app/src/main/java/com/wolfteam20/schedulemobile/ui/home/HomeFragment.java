@@ -34,10 +34,10 @@ import butterknife.OnClick;
  * Created by Efrain Bastidas on 1/7/2018.
  */
 
-public class HomeFragment extends BaseFragment implements HomeContractView, SwipeRefreshLayout.OnRefreshListener {
+public class HomeFragment extends BaseFragment implements HomeViewContract, SwipeRefreshLayout.OnRefreshListener {
 
     @Inject
-    HomeContractPresenter<HomeContractView> mPresenter;
+    HomePresenterContract<HomeViewContract> mPresenter;
 
     @BindView(R.id.home_fragment_swipe_to_refresh) SwipeRefreshLayout mSwipeRefreshLayout;
     @BindView(R.id.home_fragment_periodo_actual) TextView mPeriodoActual;

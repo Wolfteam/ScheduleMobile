@@ -10,7 +10,7 @@ import io.reactivex.disposables.CompositeDisposable;
  * Created by Efrain Bastidas on 1/2/2018.
  */
 
-public class BasePresenter<V extends BaseContractView> implements BaseContractPresenter<V> {
+public class BasePresenter<V extends BaseViewContract> implements BasePresenterContract<V> {
 
     private final CompositeDisposable mCompositeDisposable;
     private final DataManagerContract mDataManager;

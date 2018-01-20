@@ -26,9 +26,9 @@ import timber.log.Timber;
  * Created by Efrain Bastidas on 1/6/2018.
  */
 
-public class HomePresenter<V extends HomeContractView>
+public class HomePresenter<V extends HomeViewContract>
         extends BasePresenter<V>
-        implements HomeContractPresenter<V> {
+        implements HomePresenterContract<V> {
     //TODO: REEMPLZAR TODOS LOS throwable CON UN ERROR GENERICO EN TODOS LOS PRESENTER
     @Inject
     HomePresenter(CompositeDisposable compositeDisposable, DataManagerContract dataManager) {

@@ -15,7 +15,7 @@ import butterknife.Unbinder;
  * Created by Efrain Bastidas on 1/7/2018.
  */
 
-public abstract class BaseFragment extends Fragment implements BaseContractView {
+public abstract class BaseFragment extends Fragment implements BaseViewContract {
     private BaseActivity mBaseActivity;
     private BaseDrawerActivity mBaseDrawerActivity;
     private Unbinder mUnBinder;

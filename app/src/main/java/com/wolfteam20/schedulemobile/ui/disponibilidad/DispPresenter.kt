@@ -16,7 +16,7 @@ import javax.inject.Inject
 /**
  * Created by Efrain.Bastidas on 1/12/2018.
  */
-class DispPresenter<V : DispContractView> : BasePresenter<V>, DispContractPresenter<V> {
+class DispPresenter<V : DispViewContract> : BasePresenter<V>, DispPresenterContract<V> {
 
     private var mProfesores: MutableList<ProfesorDetailsDTO> = mutableListOf()
 

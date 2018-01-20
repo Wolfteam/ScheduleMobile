@@ -46,7 +46,7 @@ import butterknife.Unbinder;
  */
 
 public abstract class BaseDrawerActivity extends AppCompatActivity
-        implements BaseContractView,
+        implements BaseViewContract,
         Drawer.OnDrawerItemClickListener {
 
     private ActivityComponent mActivityComponent;

@@ -25,7 +25,7 @@ import butterknife.OnClick;
  * Created by Efrain Bastidas on 12/31/2017.
  */
 
-public class LoginActivity extends BaseActivity implements LoginContractView {
+public class LoginActivity extends BaseActivity implements LoginViewContract {
 
     @BindView(R.id.editTextUsername) EditText textViewUsername;
     @BindView(R.id.editTextPassword) EditText textViewPassword;
@@ -33,7 +33,7 @@ public class LoginActivity extends BaseActivity implements LoginContractView {
     @BindView(R.id.btnSignIn) Button mBtnSignin;
 
     @Inject
-    LoginContractPresenter<LoginContractView> mPresenter;
+    LoginPresenterContract<LoginViewContract> mPresenter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

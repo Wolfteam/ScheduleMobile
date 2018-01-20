@@ -5,17 +5,17 @@ import android.content.Context;
 
 import com.wolfteam20.schedulemobile.di.qualifiers.ActivityContext;
 import com.wolfteam20.schedulemobile.di.scopes.ActivityScope;
-import com.wolfteam20.schedulemobile.ui.disponibilidad.DispContractPresenter;
-import com.wolfteam20.schedulemobile.ui.disponibilidad.DispContractView;
+import com.wolfteam20.schedulemobile.ui.disponibilidad.DispPresenterContract;
+import com.wolfteam20.schedulemobile.ui.disponibilidad.DispViewContract;
 import com.wolfteam20.schedulemobile.ui.disponibilidad.DispPresenter;
 import com.wolfteam20.schedulemobile.ui.disponibilidad.details.DispDetailsPresenterContract;
 import com.wolfteam20.schedulemobile.ui.disponibilidad.details.DispDetailsViewContract;
 import com.wolfteam20.schedulemobile.ui.disponibilidad.details.DispDetailsPresenter;
-import com.wolfteam20.schedulemobile.ui.home.HomeContractPresenter;
-import com.wolfteam20.schedulemobile.ui.home.HomeContractView;
+import com.wolfteam20.schedulemobile.ui.home.HomePresenterContract;
+import com.wolfteam20.schedulemobile.ui.home.HomeViewContract;
 import com.wolfteam20.schedulemobile.ui.home.HomePresenter;
-import com.wolfteam20.schedulemobile.ui.login.LoginContractPresenter;
-import com.wolfteam20.schedulemobile.ui.login.LoginContractView;
+import com.wolfteam20.schedulemobile.ui.login.LoginPresenterContract;
+import com.wolfteam20.schedulemobile.ui.login.LoginViewContract;
 import com.wolfteam20.schedulemobile.ui.login.LoginPresenter;
 
 import dagger.Module;
@@ -54,19 +54,19 @@ public class ActivityModule {
     
     @Provides
     @ActivityScope
-    LoginContractPresenter<LoginContractView> provideLoginPresenter(LoginPresenter<LoginContractView> presenter) {
+    LoginPresenterContract<LoginViewContract> provideLoginPresenter(LoginPresenter<LoginViewContract> presenter) {
         return presenter;
     }
 
     @Provides
     @ActivityScope
-    HomeContractPresenter<HomeContractView> provideHomePresenter(HomePresenter<HomeContractView> presenter) {
+    HomePresenterContract<HomeViewContract> provideHomePresenter(HomePresenter<HomeViewContract> presenter) {
         return presenter;
     }
 
     @Provides
     @ActivityScope
-    DispContractPresenter<DispContractView> provideDisponibilidadPresenter(DispPresenter<DispContractView> presenter){
+    DispPresenterContract<DispViewContract> provideDisponibilidadPresenter(DispPresenter<DispViewContract> presenter){
         return presenter;
     }
 

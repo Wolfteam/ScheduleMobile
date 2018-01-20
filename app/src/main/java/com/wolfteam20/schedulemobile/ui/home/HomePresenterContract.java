@@ -1,7 +1,7 @@
 package com.wolfteam20.schedulemobile.ui.home;
 
 import com.wolfteam20.schedulemobile.di.scopes.ActivityScope;
-import com.wolfteam20.schedulemobile.ui.base.BaseContractPresenter;
+import com.wolfteam20.schedulemobile.ui.base.BasePresenterContract;
 
 import io.reactivex.ObservableEmitter;
 import okhttp3.ResponseBody;
@@ -11,7 +11,7 @@ import okhttp3.ResponseBody;
  */
 
 @ActivityScope
-public interface HomeContractPresenter<V extends HomeContractView> extends BaseContractPresenter<V> {
+public interface HomePresenterContract<V extends HomeViewContract> extends BasePresenterContract<V> {
     /**
      * Obtiene una planificacion en particular para luego salvarla
      * @param tipoPlanificacion Tipo de planificacion (1 Academica, 2 Aulas, 3 Horarios)

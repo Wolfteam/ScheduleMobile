@@ -15,9 +15,9 @@ import timber.log.Timber;
  * Created by Efrain Bastidas on 1/2/2018.
  */
 
-public class LoginPresenter<V extends LoginContractView>
+public class LoginPresenter<V extends LoginViewContract>
         extends BasePresenter<V>
-        implements LoginContractPresenter<V> {
+        implements LoginPresenterContract<V> {
 
     @Inject
     LoginPresenter(CompositeDisposable compositeDisposable, DataManagerContract dataManager) {

@@ -24,9 +24,9 @@ import javax.inject.Inject
 /**
  * Created by Efrain.Bastidas on 1/11/2018.
  */
-class DispFragment : BaseFragment(), DispContractView, AdapterView.OnItemSelectedListener {
+class DispFragment : BaseFragment(), DispViewContract, AdapterView.OnItemSelectedListener {
     @Inject
-    lateinit var mPresenter: DispContractPresenter<DispContractView>
+    lateinit var mPresenter: DispPresenterContract<DispViewContract>
         //TODO: RENOMBRAR LOS CONTRACT, EG: DispDetailsViewContract
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

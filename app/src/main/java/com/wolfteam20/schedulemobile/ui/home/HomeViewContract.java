@@ -2,13 +2,13 @@ package com.wolfteam20.schedulemobile.ui.home;
 
 import android.view.View;
 
-import com.wolfteam20.schedulemobile.ui.base.BaseContractView;
+import com.wolfteam20.schedulemobile.ui.base.BaseViewContract;
 
 /**
  * Created by Efrain.Bastidas on 1/4/2018.
  */
 
-public interface HomeContractView extends BaseContractView {
+public interface HomeViewContract extends BaseViewContract {
     void onBtnPlanificacionClick(View view);
 
     /**

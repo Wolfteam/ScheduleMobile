@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 import android.view.View;
 
 import com.wolfteam20.schedulemobile.data.network.models.ProfesorDetailsDTO;
-import com.wolfteam20.schedulemobile.ui.base.BaseContractView;
+import com.wolfteam20.schedulemobile.ui.base.BaseViewContract;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -14,7 +14,7 @@ import java.util.List;
  * Created by Efrain.Bastidas on 1/4/2018.
  */
 
-public interface DispContractView extends BaseContractView {
+public interface DispViewContract extends BaseViewContract {
 
     void hideLoading();
 

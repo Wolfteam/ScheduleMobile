@@ -22,7 +22,7 @@ import butterknife.Unbinder;
  * Created by Efrain Bastidas on 1/2/2018.
  */
 
-public class BaseActivity extends AppCompatActivity implements BaseContractView {
+public class BaseActivity extends AppCompatActivity implements BaseViewContract {
 
     private ActivityComponent mActivityComponent;
     private Unbinder mUnBinder;
