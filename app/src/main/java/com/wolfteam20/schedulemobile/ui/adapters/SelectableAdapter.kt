@@ -41,7 +41,7 @@ abstract class SelectableAdapter<VH : RecyclerView.ViewHolder> : RecyclerView.Ad
      * Indicates the list of selected items
      * @return List of selected items ids
      */
-    fun getSelectedItems(): List<Int> {
+    fun getSelectedItems(): ArrayList<Int> {
         val items : ArrayList<Int> = ArrayList(mSelectedItems.size())
         (0 until mSelectedItems.size()).mapTo(items) {
             mSelectedItems.keyAt(it)
