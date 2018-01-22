@@ -4,9 +4,11 @@ package com.wolfteam20.schedulemobile.ui.base;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.view.View;
 
+import com.wolfteam20.schedulemobile.R;
 import com.wolfteam20.schedulemobile.di.components.ActivityComponent;
 
 import butterknife.Unbinder;
@@ -66,6 +68,12 @@ public abstract class BaseFragment extends Fragment implements BaseViewContract 
         return mBaseDrawerActivity;
     }
 
+    public BaseViewContract getCurrentActivityContext() {
+        if (getBaseActivity() != null)
+            return getBaseActivity();
+        else
+            return getBaseDrawerActivity();
+    }
 
     @Override
     public void hideKeyboard() {
@@ -93,6 +101,19 @@ public abstract class BaseFragment extends Fragment implements BaseViewContract 
     }
 
     @Override
+    public void onError(String message) {
+        if (message != null)
+            getCurrentActivityContext().onError(message);
+        else
+            getCurrentActivityContext().onError(R.string.error);
+    }
+
+    @Override
+    public void onError(@StringRes int resId) {
+        onError(getString(resId));
+    }
+
+    @Override
     public void openActivityOnTokenExpire() {
         if (mBaseActivity != null) {
             mBaseActivity.openActivityOnTokenExpire();
@@ -101,5 +122,15 @@ public abstract class BaseFragment extends Fragment implements BaseViewContract 
 
     public void setUnBinder(Unbinder unBinder) {
         mUnBinder = unBinder;
+    }
+
+    @Override
+    public void showMessage(String message) {
+        getCurrentActivityContext().showMessage(message);
+    }
+
+    @Override
+    public void showMessage(@StringRes int resId) {
+        showMessage(getString(resId));
     }
 }
