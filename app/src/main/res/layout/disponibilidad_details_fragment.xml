@@ -19,14 +19,17 @@
             <android.support.v7.widget.Toolbar
                 android:id="@+id/disp_details_fragment_toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary" />
+                android:layout_height="?android:attr/actionBarSize"
+                android:background="@color/md_grey_900"
+                app:subtitleTextColor="@color/white"
+                app:titleTextColor="@color/white" />
         </android.support.design.widget.AppBarLayout>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/disp_details_recyclerView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:background="@color/md_grey_900" />
     </LinearLayout>
 
 

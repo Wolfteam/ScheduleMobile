@@ -19,26 +19,29 @@
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary">
+                android:layout_height="?android:attr/actionBarSize"
+                android:background="@color/md_grey_900"
+                app:subtitleTextColor="@color/white"
+                app:titleTextColor="@color/white">
                 <!--app:popupTheme="@style/AppTheme.PopupOverlay"-->
                 <Spinner
                     android:id="@+id/main_spinner"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"/>
-<!--app:popupTheme="@style/AppTheme.PopupOverlay"-->
+                    android:visibility="gone" />
+                <!--app:popupTheme="@style/AppTheme.PopupOverlay"-->
             </android.support.v7.widget.Toolbar>
 
             <!--<android.support.design.widget.TabLayout-->
-                <!--android:id="@+id/tab_layout"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:visibility="gone"/>-->
+            <!--android:id="@+id/tab_layout"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:visibility="gone"/>-->
 
         </android.support.design.widget.AppBarLayout>
 
-        <FrameLayout android:id="@+id/content_frame"
+        <FrameLayout
+            android:id="@+id/content_frame"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 

@@ -10,12 +10,24 @@
 
     <string name="app_name">ScheduleMobile</string>
 
-    <!--Dialogs-->
+    <!--Dialogs/Mensajes-->
     <string name="save">Guardar</string>
     <string name="yes">Si</string>
     <string name="no">No</string>
     <string name="delete">Borrar</string>
     <string name="cancelar">Cancelar</string>
+    <string name="error">Ocurrio un error</string>
+    <string name="no_network">No hay conexion disponible</string>
+    <string name="cerrar_sesion">Cerrar Sesion</string>
+    <string name="cerrar_sesion_msg">¿Esta seguro que desea salir?</string>
+    <string name="wrong_username_password">Usuario o clave invalidas</string>
+    <string name="no_prof_found">No se encontraron profesores</string>
+    <string name="disp_save_msg">Disponibilidad guardada en la base de datos</string>
+    <string name="disp_error_msg">No fue posible guardar la disponibilidad</string>
+    <string name="disp_details_save_msg">Disponibilidad guardada localmente</string>
+    <string name="disp_details_no_records_found">No se encontraron registros</string>
+    <string name="disp_details_add_msg">Las horas seleccionadas ya existen o no son validas. Debe haber minimo 2 horas seguidas</string>
+    <string name="disp_details_delete">Debe seleccionar al menos una disponibilidad para borrar</string>
 
     <!--Main Drawer Options-->
     <string name="drawer_menu_home">Home</string>
@@ -35,12 +47,8 @@
 
     <string name="navigation_drawer_open">Abir barra de navegacion</string>
     <string name="navigation_drawer_close">Cerrar barra de navegacion</string>
-
     <string name="drawer_menu_about">Acerca de</string>
 
-    <!--Cerrar Sesion-->
-    <string name="cerrar_sesion">Cerrar Sesion</string>
-    <string name="cerrar_sesion_msg">¿Esta seguro que desea salir?</string>
 
     <!--Activities-->
     <string name="home_activity">Home</string>

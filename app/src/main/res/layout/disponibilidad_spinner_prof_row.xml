@@ -8,5 +8,6 @@
         android:layout_height="wrap_content"
         android:textSize="25sp"
         android:padding="5dp"
-        android:textColor="@color/greyDarken4" />
+        android:textColor="@color/orangeAccent4"
+        android:background="@color/md_grey_850"/>
 </LinearLayout>
