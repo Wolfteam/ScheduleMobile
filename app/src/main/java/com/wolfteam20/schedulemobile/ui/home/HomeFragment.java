@@ -169,11 +169,6 @@ public class HomeFragment extends BaseFragment implements HomeViewContract, Swip
     }
 
     @Override
-    public void showError(String error) {
-        Toast.makeText(getContext(), error, Toast.LENGTH_LONG).show();
-    }
-
-    @Override
     public void showLoading() {
         if (!mSwipeRefreshLayout.isRefreshing())
             mSwipeRefreshLayout.setRefreshing(true);

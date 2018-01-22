@@ -15,7 +15,5 @@ public interface LoginViewContract extends BaseViewContract {
 
     void setEnabledViews(boolean enabled);
 
-    void showError(String error);
-
     void showLoading();
 }

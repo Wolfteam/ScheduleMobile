@@ -2,6 +2,7 @@ package com.wolfteam20.schedulemobile.ui.home;
 
 import android.os.Environment;
 
+import com.wolfteam20.schedulemobile.R;
 import com.wolfteam20.schedulemobile.data.DataManagerContract;
 import com.wolfteam20.schedulemobile.ui.base.BasePresenter;
 import com.wolfteam20.schedulemobile.utils.Constants;
@@ -26,10 +27,8 @@ import timber.log.Timber;
  * Created by Efrain Bastidas on 1/6/2018.
  */
 
-public class HomePresenter<V extends HomeViewContract>
-        extends BasePresenter<V>
-        implements HomePresenterContract<V> {
-    //TODO: REEMPLZAR TODOS LOS throwable CON UN ERROR GENERICO EN TODOS LOS PRESENTER
+public class HomePresenter<V extends HomeViewContract> extends BasePresenter<V> implements HomePresenterContract<V> {
+
     @Inject
     HomePresenter(CompositeDisposable compositeDisposable, DataManagerContract dataManager) {
         super(compositeDisposable, dataManager);
@@ -38,7 +37,7 @@ public class HomePresenter<V extends HomeViewContract>
     @Override
     public void getPlanificacion(int tipoPlanificacion) {
         if (!getView().isNetworkAvailable()) {
-            getView().showError("No hay conexion.");
+            getView().onError(R.string.no_network);
             return;
         }
         getView().showDownloadProgressIndicator();
@@ -59,10 +58,10 @@ public class HomePresenter<V extends HomeViewContract>
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe(
-                                        success -> getView().showError(success),
+                                        success -> getView().onError(success),
                                         throwable -> {
                                             getView().hideLoading();
-                                            getView().showError(throwable.getMessage());
+                                            getView().onError(throwable.getMessage());
                                             Timber.e(throwable);
                                         },
                                         () -> getView().stopDownloadProgressIndicator()
@@ -85,10 +84,10 @@ public class HomePresenter<V extends HomeViewContract>
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe(
-                                        success -> getView().showError(success),
+                                        success -> getView().onError(success),
                                         throwable -> {
                                             getView().hideLoading();
-                                            getView().showError(throwable.getMessage());
+                                            getView().onError(throwable.getMessage());
                                             Timber.e(throwable);
                                         },
                                         () -> getView().stopDownloadProgressIndicator()
@@ -111,10 +110,10 @@ public class HomePresenter<V extends HomeViewContract>
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe(
-                                        success -> getView().showError(success),
+                                        success -> getView().onError(success),
                                         throwable -> {
                                             getView().hideLoading();
-                                            getView().showError(throwable.getMessage());
+                                            getView().onError(throwable.getMessage());
                                             Timber.e(throwable);
                                         },
                                         () -> getView().stopDownloadProgressIndicator()
@@ -126,6 +125,10 @@ public class HomePresenter<V extends HomeViewContract>
 
     @Override
     public void getCurrentPeriodo() {
+        if (!getView().isNetworkAvailable()) {
+            getView().onError(R.string.no_network);
+            return;
+        }
         getView().showLoading();
         getCompositeDisposable().add(getDataManager().getCurrentPeriodoAcademico()
                 .subscribeOn(Schedulers.io())
@@ -134,14 +137,15 @@ public class HomePresenter<V extends HomeViewContract>
                         response ->
                         {
                             if (!response.isSuccessful()) {
-                                getView().showError("El token expiro?");
+                                getDataManager().storeAccessToken("");
+                                getView().openActivityOnTokenExpire();
                                 return;
                             }
                             getView().showCurrentPeriodo(response.body().getNombrePeriodo());
                         },
                         throwable -> {
                             getView().hideLoading();
-                            getView().showError(throwable.getMessage());
+                            getView().onError(throwable.getMessage());
                             Timber.e(throwable);
                         },
                         () -> getView().hideLoading()

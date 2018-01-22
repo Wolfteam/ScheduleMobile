@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.wolfteam20.schedulemobile.R;
 import com.wolfteam20.schedulemobile.ui.base.BaseActivity;
@@ -75,11 +74,6 @@ public class LoginActivity extends BaseActivity implements LoginViewContract {
     @OnClick(R.id.btnSignIn)
     @Override
     public void onBtnSignInClick() {
-        boolean isNetworkAvailble = isNetworkAvailable();
-        if (!isNetworkAvailble) {
-            showError("No hay red disponible.");
-            return;
-        }
         String username = textViewUsername.getText().toString();
         String password = textViewPassword.getText().toString();
         mPresenter.onBtnSignInClick(username, password);
@@ -90,11 +84,6 @@ public class LoginActivity extends BaseActivity implements LoginViewContract {
         textViewPassword.setEnabled(enabled);
         textViewUsername.setEnabled(enabled);
         mBtnSignin.setEnabled(enabled);
-    }
-
-    @Override
-    public void showError(String error) {
-        Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
     }
 
     @Override

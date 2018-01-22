@@ -24,8 +24,6 @@ public interface HomeViewContract extends BaseViewContract {
 
     void showDownloadProgressIndicator();
 
-    void showError(String error);
-
     void showLoading();
 
     void stopDownloadProgressIndicator();

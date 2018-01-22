@@ -1,5 +1,6 @@
 package com.wolfteam20.schedulemobile.ui.login;
 
+import com.wolfteam20.schedulemobile.R;
 import com.wolfteam20.schedulemobile.data.DataManagerContract;
 import com.wolfteam20.schedulemobile.data.network.models.TokenDTO;
 import com.wolfteam20.schedulemobile.ui.base.BasePresenter;
@@ -15,9 +16,7 @@ import timber.log.Timber;
  * Created by Efrain Bastidas on 1/2/2018.
  */
 
-public class LoginPresenter<V extends LoginViewContract>
-        extends BasePresenter<V>
-        implements LoginPresenterContract<V> {
+public class LoginPresenter<V extends LoginViewContract> extends BasePresenter<V> implements LoginPresenterContract<V> {
 
     @Inject
     LoginPresenter(CompositeDisposable compositeDisposable, DataManagerContract dataManager) {
@@ -26,28 +25,31 @@ public class LoginPresenter<V extends LoginViewContract>
 
     @Override
     public void onBtnSignInClick(String username, String password) {
+        if (!getView().isNetworkAvailable()) {
+            getView().onError(R.string.no_network);
+            return;
+        }
         getView().showLoading();
-        getCompositeDisposable().add(
-                getDataManager().getToken(username, password, true)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(response ->
-                                {
-                                    if (response.isSuccessful()) {
-                                        TokenDTO token = response.body();
-                                        getDataManager().storeAccessToken(token.getAuthenticationToken());
-                                        getDataManager().storeUser(token.getAuthenticationToken());
-                                        getView().intentToHomeActivity();
-                                    } else {
-                                        getView().showError("Usuario o clave invalidas");
-                                    }
-                                }, throwable -> {
-                                    getView().hideLoading();
-                                    getView().showError(throwable.getMessage());
-                                    Timber.e(throwable);
-                                },
-                                () -> getView().hideLoading()
-                        )
+        getCompositeDisposable().add(getDataManager().getToken(username, password, true)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(response ->
+                        {
+                            if (response.isSuccessful()) {
+                                TokenDTO token = response.body();
+                                getDataManager().storeAccessToken(token.getAuthenticationToken());
+                                getDataManager().storeUser(token.getAuthenticationToken());
+                                getView().intentToHomeActivity();
+                            } else {
+                                getView().onError(R.string.wrong_username_password);
+                            }
+                        }, throwable -> {
+                            getView().hideLoading();
+                            getView().onError(throwable.getLocalizedMessage());
+                            Timber.e(throwable);
+                        },
+                        () -> getView().hideLoading()
+                )
         );
     }
 
