@@ -14,14 +14,13 @@ import kotlinx.android.synthetic.main.base_activity.*
 class DispActivity : BaseDrawerActivity() {
     private val DISP_FRAGMENT_TAG = "DISP_FRAGMENT_TAG"
     private val DISP_DETAILS_FRAGMENT_TAG = "DISP_DETAILS_FRAGMENT_TAG"
-    private var fragment: DispFragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // setContentView(R.layout.disponibilidad_activity)
         layoutInflater.inflate(R.layout.disponibilidad_activity, content_frame)
         var fragment: DispFragment? = supportFragmentManager.findFragmentByTag(DISP_FRAGMENT_TAG) as DispFragment?
-        if (fragment == null) {
+        if (fragment == null && savedInstanceState == null) {
             fragment = DispFragment()
             supportFragmentManager
                     .beginTransaction()

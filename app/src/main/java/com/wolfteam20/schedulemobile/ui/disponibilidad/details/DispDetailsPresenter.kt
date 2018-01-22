@@ -1,5 +1,6 @@
 package com.wolfteam20.schedulemobile.ui.disponibilidad.details
 
+import com.wolfteam20.schedulemobile.R
 import com.wolfteam20.schedulemobile.data.DataManagerContract
 import com.wolfteam20.schedulemobile.data.network.models.DisponibilidadDTO
 import com.wolfteam20.schedulemobile.data.network.models.DisponibilidadDetailsDTO
@@ -17,7 +18,7 @@ class DispDetailsPresenter<V : DispDetailsViewContract> : BasePresenter<V>, Disp
     //TODO: VER COMO SE COMPORTA ESTO CON CAMBIOS DE ORIENTACION,ETC
     //XQ CAPAZ AL AGREGAR/ELIMINAR TENGA Q HACER UN LLAMADO A LA API EN VEZ DE MANTENER
     //LOS CAMBIOS EN MEMORIA
-    private var mDisp: MutableList<DisponibilidadDTO> = arrayListOf()
+    //private var mDisp: MutableList<DisponibilidadDTO> = arrayListOf()
     private var mCedula = 0
     private var mIdDia: Int = 0
     private var mHorasAsignadas = 0
@@ -27,25 +28,21 @@ class DispDetailsPresenter<V : DispDetailsViewContract> : BasePresenter<V>, Disp
     constructor(mCompositeDisposable: CompositeDisposable, mDataManager: DataManagerContract)
             : super(mCompositeDisposable, mDataManager)
 
-
     override fun addDisponibilidad(idHoraInicio: Int, idHoraFin: Int) {
-        mDisp.add(DisponibilidadDTO(0, mCedula, mIdDia, idHoraInicio, idHoraFin, -1))
         mHorasAsignadas += idHoraFin - idHoraInicio
-        view.showList(mDisp)
+        view.addItem(DisponibilidadDTO(0, mCedula, mIdDia, idHoraInicio, idHoraFin, -1))
     }
 
     override fun onDisponibilidadDeleted(idHoraInicio: Int, idHoraFin: Int) {
-        mDisp.removeAll {
-            it.idDia == mIdDia && it.idHoraInicio == idHoraInicio && it.idHoraFin == idHoraFin
-        }
+        mHorasAsignadas -= idHoraFin - idHoraInicio
     }
 
     override fun saveDisponibilidadLocal() {
         dataManager.removeDisponibilidadLocal(mCedula, mIdDia)
         dataManager.removeDisponibilidadDetailsLocal(mCedula)
-        dataManager.saveDisponibilidadLocal(mDisp)
+        dataManager.saveDisponibilidadLocal(view.getItems())
         dataManager.saveDisponibilidadDetailsLocal(DisponibilidadDetailsDTO(0, mCedula, null, mHorasAsignadas, mHorasACumplir))
-        view.showMessage("Disponibilidad Guardada")
+        view.showMessage(R.string.disp_details_save_msg)
     }
 
     override fun subscribe(cedula: Int, idDia: Int) {
@@ -65,10 +62,9 @@ class DispDetailsPresenter<V : DispDetailsViewContract> : BasePresenter<V>, Disp
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
                                 { disp ->
-                                    mDisp = disp
                                     view.showList(disp)
                                 },
-                                { throwable -> view.showError(throwable.localizedMessage) }
+                                { throwable -> view.onError(throwable.localizedMessage) }
                         )
         )
     }
@@ -76,21 +72,21 @@ class DispDetailsPresenter<V : DispDetailsViewContract> : BasePresenter<V>, Disp
     override fun validateHorasSelected(idHoraInicio: Int, idHoraFin: Int): Boolean {
         val horasRestantes = mHorasACumplir - mHorasAsignadas
         if (horasRestantes < idHoraFin - idHoraInicio) {
-            view.showError("Excedes las horas restantes, solo puedes asignar: $horasRestantes horas mas")
+            view.onError("Excedes las horas restantes, solo puedes asignar: $horasRestantes horas mas")
             return false
         }
-
-        if (mDisp.count() == 0) {
+        val disponibilidades = view.getItems()
+        if (disponibilidades.size == 0) {
             val result = validateHoras(idHoraInicio, idHoraFin)
             if (!result) {
-                view.showError("Las horas seleccionadas ya existen o no son validas")
+                view.onError(R.string.disp_details_add_msg)
                 return false
             }
         } else {
-            for (d in mDisp) {
+            for (d in disponibilidades) {
                 val result = validateHoras(d.idHoraInicio, d.idHoraFin, idHoraInicio, idHoraFin)
                 if (!result) {
-                    view.showError("Las horas seleccionadas ya existen o no son validas")
+                    view.onError(R.string.disp_details_add_msg)
                     return false
                 }
             }

@@ -1,5 +1,6 @@
 package com.wolfteam20.schedulemobile.ui.disponibilidad
 
+import com.wolfteam20.schedulemobile.R
 import com.wolfteam20.schedulemobile.data.DataManagerContract
 import com.wolfteam20.schedulemobile.data.network.models.DisponibilidadDetailsDTO
 import com.wolfteam20.schedulemobile.data.network.models.ProfesorDetailsDTO
@@ -51,16 +52,11 @@ class DispPresenter<V : DispViewContract> : BasePresenter<V>, DispPresenterContr
                             dataManager.removeDisponibilidadLocal(cedula)
                             dataManager.saveDisponibilidadLocal(disp.disponibilidad)
                             dataManager.saveDisponibilidadDetailsLocal(DisponibilidadDetailsDTO(0, cedula, null, disp.horasAsignadas, disp.horasACumplir))
-                            //mDisponibilidad = disp
-                            //ESTA VALIDACION creo que sobra
-//                            if (disp.disponibilidad == null)
-//                                view.updateHoras(disp.horasACumplir, disp.horasACumplir)
-//                            else
                             view.updateHoras(disp.horasACumplir, disp.horasACumplir - disp.horasAsignadas)
                         },
                         { throwable ->
                             view.hideLoading()
-                            view.showError(throwable.message)
+                            view.onError(throwable.message)
                             Timber.e(throwable)
                         },
                         { view.hideLoading() }
@@ -71,9 +67,10 @@ class DispPresenter<V : DispViewContract> : BasePresenter<V>, DispPresenterContr
 
     override fun saveDisponibilidad(cedula: Int) {
         if (!view.isNetworkAvailable) {
-            view.showError("No hay conexion a internet")
+            view.onError(R.string.no_network)
             return
         }
+        view.showLoading()
         compositeDisposable.add(dataManager.getDisponibilidadLocal(cedula)
                 .flatMap { disp -> return@flatMap dataManager.postDisponibilidad(disp) }
                 .subscribeOn(Schedulers.io())
@@ -81,20 +78,27 @@ class DispPresenter<V : DispViewContract> : BasePresenter<V>, DispPresenterContr
                 .subscribe(
                         { response ->
                             if (response.isSuccessful)
-                                view.showError("Disponibilidad guardada en la base de datos")
+                                view.showMessage(R.string.disp_save_msg)
                             else
-                                view.showError("No fue posible guardar la disponibilidad")
+                                view.showMessage(R.string.disp_error_msg)
                         },
                         { error ->
+                            view.hideLoading()
                             Timber.e(error)
-                            view.showError("Ocurrio un error: ${error.localizedMessage}")
-                        })
+                            view.onError(error.localizedMessage)
+                        },
+                        { view.hideLoading() }
+                )
         )
     }
 
     override fun subscribe() {
         if (mProfesores.size != 0) {
             view.showProfesores(mProfesores)
+            return
+        }
+        if (!view.isNetworkAvailable) {
+            view.onError(R.string.no_network)
             return
         }
         val isAdmin = dataManager.isUserAdmin
@@ -107,14 +111,17 @@ class DispPresenter<V : DispViewContract> : BasePresenter<V>, DispPresenterContr
                             { profesores ->
                                 mProfesores = profesores
                                 val collator = Collator.getInstance(Locale.US)
-                                Collections.sort(mProfesores) { c1, c2 ->
+                                mProfesores.sortWith(Comparator { c1, c2 ->
                                     collator.compare(c1.nombre, c2.nombre)
-                                }
-                                view.showProfesores(mProfesores)
+                                })
+                                if (profesores.size == 0)
+                                    view.onError(R.string.no_prof_found)
+                                else
+                                    view.showProfesores(mProfesores)
                             },
                             { throwable ->
                                 view.hideLoading()
-                                view.showError(throwable.message)
+                                view.onError(throwable.message)
                                 Timber.e(throwable)
                             },
                             { view.hideLoading() }
@@ -132,7 +139,7 @@ class DispPresenter<V : DispViewContract> : BasePresenter<V>, DispPresenterContr
                             },
                             { throwable ->
                                 view.hideLoading()
-                                view.showError(throwable.message)
+                                view.onError(throwable.message)
                                 Timber.e(throwable)
                             },
                             { view.hideLoading() }

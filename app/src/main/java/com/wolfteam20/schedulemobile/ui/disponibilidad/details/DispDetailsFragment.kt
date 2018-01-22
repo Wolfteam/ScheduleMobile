@@ -19,12 +19,15 @@ import javax.inject.Inject
 /**
  * Created by Efrain Bastidas on 1/13/2018.
  */
-class DispDetailsFragment : BaseFragment(), DispDetailsViewContract {
+class DispDetailsFragment : BaseFragment(), DispDetailsViewContract,
+        DispDetailsListAdapter.DispDetailsListViewHolder.ClickListener {
+
     @Inject
     lateinit var mPresenter: DispDetailsPresenterContract<DispDetailsViewContract>
     private val mHoras = arrayOf("7:00 am", "7:50 am", "8:40 am", "9:30 am", "10:20 am", "11:10 am",
             "12:00 pm", "1:00 pm", "1:50 pm", "2:40 pm", "3:30 pm", "4:20 pm", "5:10 pm", "6:00 pm")
-    private var mAdapter = DispDetailsListAdapter(mHoras)
+    private val mAdapter = DispDetailsListAdapter(mHoras, this)
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,10 +45,27 @@ class DispDetailsFragment : BaseFragment(), DispDetailsViewContract {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.disp_guardar_ic -> mPresenter.saveDisponibilidadLocal()
-            R.id.disp_borrar_ic -> Toast.makeText(context, "Borrar", Toast.LENGTH_LONG).show()
+            R.id.disp_borrar_ic -> {
+                if (mAdapter.getSelectedItemCount() == 0) {
+                    showMessage(R.string.disp_details_delete)
+                    return true
+                }
+                val itemsToRemove = mAdapter.getItems(mAdapter.getSelectedItems())
+                for (i in itemsToRemove)
+                    mPresenter.onDisponibilidadDeleted(i.idHoraInicio, i.idHoraFin)
+                mAdapter.removeItems(mAdapter.getSelectedItems())
+            }
             else -> Toast.makeText(context, "NPI", Toast.LENGTH_LONG).show()
         }
         return true
+    }
+
+    override fun addItem(disponibilidad: DisponibilidadDTO) {
+        mAdapter.addItem(disponibilidad)
+    }
+
+    override fun getItems(): MutableList<DisponibilidadDTO> {
+        return mAdapter.getAllItems()
     }
 
     override fun initLayout(view: View?, savedInstanceState: Bundle?) {
@@ -106,19 +126,23 @@ class DispDetailsFragment : BaseFragment(), DispDetailsViewContract {
         }
     }
 
-    override fun showEmptyList() {
-        Toast.makeText(baseActivity, "No se encontraron registros", Toast.LENGTH_LONG).show()
-    }
-
-    override fun showError(error: String) {
-        Toast.makeText(baseActivity, error, Toast.LENGTH_LONG).show()
+    /**
+     * Selecciona/Deselecciona un item en la [position] indicada
+     */
+    private fun toggleSelection(position: Int) {
+        mAdapter.toggleSelection(position)
     }
 
     override fun showList(disponibilidades: List<DisponibilidadDTO>) {
-        mAdapter.addDisponibilidades(disponibilidades)
+        mAdapter.addItems(disponibilidades)
     }
 
-    override fun showMessage(msg: String) {
-        Toast.makeText(baseActivity, msg, Toast.LENGTH_SHORT).show()
+    override fun onItemClicked(position: Int) {
+        toggleSelection(position)
+    }
+
+    override fun onItemLongClicked(position: Int): Boolean {
+        toggleSelection(position)
+        return true
     }
 }

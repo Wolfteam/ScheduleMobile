@@ -19,15 +19,13 @@ import kotlinx.android.synthetic.main.disponibilidad_fragment.*
 import javax.inject.Inject
 
 
-
-
 /**
  * Created by Efrain.Bastidas on 1/11/2018.
  */
 class DispFragment : BaseFragment(), DispViewContract, AdapterView.OnItemSelectedListener {
     @Inject
     lateinit var mPresenter: DispPresenterContract<DispViewContract>
-        //TODO: RENOMBRAR LOS CONTRACT, EG: DispDetailsViewContract
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activityComponent.inject(this)
@@ -47,13 +45,11 @@ class DispFragment : BaseFragment(), DispViewContract, AdapterView.OnItemSelecte
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
-                val edited = data?.getBooleanExtra("Edited", false)
+                val edited = data?.getBooleanExtra("Edited", false) ?: false
                 val cedula = disp_prof_dropdown.selectedItemId.toInt()
 
-                edited?.let {
-                    if (cedula != -1)
-                        mPresenter.onHorasUpdatedLocal(cedula)
-                }
+                if (edited && cedula != -1)
+                    mPresenter.onHorasUpdatedLocal(cedula)
             }
         }
     }
@@ -112,12 +108,7 @@ class DispFragment : BaseFragment(), DispViewContract, AdapterView.OnItemSelecte
         val intent = DispDetailsActivity.getIntent(context)
         intent.putExtra("Cedula", disp_prof_dropdown.selectedItemId.toInt())
         intent.putExtra("IdDia", idDia)
-        startActivityForResult(intent,1)
-    }
-
-    override fun showError(error: String) {
-        //Toasty.error(baseDrawerActivity, error, Toast.LENGTH_LONG).show()
-        Toast.makeText(baseDrawerActivity, error, Toast.LENGTH_LONG).show()
+        startActivityForResult(intent, 1)
     }
 
     override fun showLoading() {
@@ -125,11 +116,6 @@ class DispFragment : BaseFragment(), DispViewContract, AdapterView.OnItemSelecte
     }
 
     override fun showProfesores(profesores: MutableList<ProfesorDetailsDTO>) {
-        val numeroProfesores = profesores.size
-        if (numeroProfesores == 0) {
-            showError("No se encontraron profesores")
-            return
-        }
         profesores.add(0, ProfesorDetailsDTO(-1, "Seleccione una opcion", "", null))
         val adapter = ProfesoresListSpinnerAdapter(baseDrawerActivity, R.layout.disponibilidad_spinner_prof_row, profesores)
         disp_prof_dropdown.adapter = adapter

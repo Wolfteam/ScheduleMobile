@@ -24,8 +24,6 @@ public interface DispViewContract extends BaseViewContract {
 
     void startDetailsActivity(int idDia);
 
-    void showError(String error);
-
     void showLoading();
 
     /**
