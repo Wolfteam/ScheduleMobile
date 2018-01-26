@@ -10,6 +10,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
+import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.wolfteam20.schedulemobile.R;
 import com.wolfteam20.schedulemobile.ui.base.BaseActivity;
 import com.wolfteam20.schedulemobile.ui.home.HomeActivity;
@@ -32,26 +34,23 @@ public class LoginActivity extends BaseActivity implements LoginViewContract {
     @BindView(R.id.btnSignIn) Button mBtnSignin;
 
     @Inject
-    LoginPresenterContract<LoginViewContract> mPresenter;
+    @InjectPresenter
+    LoginPresenter mPresenter;
+
+    @ProvidePresenter
+    LoginPresenter provideHomePresenter() {
+        getActivityComponent().inject(this);
+        return mPresenter;
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_activity);
         setUnBinder(ButterKnife.bind(this));
-
-        getActivityComponent().inject(this);
 //        mScheduleService = App.getApplication(this)
 //                .getApplicationComponent()
 //                .getScheduleService();
-        mPresenter.onAttach(this);
-        mPresenter.subscribe();
-    }
-
-    @Override
-    protected void onDestroy() {
-        mPresenter.onDetach();
-        super.onDestroy();
     }
 
     @NonNull

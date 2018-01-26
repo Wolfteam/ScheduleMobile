@@ -1,5 +1,6 @@
 package com.wolfteam20.schedulemobile.ui.login;
 
+import com.arellomobile.mvp.InjectViewState;
 import com.wolfteam20.schedulemobile.R;
 import com.wolfteam20.schedulemobile.data.DataManagerContract;
 import com.wolfteam20.schedulemobile.data.network.models.TokenDTO;
@@ -16,20 +17,22 @@ import timber.log.Timber;
  * Created by Efrain Bastidas on 1/2/2018.
  */
 
-public class LoginPresenter<V extends LoginViewContract> extends BasePresenter<V> implements LoginPresenterContract<V> {
+@InjectViewState
+public class LoginPresenter extends BasePresenter<LoginViewContract> implements LoginPresenterContract {
 
     @Inject
     LoginPresenter(CompositeDisposable compositeDisposable, DataManagerContract dataManager) {
         super(compositeDisposable, dataManager);
+        subscribe();
     }
 
     @Override
     public void onBtnSignInClick(String username, String password) {
-        if (!getView().isNetworkAvailable()) {
-            getView().onError(R.string.no_network);
+        if (!isNetworkAvailable()) {
+            getViewState().onError(R.string.no_network);
             return;
         }
-        getView().showLoading();
+        getViewState().showLoading();
         getCompositeDisposable().add(getDataManager().getToken(username, password, true)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -39,16 +42,16 @@ public class LoginPresenter<V extends LoginViewContract> extends BasePresenter<V
                                 TokenDTO token = response.body();
                                 getDataManager().storeAccessToken(token.getAuthenticationToken());
                                 getDataManager().storeUser(token.getAuthenticationToken());
-                                getView().intentToHomeActivity();
+                                getViewState().intentToHomeActivity();
                             } else {
-                                getView().onError(R.string.wrong_username_password);
+                                getViewState().onError(R.string.wrong_username_password);
                             }
                         }, throwable -> {
-                            getView().hideLoading();
-                            getView().onError(throwable.getLocalizedMessage());
+                            getViewState().hideLoading();
+                            getViewState().onError(throwable.getLocalizedMessage());
                             Timber.e(throwable);
                         },
-                        () -> getView().hideLoading()
+                        () -> getViewState().hideLoading()
                 )
         );
     }
@@ -56,6 +59,6 @@ public class LoginPresenter<V extends LoginViewContract> extends BasePresenter<V
     @Override
     public void subscribe() {
         if (!getDataManager().getToken().isEmpty())
-            getView().intentToHomeActivity();
+            getViewState().intentToHomeActivity();
     }
 }
