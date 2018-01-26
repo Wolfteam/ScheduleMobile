@@ -86,6 +86,12 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     implementation "io.objectbox:objectbox-kotlin:1.4.0"
+
+    //Moxy
+    implementation 'com.arello-mobile:moxy:1.5.3'
+    kapt 'com.arello-mobile:moxy-compiler:1.5.3'
+    implementation 'com.arello-mobile:moxy-app-compat:1.5.3'
+    implementation "com.android.support:appcompat-v7:$android_support"
     //Toasty
     //implementation 'com.github.GrenderG:Toasty:1.2.8'
 
