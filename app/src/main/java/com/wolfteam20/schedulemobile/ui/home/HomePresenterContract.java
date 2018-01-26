@@ -11,7 +11,7 @@ import okhttp3.ResponseBody;
  */
 
 @ActivityScope
-public interface HomePresenterContract<V extends HomeViewContract> extends BasePresenterContract<V> {
+public interface HomePresenterContract extends BasePresenterContract{
     /**
      * Obtiene una planificacion en particular para luego salvarla
      * @param tipoPlanificacion Tipo de planificacion (1 Academica, 2 Aulas, 3 Horarios)
@@ -22,6 +22,13 @@ public interface HomePresenterContract<V extends HomeViewContract> extends BaseP
      * Obtiene el periodo academico actual y actualiza la ui
      */
     void getCurrentPeriodo();
+
+    /**
+     * Verifica si tiene permisos de escritura, si no los tiene los pide.
+     * Esto se usa para poder guardar el archivo de planificacion
+     * @return True en caso de tenerlos
+     */
+    boolean isWritePermissionGranted();
 
     /**
      * Se encarga de guardar el archivo excel en la memoria
