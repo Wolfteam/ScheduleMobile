@@ -1,5 +1,6 @@
 package com.wolfteam20.schedulemobile.ui.disponibilidad.details
 
+import com.arellomobile.mvp.InjectViewState
 import com.wolfteam20.schedulemobile.R
 import com.wolfteam20.schedulemobile.data.DataManagerContract
 import com.wolfteam20.schedulemobile.data.network.models.DisponibilidadDTO
@@ -14,7 +15,9 @@ import javax.inject.Inject
 /**
  * Created by Efrain Bastidas on 1/13/2018.
  */
-class DispDetailsPresenter<V : DispDetailsViewContract> : BasePresenter<V>, DispDetailsPresenterContract<V> {
+
+@InjectViewState
+class DispDetailsPresenter : BasePresenter<DispDetailsViewContract>, DispDetailsPresenterContract {
     //TODO: VER COMO SE COMPORTA ESTO CON CAMBIOS DE ORIENTACION,ETC
     //XQ CAPAZ AL AGREGAR/ELIMINAR TENGA Q HACER UN LLAMADO A LA API EN VEZ DE MANTENER
     //LOS CAMBIOS EN MEMORIA
@@ -28,9 +31,10 @@ class DispDetailsPresenter<V : DispDetailsViewContract> : BasePresenter<V>, Disp
     constructor(mCompositeDisposable: CompositeDisposable, mDataManager: DataManagerContract)
             : super(mCompositeDisposable, mDataManager)
 
+
     override fun addDisponibilidad(idHoraInicio: Int, idHoraFin: Int) {
         mHorasAsignadas += idHoraFin - idHoraInicio
-        view.addItem(DisponibilidadDTO(0, mCedula, mIdDia, idHoraInicio, idHoraFin, -1))
+        viewState.addItem(DisponibilidadDTO(0, mCedula, mIdDia, idHoraInicio, idHoraFin, -1))
     }
 
     override fun onDisponibilidadDeleted(idHoraInicio: Int, idHoraFin: Int) {
@@ -40,9 +44,9 @@ class DispDetailsPresenter<V : DispDetailsViewContract> : BasePresenter<V>, Disp
     override fun saveDisponibilidadLocal() {
         dataManager.removeDisponibilidadLocal(mCedula, mIdDia)
         dataManager.removeDisponibilidadDetailsLocal(mCedula)
-        dataManager.saveDisponibilidadLocal(view.getItems())
+        dataManager.saveDisponibilidadLocal(viewState.getItems())
         dataManager.saveDisponibilidadDetailsLocal(DisponibilidadDetailsDTO(0, mCedula, null, mHorasAsignadas, mHorasACumplir))
-        view.showMessage(R.string.disp_details_save_msg)
+        viewState.showMessage(R.string.disp_details_save_msg)
     }
 
     override fun subscribe(cedula: Int, idDia: Int) {
@@ -62,9 +66,9 @@ class DispDetailsPresenter<V : DispDetailsViewContract> : BasePresenter<V>, Disp
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
                                 { disp ->
-                                    view.showList(disp)
+                                    viewState.showList(disp)
                                 },
-                                { throwable -> view.onError(throwable.localizedMessage) }
+                                { throwable -> viewState.onError(throwable.localizedMessage) }
                         )
         )
     }
@@ -72,21 +76,21 @@ class DispDetailsPresenter<V : DispDetailsViewContract> : BasePresenter<V>, Disp
     override fun validateHorasSelected(idHoraInicio: Int, idHoraFin: Int): Boolean {
         val horasRestantes = mHorasACumplir - mHorasAsignadas
         if (horasRestantes < idHoraFin - idHoraInicio) {
-            view.onError("Excedes las horas restantes, solo puedes asignar: $horasRestantes horas mas")
+            viewState.onError("Excedes las horas restantes, solo puedes asignar: $horasRestantes horas mas")
             return false
         }
-        val disponibilidades = view.getItems()
+        val disponibilidades = viewState.getItems()
         if (disponibilidades.size == 0) {
             val result = validateHoras(idHoraInicio, idHoraFin)
             if (!result) {
-                view.onError(R.string.disp_details_add_msg)
+                viewState.onError(R.string.disp_details_add_msg)
                 return false
             }
         } else {
             for (d in disponibilidades) {
                 val result = validateHoras(d.idHoraInicio, d.idHoraFin, idHoraInicio, idHoraFin)
                 if (!result) {
-                    view.onError(R.string.disp_details_add_msg)
+                    viewState.onError(R.string.disp_details_add_msg)
                     return false
                 }
             }

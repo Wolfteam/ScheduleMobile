@@ -5,7 +5,7 @@ import com.wolfteam20.schedulemobile.ui.base.BasePresenterContract
 /**
  * Created by Efrain Bastidas on 1/13/2018.
  */
-interface DispDetailsPresenterContract<V : DispDetailsViewContract> : BasePresenterContract<V> {
+interface DispDetailsPresenterContract : BasePresenterContract {
 
     fun addDisponibilidad(idHoraInicio : Int, idHoraFin : Int)
 

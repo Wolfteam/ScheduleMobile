@@ -9,12 +9,16 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.*
 import android.widget.NumberPicker
 import android.widget.Toast
+import com.arellomobile.mvp.presenter.InjectPresenter
+import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wolfteam20.schedulemobile.R
 import com.wolfteam20.schedulemobile.data.network.models.DisponibilidadDTO
 import com.wolfteam20.schedulemobile.ui.adapters.DispDetailsListAdapter
 import com.wolfteam20.schedulemobile.ui.base.BaseFragment
 import kotlinx.android.synthetic.main.disponibilidad_details_fragment.*
 import javax.inject.Inject
+
+
 
 /**
  * Created by Efrain Bastidas on 1/13/2018.
@@ -23,15 +27,16 @@ class DispDetailsFragment : BaseFragment(), DispDetailsViewContract,
         DispDetailsListAdapter.DispDetailsListViewHolder.ClickListener {
 
     @Inject
-    lateinit var mPresenter: DispDetailsPresenterContract<DispDetailsViewContract>
+    @InjectPresenter
+    lateinit var mPresenter: DispDetailsPresenter
     private val mHoras = arrayOf("7:00 am", "7:50 am", "8:40 am", "9:30 am", "10:20 am", "11:10 am",
             "12:00 pm", "1:00 pm", "1:50 pm", "2:40 pm", "3:30 pm", "4:20 pm", "5:10 pm", "6:00 pm")
     private val mAdapter = DispDetailsListAdapter(mHoras, this)
 
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    @ProvidePresenter
+    fun provideHomePresenter(): DispDetailsPresenter {
         activityComponent.inject(this)
+        return mPresenter
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -93,8 +98,7 @@ class DispDetailsFragment : BaseFragment(), DispDetailsViewContract,
         disp_details_recyclerView.adapter = mAdapter
 
         disp_details_fab.setOnClickListener { showAddDisponibilidadDialog() }
-
-        mPresenter.onAttach(this)
+        //TODO: ACA HAY QUE PENSAR COMO SACO ESTA LINEA
         mPresenter.subscribe(cedula, idDia)
     }
 
