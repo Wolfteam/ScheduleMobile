@@ -8,7 +8,7 @@ import com.wolfteam20.schedulemobile.ui.base.BasePresenterContract;
  */
 
 @ActivityScope
-public interface DispPresenterContract<V extends DispViewContract> extends BasePresenterContract<V> {
+public interface DispPresenterContract extends BasePresenterContract{
 
     /**
      * Inicia la activity Details pasandole el dia incado

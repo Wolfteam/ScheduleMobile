@@ -1,5 +1,6 @@
 package com.wolfteam20.schedulemobile.ui.disponibilidad
 
+import com.arellomobile.mvp.InjectViewState
 import com.wolfteam20.schedulemobile.R
 import com.wolfteam20.schedulemobile.data.DataManagerContract
 import com.wolfteam20.schedulemobile.data.network.models.DisponibilidadDetailsDTO
@@ -17,16 +18,20 @@ import javax.inject.Inject
 /**
  * Created by Efrain.Bastidas on 1/12/2018.
  */
-class DispPresenter<V : DispViewContract> : BasePresenter<V>, DispPresenterContract<V> {
+
+@InjectViewState
+class DispPresenter : BasePresenter<DispViewContract>, DispPresenterContract {
 
     private var mProfesores: MutableList<ProfesorDetailsDTO> = mutableListOf()
 
     @Inject
     constructor(mCompositeDisposable: CompositeDisposable, mDataManager: DataManagerContract)
-            : super(mCompositeDisposable, mDataManager)
+            : super(mCompositeDisposable, mDataManager) {
+        subscribe()
+    }
 
     override fun onDiaClicked(idDia: Int) {
-        view.startDetailsActivity(idDia)
+        viewState.startDetailsActivity(idDia)
     }
 
     override fun onHorasUpdatedLocal(cedula: Int) {
@@ -35,14 +40,14 @@ class DispPresenter<V : DispViewContract> : BasePresenter<V>, DispPresenterContr
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         { details ->
-                            view.updateHoras(details.horasACumplir, details.horasACumplir - details.horasAsignadas)
+                            viewState.updateHoras(details.horasACumplir, details.horasACumplir - details.horasAsignadas)
                         }
                 )
         )
     }
 
     override fun onProfesorSelected(cedula: Int) {
-        view.showLoading()
+        viewState.showLoading()
         compositeDisposable.add(dataManager.getDisponbilidad(cedula)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -52,25 +57,25 @@ class DispPresenter<V : DispViewContract> : BasePresenter<V>, DispPresenterContr
                             dataManager.removeDisponibilidadLocal(cedula)
                             dataManager.saveDisponibilidadLocal(disp.disponibilidad)
                             dataManager.saveDisponibilidadDetailsLocal(DisponibilidadDetailsDTO(0, cedula, null, disp.horasAsignadas, disp.horasACumplir))
-                            view.updateHoras(disp.horasACumplir, disp.horasACumplir - disp.horasAsignadas)
+                            viewState.updateHoras(disp.horasACumplir, disp.horasACumplir - disp.horasAsignadas)
                         },
                         { throwable ->
-                            view.hideLoading()
-                            view.onError(throwable.message)
+                            viewState.hideLoading()
+                            viewState.onError(throwable.message)
                             Timber.e(throwable)
                         },
-                        { view.hideLoading() }
+                        { viewState.hideLoading() }
                 )
 
         )
     }
 
     override fun saveDisponibilidad(cedula: Int) {
-        if (!view.isNetworkAvailable) {
-            view.onError(R.string.no_network)
+        if (!isNetworkAvailable) {
+            viewState.onError(R.string.no_network)
             return
         }
-        view.showLoading()
+        viewState.showLoading()
         compositeDisposable.add(dataManager.getDisponibilidadLocal(cedula)
                 .flatMap { disp -> return@flatMap dataManager.postDisponibilidad(disp) }
                 .subscribeOn(Schedulers.io())
@@ -78,31 +83,31 @@ class DispPresenter<V : DispViewContract> : BasePresenter<V>, DispPresenterContr
                 .subscribe(
                         { response ->
                             if (response.isSuccessful)
-                                view.showMessage(R.string.disp_save_msg)
+                                viewState.showMessage(R.string.disp_save_msg)
                             else
-                                view.showMessage(R.string.disp_error_msg)
+                                viewState.showMessage(R.string.disp_error_msg)
                         },
                         { error ->
-                            view.hideLoading()
+                            viewState.hideLoading()
                             Timber.e(error)
-                            view.onError(error.localizedMessage)
+                            viewState.onError(error.localizedMessage)
                         },
-                        { view.hideLoading() }
+                        { viewState.hideLoading() }
                 )
         )
     }
 
     override fun subscribe() {
         if (mProfesores.size != 0) {
-            view.showProfesores(mProfesores)
+            viewState.showProfesores(mProfesores)
             return
         }
-        if (!view.isNetworkAvailable) {
-            view.onError(R.string.no_network)
+        if (!isNetworkAvailable) {
+            viewState.onError(R.string.no_network)
             return
         }
         val isAdmin = dataManager.isUserAdmin
-        view.showLoading()
+        viewState.showLoading()
         if (isAdmin)
             compositeDisposable.add(dataManager.getAllProfesores()
                     .subscribeOn(Schedulers.io())
@@ -115,16 +120,16 @@ class DispPresenter<V : DispViewContract> : BasePresenter<V>, DispPresenterContr
                                     collator.compare(c1.nombre, c2.nombre)
                                 })
                                 if (profesores.size == 0)
-                                    view.onError(R.string.no_prof_found)
+                                    viewState.onError(R.string.no_prof_found)
                                 else
-                                    view.showProfesores(mProfesores)
+                                    viewState.showProfesores(mProfesores)
                             },
                             { throwable ->
-                                view.hideLoading()
-                                view.onError(throwable.message)
+                                viewState.hideLoading()
+                                viewState.onError(throwable.message)
                                 Timber.e(throwable)
                             },
-                            { view.hideLoading() }
+                            { viewState.hideLoading() }
                     )
             )
         else
@@ -135,14 +140,14 @@ class DispPresenter<V : DispViewContract> : BasePresenter<V>, DispPresenterContr
                             { profesor ->
                                 mProfesores.clear()
                                 mProfesores.add(profesor)
-                                view.showProfesores(mProfesores)
+                                viewState.showProfesores(mProfesores)
                             },
                             { throwable ->
-                                view.hideLoading()
-                                view.onError(throwable.message)
+                                viewState.hideLoading()
+                                viewState.onError(throwable.message)
                                 Timber.e(throwable)
                             },
-                            { view.hideLoading() }
+                            { viewState.hideLoading() }
                     )
             )
     }

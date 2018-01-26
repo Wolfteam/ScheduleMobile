@@ -10,6 +10,8 @@ import android.widget.AdapterView
 import android.widget.Toast
 import butterknife.ButterKnife
 import butterknife.OnClick
+import com.arellomobile.mvp.presenter.InjectPresenter
+import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wolfteam20.schedulemobile.R
 import com.wolfteam20.schedulemobile.data.network.models.ProfesorDetailsDTO
 import com.wolfteam20.schedulemobile.ui.adapters.ProfesoresListSpinnerAdapter
@@ -19,27 +21,26 @@ import kotlinx.android.synthetic.main.disponibilidad_fragment.*
 import javax.inject.Inject
 
 
+
+
 /**
  * Created by Efrain.Bastidas on 1/11/2018.
  */
 class DispFragment : BaseFragment(), DispViewContract, AdapterView.OnItemSelectedListener {
     @Inject
-    lateinit var mPresenter: DispPresenterContract<DispViewContract>
+    @InjectPresenter
+    lateinit var mPresenter: DispPresenter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    @ProvidePresenter
+    fun provideHomePresenter(): DispPresenter {
         activityComponent.inject(this)
+        return mPresenter
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.disponibilidad_fragment, container, false)
         ButterKnife.bind(this, view)
         return view
-    }
-
-    override fun onDestroy() {
-        mPresenter.onDetach()
-        super.onDestroy()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -75,7 +76,6 @@ class DispFragment : BaseFragment(), DispViewContract, AdapterView.OnItemSelecte
             it.title = resources.getString(R.string.disp_activity)
         }
         enableAllButtons(false)
-        mPresenter.onAttach(this)
         mPresenter.subscribe()
     }
 
