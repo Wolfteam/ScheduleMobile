@@ -5,9 +5,9 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
-import android.support.v4.app.Fragment;
 import android.view.View;
 
+import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.wolfteam20.schedulemobile.R;
 import com.wolfteam20.schedulemobile.di.components.ActivityComponent;
 
@@ -17,7 +17,7 @@ import butterknife.Unbinder;
  * Created by Efrain Bastidas on 1/7/2018.
  */
 
-public abstract class BaseFragment extends Fragment implements BaseViewContract {
+public abstract class BaseFragment extends MvpAppCompatFragment implements BaseViewContract {
     private BaseActivity mBaseActivity;
     private BaseDrawerActivity mBaseDrawerActivity;
     private Unbinder mUnBinder;
@@ -91,14 +91,6 @@ public abstract class BaseFragment extends Fragment implements BaseViewContract 
      * @param savedInstanceState Bundle
      */
     protected abstract void initLayout(View view, Bundle savedInstanceState);
-
-    @Override
-    public boolean isNetworkAvailable() {
-        if (mBaseActivity != null)
-            return mBaseActivity.isNetworkAvailable();
-        else
-            return mBaseDrawerActivity.isNetworkAvailable();
-    }
 
     @Override
     public void onError(String message) {

@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,6 +16,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
@@ -36,7 +36,6 @@ import com.wolfteam20.schedulemobile.ui.disponibilidad.DispActivity;
 import com.wolfteam20.schedulemobile.ui.home.HomeActivity;
 import com.wolfteam20.schedulemobile.ui.login.LoginActivity;
 import com.wolfteam20.schedulemobile.utils.Constants;
-import com.wolfteam20.schedulemobile.utils.NetworkUtilities;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +48,7 @@ import butterknife.Unbinder;
  * Created by Efrain.Bastidas on 1/5/2018.
  */
 
-public abstract class BaseDrawerActivity extends AppCompatActivity
+public abstract class BaseDrawerActivity extends MvpAppCompatActivity
         implements BaseViewContract,
         Drawer.OnDrawerItemClickListener {
 
@@ -263,11 +262,6 @@ public abstract class BaseDrawerActivity extends AppCompatActivity
                             }
                             return false;
                         });
-    }
-
-    @Override
-    public boolean isNetworkAvailable() {
-        return NetworkUtilities.isNetworkAvailable(this);
     }
 
     @Override
