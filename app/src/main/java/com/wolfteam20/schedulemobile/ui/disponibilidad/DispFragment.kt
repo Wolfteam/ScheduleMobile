@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import android.widget.Button
 import android.widget.Toast
 import butterknife.ButterKnife
 import butterknife.OnClick
@@ -21,8 +22,6 @@ import kotlinx.android.synthetic.main.disponibilidad_fragment.*
 import javax.inject.Inject
 
 
-
-
 /**
  * Created by Efrain.Bastidas on 1/11/2018.
  */
@@ -30,6 +29,8 @@ class DispFragment : BaseFragment(), DispViewContract, AdapterView.OnItemSelecte
     @Inject
     @InjectPresenter
     lateinit var mPresenter: DispPresenter
+
+    private lateinit var mAdapter :ProfesoresListSpinnerAdapter
 
     @ProvidePresenter
     fun provideHomePresenter(): DispPresenter {
@@ -56,12 +57,11 @@ class DispFragment : BaseFragment(), DispViewContract, AdapterView.OnItemSelecte
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        enableAllButtons(false)
         if (id.toInt() == -1) {
             updateHoras(0, 0)
-            enableAllButtons(false)
             return
         }
-        enableAllButtons(true)
         mPresenter.onProfesorSelected(id.toInt())
     }
 
@@ -76,32 +76,23 @@ class DispFragment : BaseFragment(), DispViewContract, AdapterView.OnItemSelecte
             it.title = resources.getString(R.string.disp_activity)
         }
         enableAllButtons(false)
-        mPresenter.subscribe()
+        mAdapter = ProfesoresListSpinnerAdapter(baseDrawerActivity, R.layout.disponibilidad_spinner_prof_row)
+        disp_prof_dropdown.adapter = mAdapter
+        disp_prof_dropdown.onItemSelectedListener = this
+    }
+
+    override fun enableAllButtons(enable: Boolean) {
+        btn_lunes.isEnabled = enable
+        btn_martes.isEnabled = enable
+        btn_miercoles.isEnabled = enable
+        btn_jueves.isEnabled = enable
+        btn_viernes.isEnabled = enable
+        btn_sabado.isEnabled = enable
+        btnGuardarCambios.isEnabled = enable
     }
 
     override fun hideLoading() {
         disp_progress_bar.visibility = View.GONE
-    }
-
-    @OnClick(R.id.btn_lunes, R.id.btn_martes, R.id.btn_miercoles, R.id.btn_jueves, R.id.btn_viernes, R.id.btn_sabado)
-    override fun onBtnDiaClick(view: View) {
-        when (view.id) {
-            R.id.btn_lunes -> mPresenter.onDiaClicked(1)
-            R.id.btn_martes -> mPresenter.onDiaClicked(2)
-            R.id.btn_miercoles -> mPresenter.onDiaClicked(3)
-            R.id.btn_jueves -> mPresenter.onDiaClicked(4)
-            R.id.btn_viernes -> mPresenter.onDiaClicked(5)
-            else -> mPresenter.onDiaClicked(6)
-        }
-    }
-
-    @OnClick(R.id.btnGuardarCambios)
-    override fun onBtnGuardarCambiosClick() {
-        val horasRestantes = horas_restantes.text.toString().toInt()
-        if (horasRestantes == 0)
-            mPresenter.saveDisponibilidad(disp_prof_dropdown.selectedItemId.toInt())
-        else
-            Toast.makeText(baseDrawerActivity, "Aun queda $horasRestantes horas", Toast.LENGTH_LONG).show()
     }
 
     override fun startDetailsActivity(idDia: Int) {
@@ -116,11 +107,7 @@ class DispFragment : BaseFragment(), DispViewContract, AdapterView.OnItemSelecte
     }
 
     override fun showProfesores(profesores: MutableList<ProfesorDetailsDTO>) {
-        profesores.add(0, ProfesorDetailsDTO(-1, "Seleccione una opcion", "", null))
-        val adapter = ProfesoresListSpinnerAdapter(baseDrawerActivity, R.layout.disponibilidad_spinner_prof_row, profesores)
-        disp_prof_dropdown.adapter = adapter
-        disp_prof_dropdown.onItemSelectedListener = this
-        disp_prof_dropdown.setSelection(0)
+        mAdapter.setItems(profesores)
     }
 
     override fun updateHoras(horasACumplir: Int, horasRestantes: Int) {
@@ -128,13 +115,24 @@ class DispFragment : BaseFragment(), DispViewContract, AdapterView.OnItemSelecte
         horas_restantes.setText(horasRestantes.toString())
     }
 
-    private fun enableAllButtons(enable: Boolean) {
-        btn_lunes.isEnabled = enable
-        btn_martes.isEnabled = enable
-        btn_miercoles.isEnabled = enable
-        btn_jueves.isEnabled = enable
-        btn_viernes.isEnabled = enable
-        btn_sabado.isEnabled = enable
-        btnGuardarCambios.isEnabled = enable
+    @OnClick(R.id.btn_lunes, R.id.btn_martes, R.id.btn_miercoles, R.id.btn_jueves, R.id.btn_viernes, R.id.btn_sabado)
+    fun onBtnDiaClick(button: Button) {
+        when (button.id) {
+            R.id.btn_lunes -> mPresenter.onDiaClicked(1)
+            R.id.btn_martes -> mPresenter.onDiaClicked(2)
+            R.id.btn_miercoles -> mPresenter.onDiaClicked(3)
+            R.id.btn_jueves -> mPresenter.onDiaClicked(4)
+            R.id.btn_viernes -> mPresenter.onDiaClicked(5)
+            else -> mPresenter.onDiaClicked(6)
+        }
+    }
+
+    @OnClick(R.id.btnGuardarCambios)
+    fun onBtnGuardarCambiosClick() {
+        val horasRestantes = horas_restantes.text.toString().toInt()
+        if (horasRestantes == 0)
+            mPresenter.saveDisponibilidad(disp_prof_dropdown.selectedItemId.toInt())
+        else
+            Toast.makeText(baseDrawerActivity, "Aun queda $horasRestantes horas por asignar", Toast.LENGTH_LONG).show()
     }
 }

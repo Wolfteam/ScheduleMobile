@@ -16,14 +16,13 @@ import com.wolfteam20.schedulemobile.data.network.models.ProfesorDetailsDTO
 class ProfesoresListSpinnerAdapter : ArrayAdapter<ProfesorDetailsDTO> {
     private val mContext: Context
     private val mInflater: LayoutInflater
-    private val mProfesores: MutableList<ProfesorDetailsDTO>
+    private var mProfesores: MutableList<ProfesorDetailsDTO> = arrayListOf()
     private val mLayout : Int
 
-    constructor(context: Context, layout: Int, profesores: MutableList<ProfesorDetailsDTO>)
-            : super(context, layout, profesores) {
+    constructor(context: Context, layout: Int)
+            : super(context, layout) {
         mContext = context
         mInflater = LayoutInflater.from(mContext)
-        mProfesores = profesores
         mLayout = layout
     }
 
@@ -45,6 +44,11 @@ class ProfesoresListSpinnerAdapter : ArrayAdapter<ProfesorDetailsDTO> {
 
     override fun getItemId(position: Int): Long {
         return mProfesores[position].cedula.toLong()
+    }
+
+    fun setItems(profesores : MutableList<ProfesorDetailsDTO>){
+        mProfesores = profesores
+        notifyDataSetChanged()
     }
 
     private fun createItemView(position: Int, convertView: View?, parent: ViewGroup?) : View{

@@ -1,12 +1,9 @@
 package com.wolfteam20.schedulemobile.ui.disponibilidad;
 
 import android.support.annotation.NonNull;
-import android.view.View;
 
 import com.wolfteam20.schedulemobile.data.network.models.ProfesorDetailsDTO;
 import com.wolfteam20.schedulemobile.ui.base.BaseViewContract;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -16,11 +13,9 @@ import java.util.List;
 
 public interface DispViewContract extends BaseViewContract {
 
+    void enableAllButtons(Boolean enabled);
+
     void hideLoading();
-
-    void onBtnDiaClick(@NotNull View view);
-
-    void onBtnGuardarCambiosClick();
 
     void startDetailsActivity(int idDia);
 
