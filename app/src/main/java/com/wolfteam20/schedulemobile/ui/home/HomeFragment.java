@@ -14,6 +14,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,7 +42,7 @@ public class HomeFragment extends BaseFragment implements HomeViewContract, Swip
 
     @BindView(R.id.home_fragment_swipe_to_refresh) SwipeRefreshLayout mSwipeRefreshLayout;
     @BindView(R.id.home_fragment_periodo_actual) TextView mPeriodoActual;
-    private View mButtonClicked;
+    private Button mButtonClicked;
 
     private NotificationManager mNotifyManager;
     private NotificationCompat.Builder mBuilder;
@@ -69,12 +70,12 @@ public class HomeFragment extends BaseFragment implements HomeViewContract, Swip
 
     @OnClick({R.id.btnPlanificacionAcademica, R.id.btnPlanificacionAulas, R.id.btnPlanificacionHorario})
     @Override
-    public void onBtnPlanificacionClick(View view) {
-        mButtonClicked = view;
+    public void onBtnPlanificacionClick(Button button) {
+        mButtonClicked = button;
         if (!mPresenter.isWritePermissionGranted()) {
             return;
         }
-        switch (view.getId()) {
+        switch (button.getId()) {
             case R.id.btnPlanificacionAcademica:
                 mPresenter.getPlanificacion(1);
                 break;

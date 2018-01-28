@@ -1,6 +1,6 @@
 package com.wolfteam20.schedulemobile.ui.home;
 
-import android.view.View;
+import android.widget.Button;
 
 import com.wolfteam20.schedulemobile.ui.base.BaseViewContract;
 
@@ -9,7 +9,7 @@ import com.wolfteam20.schedulemobile.ui.base.BaseViewContract;
  */
 
 public interface HomeViewContract extends BaseViewContract {
-    void onBtnPlanificacionClick(View view);
+    void onBtnPlanificacionClick(Button button);
 
     void hideLoading();
 
