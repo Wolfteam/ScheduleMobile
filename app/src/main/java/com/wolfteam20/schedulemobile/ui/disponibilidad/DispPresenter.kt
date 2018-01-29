@@ -21,7 +21,7 @@ import javax.inject.Inject
 
 @InjectViewState
 class DispPresenter : BasePresenter<DispViewContract>, DispPresenterContract {
-
+    //TODO: Aca ocurre un bug raro, en 4.4.4 al rotar matiene el estado, pero en 7.1.2 no o.o
     private var mProfesores: MutableList<ProfesorDetailsDTO> = mutableListOf()
     private var mSelectedCedula: Int = -1
 
@@ -42,14 +42,23 @@ class DispPresenter : BasePresenter<DispViewContract>, DispPresenterContract {
                 .subscribe(
                         { details ->
                             viewState.updateHoras(details.horasACumplir, details.horasACumplir - details.horasAsignadas)
+                        },
+                        { error ->
+                            viewState.onError(error.localizedMessage)
                         }
                 )
         )
     }
 
     override fun onProfesorSelected(cedula: Int) {
+        if (cedula == -1) {
+            mSelectedCedula = cedula
+            viewState.enableAllButtons(false)
+            viewState.updateHoras(0, 0)
+            return
+        }
         viewState.showLoading()
-        if (mSelectedCedula != cedula) {
+        if (mSelectedCedula != cedula && cedula > 0) {
             mSelectedCedula = cedula
             compositeDisposable.add(dataManager.getDisponbilidad(cedula)
                     .subscribeOn(Schedulers.io())
@@ -72,7 +81,7 @@ class DispPresenter : BasePresenter<DispViewContract>, DispPresenterContract {
                     )
             )
         } else {
-            compositeDisposable.add(dataManager.getDisponibilidadDetailsLocal(cedula)
+            compositeDisposable.add(dataManager.getDisponibilidadDetailsLocal(mSelectedCedula)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(
@@ -120,6 +129,7 @@ class DispPresenter : BasePresenter<DispViewContract>, DispPresenterContract {
     }
 
     override fun subscribe() {
+        viewState.enableAllButtons(false)
         if (mProfesores.size != 0) {
             viewState.showProfesores(mProfesores)
             return
@@ -138,11 +148,11 @@ class DispPresenter : BasePresenter<DispViewContract>, DispPresenterContract {
                     .subscribe(
                             { profesores ->
                                 mProfesores = profesores
-                                mProfesores.add(0, default)
                                 val collator = Collator.getInstance(Locale.US)
                                 mProfesores.sortWith(Comparator { c1, c2 ->
                                     collator.compare(c1.nombre, c2.nombre)
                                 })
+                                mProfesores.add(0, default)
                                 if (profesores.size == 0)
                                     viewState.onError(R.string.no_prof_found)
                                 else

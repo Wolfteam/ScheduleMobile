@@ -50,18 +50,13 @@ class DispFragment : BaseFragment(), DispViewContract, AdapterView.OnItemSelecte
                 val edited = data?.getBooleanExtra("Edited", false) ?: false
                 val cedula = disp_prof_dropdown.selectedItemId.toInt()
 
-                if (edited && cedula != -1)
+                if (edited && cedula > 0)
                     mPresenter.onHorasUpdatedLocal(cedula)
             }
         }
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        enableAllButtons(false)
-        if (id.toInt() == -1) {
-            updateHoras(0, 0)
-            return
-        }
         mPresenter.onProfesorSelected(id.toInt())
     }
 
@@ -75,7 +70,6 @@ class DispFragment : BaseFragment(), DispViewContract, AdapterView.OnItemSelecte
             it.setDisplayShowHomeEnabled(true)
             it.title = resources.getString(R.string.disp_activity)
         }
-        enableAllButtons(false)
         mAdapter = ProfesoresListSpinnerAdapter(baseDrawerActivity, R.layout.disponibilidad_spinner_prof_row)
         disp_prof_dropdown.adapter = mAdapter
         disp_prof_dropdown.onItemSelectedListener = this
@@ -116,7 +110,7 @@ class DispFragment : BaseFragment(), DispViewContract, AdapterView.OnItemSelecte
     }
 
     @OnClick(R.id.btn_lunes, R.id.btn_martes, R.id.btn_miercoles, R.id.btn_jueves, R.id.btn_viernes, R.id.btn_sabado)
-    fun onBtnDiaClick(button: Button) {
+    override fun onBtnDiaClick(button: Button) {
         when (button.id) {
             R.id.btn_lunes -> mPresenter.onDiaClicked(1)
             R.id.btn_martes -> mPresenter.onDiaClicked(2)
@@ -128,7 +122,7 @@ class DispFragment : BaseFragment(), DispViewContract, AdapterView.OnItemSelecte
     }
 
     @OnClick(R.id.btnGuardarCambios)
-    fun onBtnGuardarCambiosClick() {
+   override fun onBtnGuardarCambiosClick() {
         val horasRestantes = horas_restantes.text.toString().toInt()
         if (horasRestantes == 0)
             mPresenter.saveDisponibilidad(disp_prof_dropdown.selectedItemId.toInt())

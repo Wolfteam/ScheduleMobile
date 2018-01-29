@@ -1,7 +1,10 @@
 package com.wolfteam20.schedulemobile.ui.disponibilidad;
 
 import android.support.annotation.NonNull;
+import android.widget.Button;
 
+import com.arellomobile.mvp.viewstate.strategy.SkipStrategy;
+import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 import com.wolfteam20.schedulemobile.data.network.models.ProfesorDetailsDTO;
 import com.wolfteam20.schedulemobile.ui.base.BaseViewContract;
 
@@ -17,6 +20,13 @@ public interface DispViewContract extends BaseViewContract {
 
     void hideLoading();
 
+    @StateStrategyType(SkipStrategy.class)
+    void onBtnDiaClick(Button button);
+
+    @StateStrategyType(SkipStrategy.class)
+    void onBtnGuardarCambiosClick();
+
+    @StateStrategyType(SkipStrategy.class)
     void startDetailsActivity(int idDia);
 
     void showLoading();
