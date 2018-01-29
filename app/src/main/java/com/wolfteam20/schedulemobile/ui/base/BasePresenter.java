@@ -22,6 +22,24 @@ public class BasePresenter<V extends BaseViewContract> extends MvpPresenter<V> i
         this.mDataManager = mDataManager;
     }
 
+    @Override
+    public void detachView(V view) {
+        //mCompositeDisposable.clear();
+        super.detachView(view);
+    }
+
+    @Override
+    public void destroyView(V view) {
+        mCompositeDisposable.clear();
+        super.destroyView(view);
+    }
+
+    @Override
+    public void onDestroy() {
+        mCompositeDisposable.dispose();
+        super.onDestroy();
+    }
+
     public DataManagerContract getDataManager() {
         return mDataManager;
     }
