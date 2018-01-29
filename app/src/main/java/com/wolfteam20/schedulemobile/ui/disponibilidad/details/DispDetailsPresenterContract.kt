@@ -1,5 +1,6 @@
 package com.wolfteam20.schedulemobile.ui.disponibilidad.details
 
+import com.wolfteam20.schedulemobile.data.network.models.DisponibilidadDTO
 import com.wolfteam20.schedulemobile.ui.base.BasePresenterContract
 
 /**
@@ -22,5 +23,5 @@ interface DispDetailsPresenterContract : BasePresenterContract {
      */
     fun validateHorasSelected(idHoraInicio : Int, idHoraFin : Int) : Boolean
 
-
+    fun updateItems(disponibilidad : MutableList<DisponibilidadDTO>)
 }

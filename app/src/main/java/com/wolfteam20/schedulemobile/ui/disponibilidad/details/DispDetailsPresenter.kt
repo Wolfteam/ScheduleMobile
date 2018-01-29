@@ -18,10 +18,8 @@ import javax.inject.Inject
 
 @InjectViewState
 class DispDetailsPresenter : BasePresenter<DispDetailsViewContract>, DispDetailsPresenterContract {
-    //TODO: VER COMO SE COMPORTA ESTO CON CAMBIOS DE ORIENTACION,ETC
-    //XQ CAPAZ AL AGREGAR/ELIMINAR TENGA Q HACER UN LLAMADO A LA API EN VEZ DE MANTENER
-    //LOS CAMBIOS EN MEMORIA
-    //private var mDisp: MutableList<DisponibilidadDTO> = arrayListOf()
+
+    private var mDispList: MutableList<DisponibilidadDTO> = arrayListOf()
     private var mCedula = 0
     private var mIdDia: Int = 0
     private var mHorasAsignadas = 0
@@ -34,7 +32,10 @@ class DispDetailsPresenter : BasePresenter<DispDetailsViewContract>, DispDetails
 
     override fun addDisponibilidad(idHoraInicio: Int, idHoraFin: Int) {
         mHorasAsignadas += idHoraFin - idHoraInicio
-        viewState.addItem(DisponibilidadDTO(0, mCedula, mIdDia, idHoraInicio, idHoraFin, -1))
+        val disp = DisponibilidadDTO(0, mCedula, mIdDia, idHoraInicio, idHoraFin, -1)
+        viewState.addItem(disp)
+        //TODO: POR ALGUNA RAZON ALGUIEN ME AGREGA ITEMS o.o cuando agrego al adapter
+        //mDispList.add(disp)
     }
 
     override fun onDisponibilidadDeleted(idHoraInicio: Int, idHoraFin: Int) {
@@ -44,12 +45,14 @@ class DispDetailsPresenter : BasePresenter<DispDetailsViewContract>, DispDetails
     override fun saveDisponibilidadLocal() {
         dataManager.removeDisponibilidadLocal(mCedula, mIdDia)
         dataManager.removeDisponibilidadDetailsLocal(mCedula)
-        dataManager.saveDisponibilidadLocal(viewState.getItems())
+        dataManager.saveDisponibilidadLocal(mDispList)
         dataManager.saveDisponibilidadDetailsLocal(DisponibilidadDetailsDTO(0, mCedula, null, mHorasAsignadas, mHorasACumplir))
         viewState.showMessage(R.string.disp_details_save_msg)
     }
 
     override fun subscribe(cedula: Int, idDia: Int) {
+        if (mDispList.size > 0)
+            return
         mCedula = cedula
         mIdDia = idDia
         compositeDisposable.addAll(
@@ -66,11 +69,16 @@ class DispDetailsPresenter : BasePresenter<DispDetailsViewContract>, DispDetails
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
                                 { disp ->
+                                    mDispList = disp
                                     viewState.showList(disp)
                                 },
                                 { throwable -> viewState.onError(throwable.localizedMessage) }
                         )
         )
+    }
+
+    override fun updateItems(disponibilidad: MutableList<DisponibilidadDTO>) {
+       mDispList = disponibilidad
     }
 
     override fun validateHorasSelected(idHoraInicio: Int, idHoraFin: Int): Boolean {
@@ -79,15 +87,14 @@ class DispDetailsPresenter : BasePresenter<DispDetailsViewContract>, DispDetails
             viewState.onError("Excedes las horas restantes, solo puedes asignar: $horasRestantes horas mas")
             return false
         }
-        val disponibilidades = viewState.getItems()
-        if (disponibilidades.size == 0) {
+        if (mDispList.size == 0) {
             val result = validateHoras(idHoraInicio, idHoraFin)
             if (!result) {
                 viewState.onError(R.string.disp_details_add_msg)
                 return false
             }
         } else {
-            for (d in disponibilidades) {
+            for (d in mDispList) {
                 val result = validateHoras(d.idHoraInicio, d.idHoraFin, idHoraInicio, idHoraFin)
                 if (!result) {
                     viewState.onError(R.string.disp_details_add_msg)

@@ -1,5 +1,7 @@
 package com.wolfteam20.schedulemobile.ui.disponibilidad.details
 
+import com.arellomobile.mvp.viewstate.strategy.SkipStrategy
+import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
 import com.wolfteam20.schedulemobile.data.network.models.DisponibilidadDTO
 import com.wolfteam20.schedulemobile.ui.base.BaseViewContract
 
@@ -10,16 +12,11 @@ interface DispDetailsViewContract : BaseViewContract {
     /**
      * Agrega y muestra uuna [disponibilidad] mediante el adapter
      */
+    @StateStrategyType(SkipStrategy::class)
     fun addItem(disponibilidad: DisponibilidadDTO)
-
-    /**
-     * Obtiene todas las disponibilidades del adapter
-     * @return MutableList<DisponibilidadDTO>
-     */
-    fun getItems(): MutableList<DisponibilidadDTO>
 
     /**
      * Agrega y muestra una lista de [disponibilidades] mediante el adapter
      */
-    fun showList(disponibilidades: List<DisponibilidadDTO>)
+    fun showList(disponibilidades: MutableList<DisponibilidadDTO>)
 }

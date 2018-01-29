@@ -8,7 +8,6 @@ import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.*
 import android.widget.NumberPicker
-import android.widget.Toast
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wolfteam20.schedulemobile.R
@@ -17,7 +16,6 @@ import com.wolfteam20.schedulemobile.ui.adapters.DispDetailsListAdapter
 import com.wolfteam20.schedulemobile.ui.base.BaseFragment
 import kotlinx.android.synthetic.main.disponibilidad_details_fragment.*
 import javax.inject.Inject
-
 
 
 /**
@@ -31,7 +29,7 @@ class DispDetailsFragment : BaseFragment(), DispDetailsViewContract,
     lateinit var mPresenter: DispDetailsPresenter
     private val mHoras = arrayOf("7:00 am", "7:50 am", "8:40 am", "9:30 am", "10:20 am", "11:10 am",
             "12:00 pm", "1:00 pm", "1:50 pm", "2:40 pm", "3:30 pm", "4:20 pm", "5:10 pm", "6:00 pm")
-    private val mAdapter = DispDetailsListAdapter(mHoras, this)
+    private lateinit var mAdapter: DispDetailsListAdapter
 
     @ProvidePresenter
     fun provideHomePresenter(): DispDetailsPresenter {
@@ -60,7 +58,7 @@ class DispDetailsFragment : BaseFragment(), DispDetailsViewContract,
                     mPresenter.onDisponibilidadDeleted(i.idHoraInicio, i.idHoraFin)
                 mAdapter.removeItems(mAdapter.getSelectedItems())
             }
-            else -> Toast.makeText(context, "NPI", Toast.LENGTH_LONG).show()
+            else -> baseActivity.onBackPressed()
         }
         return true
     }
@@ -69,14 +67,9 @@ class DispDetailsFragment : BaseFragment(), DispDetailsViewContract,
         mAdapter.addItem(disponibilidad)
     }
 
-    override fun getItems(): MutableList<DisponibilidadDTO> {
-        return mAdapter.getAllItems()
-    }
-
     override fun initLayout(view: View?, savedInstanceState: Bundle?) {
         val cedula = activity.intent.getIntExtra("Cedula", -1)
         val idDia = activity.intent.getIntExtra("IdDia", -1)
-
         //Al pasarle true me hace una llamada directa a onCreateOptionsMenu
         setHasOptionsMenu(true)
         (activity as AppCompatActivity).setSupportActionBar(disp_details_fragment_toolbar)
@@ -90,7 +83,7 @@ class DispDetailsFragment : BaseFragment(), DispDetailsViewContract,
         })
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
         (activity as AppCompatActivity).supportActionBar?.setDisplayShowHomeEnabled(true)
-
+        mAdapter = DispDetailsListAdapter(mPresenter, mHoras, this)
         val llm = LinearLayoutManager(context)
         disp_details_recyclerView.layoutManager = llm
         disp_details_recyclerView.addItemDecoration(DividerItemDecoration(disp_details_recyclerView.context, llm.orientation))
@@ -137,8 +130,8 @@ class DispDetailsFragment : BaseFragment(), DispDetailsViewContract,
         mAdapter.toggleSelection(position)
     }
 
-    override fun showList(disponibilidades: List<DisponibilidadDTO>) {
-        mAdapter.addItems(disponibilidades)
+    override fun showList(disponibilidades: MutableList<DisponibilidadDTO>) {
+        mAdapter.setItems(disponibilidades)
     }
 
     override fun onItemClicked(position: Int) {

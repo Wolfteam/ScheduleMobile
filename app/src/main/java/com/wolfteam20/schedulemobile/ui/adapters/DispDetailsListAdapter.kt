@@ -6,16 +6,19 @@ import android.view.View
 import android.view.ViewGroup
 import com.wolfteam20.schedulemobile.R
 import com.wolfteam20.schedulemobile.data.network.models.DisponibilidadDTO
+import com.wolfteam20.schedulemobile.ui.disponibilidad.details.DispDetailsPresenter
 import kotlinx.android.synthetic.main.disponibilidad_details_list_item.view.*
 
 
 /**
  * Created by Efrain.Bastidas on 1/15/2018.
  */
-class DispDetailsListAdapter(horas: Array<String>, clickListener: DispDetailsListViewHolder.ClickListener) : SelectableAdapter<DispDetailsListAdapter.DispDetailsListViewHolder>() {
+class DispDetailsListAdapter(presenter: DispDetailsPresenter, horas: Array<String>, clickListener: DispDetailsListViewHolder.ClickListener)
+    : SelectableAdapter<DispDetailsListAdapter.DispDetailsListViewHolder>() {
 
     private val mClickListener: DispDetailsListViewHolder.ClickListener = clickListener
-    private var mDispList: MutableList<DisponibilidadDTO> = mutableListOf()
+    private val mPresenter: DispDetailsPresenter = presenter
+    private var mDisponibilidadList: MutableList<DisponibilidadDTO> = mutableListOf()
     private var mHoras = horas
 
     class DispDetailsListViewHolder(root: View, clickListener: ClickListener) : RecyclerView.ViewHolder(root) {
@@ -44,12 +47,12 @@ class DispDetailsListAdapter(horas: Array<String>, clickListener: DispDetailsLis
     }
 
     override fun getItemCount(): Int {
-        return mDispList.size
+        return mDisponibilidadList.size
     }
 
     override fun onBindViewHolder(holder: DispDetailsListViewHolder?, position: Int) {
         if (holder is DispDetailsListViewHolder) {
-            val disponibilidad = mDispList[position]
+            val disponibilidad = mDisponibilidadList[position]
             val isItemSelected = isSelected(position)
             holder.bind(getTextToShow(disponibilidad.idHoraInicio, disponibilidad.idHoraFin), isItemSelected, position)
         }
@@ -68,8 +71,8 @@ class DispDetailsListAdapter(horas: Array<String>, clickListener: DispDetailsLis
      * Agrega una lista de [disponibilidades] al adapter y los muestra
      */
     fun addItems(disponibilidades: List<DisponibilidadDTO>) {
-        mDispList.clear()
-        mDispList.addAll(disponibilidades)
+        mDisponibilidadList.clear()
+        mDisponibilidadList.addAll(disponibilidades)
         notifyDataSetChanged()
     }
 
@@ -77,8 +80,8 @@ class DispDetailsListAdapter(horas: Array<String>, clickListener: DispDetailsLis
      * Agrega una [disponibilidad] al adapter y lo muestra
      */
     fun addItem(disponibilidad: DisponibilidadDTO) {
-        mDispList.add(disponibilidad)
-        notifyItemInserted(mDispList.size - 1)
+        mDisponibilidadList.add(disponibilidad)
+        notifyItemInserted(mDisponibilidadList.size - 1)
     }
 
     /**
@@ -86,7 +89,7 @@ class DispDetailsListAdapter(horas: Array<String>, clickListener: DispDetailsLis
      * @return MutableList<DisponibilidadDTO>
      */
     fun getAllItems(): MutableList<DisponibilidadDTO> {
-        return mDispList
+        return mDisponibilidadList
     }
 
     /**
@@ -94,7 +97,7 @@ class DispDetailsListAdapter(horas: Array<String>, clickListener: DispDetailsLis
      * por [itemsPosition]
      */
     fun getItems(itemsPosition: ArrayList<Int>): List<DisponibilidadDTO> {
-        return itemsPosition.map { mDispList[it] }
+        return itemsPosition.map { mDisponibilidadList[it] }
     }
 
     /**
@@ -110,7 +113,7 @@ class DispDetailsListAdapter(horas: Array<String>, clickListener: DispDetailsLis
      * notifica  de los cambios al adapter
      */
     private fun removeItem(position: Int) {
-        mDispList.removeAt(position)
+        mDisponibilidadList.removeAt(position)
         notifyItemRemoved(position)
     }
 
@@ -142,6 +145,7 @@ class DispDetailsListAdapter(horas: Array<String>, clickListener: DispDetailsLis
                     positions.removeAt(0)
             }
         }
+        mPresenter.updateItems(mDisponibilidadList)
     }
 
     /**
@@ -150,8 +154,16 @@ class DispDetailsListAdapter(horas: Array<String>, clickListener: DispDetailsLis
      */
     private fun removeRange(positionStart: Int, itemCount: Int) {
         for (i in 0 until itemCount) {
-            mDispList.removeAt(positionStart)
+            mDisponibilidadList.removeAt(positionStart)
         }
         notifyItemRangeRemoved(positionStart, itemCount)
+    }
+
+    /**
+     * Setea por primera vez los items en el adapter
+     */
+    fun setItems(disponibilidades: MutableList<DisponibilidadDTO>) {
+        mDisponibilidadList = disponibilidades
+        notifyDataSetChanged()
     }
 }
