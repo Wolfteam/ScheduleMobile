@@ -11,7 +11,7 @@ import com.wolfteam20.schedulemobile.ui.base.BasePresenterContract;
 public interface DispPresenterContract extends BasePresenterContract{
 
     /**
-     * Inicia la activity Details pasandole el dia incado
+     * Inicia la activity Details pasandole el dia incado.
      * @param dia Dia en donde se hizo click
      */
     void onDiaClicked(int dia);

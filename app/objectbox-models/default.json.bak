@@ -30,15 +30,46 @@
         },
         {
           "id": "6:4923077281168534128",
+          "indexId": "2:46049691064300789",
           "name": "cedula"
         }
       ],
       "relations": []
+    },
+    {
+      "id": "2:1384230317566274995",
+      "lastPropertyId": "4:6277987307756285100",
+      "name": "DisponibilidadDetailsDTO",
+      "properties": [
+        {
+          "id": "1:7270183493555016997",
+          "name": "id"
+        },
+        {
+          "id": "2:6975496852125519737",
+          "indexId": "1:5295221706025413587",
+          "name": "cedula"
+        },
+        {
+          "id": "3:4014304925460964218",
+          "name": "horasAsignadas"
+        },
+        {
+          "id": "4:6277987307756285100",
+          "name": "horasACumplir"
+        }
+      ],
+      "relations": [
+        {
+          "id": "1:4902894799220732532",
+          "name": "disponibilidad"
+        }
+      ]
     }
   ],
-  "lastEntityId": "1:2408667967769117913",
-  "lastIndexId": "0:0",
-  "lastRelationId": "0:0",
+  "lastEntityId": "2:1384230317566274995",
+  "lastIndexId": "2:46049691064300789",
+  "lastRelationId": "1:4902894799220732532",
   "lastSequenceId": "0:0",
   "modelVersion": 4,
   "modelVersionParserMinimum": 4,

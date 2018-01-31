@@ -17,17 +17,17 @@ import javax.inject.Inject
  */
 
 @InjectViewState
-class DispDetailsPresenter : BasePresenter<DispDetailsViewContract>, DispDetailsPresenterContract {
+class DispDetailsPresenter @Inject constructor(
+    mCompositeDisposable: CompositeDisposable,
+    mDataManager: DataManagerContract
+) : BasePresenter<DispDetailsViewContract>(mCompositeDisposable, mDataManager),
+    DispDetailsPresenterContract {
 
     private var mDispList: MutableList<DisponibilidadDTO> = arrayListOf()
     private var mCedula = 0
     private var mIdDia: Int = 0
     private var mHorasAsignadas = 0
     private var mHorasACumplir = 0
-
-    @Inject
-    constructor(mCompositeDisposable: CompositeDisposable, mDataManager: DataManagerContract)
-            : super(mCompositeDisposable, mDataManager)
 
 
     override fun addDisponibilidad(idHoraInicio: Int, idHoraFin: Int) {
@@ -46,7 +46,15 @@ class DispDetailsPresenter : BasePresenter<DispDetailsViewContract>, DispDetails
         dataManager.removeDisponibilidadLocal(mCedula, mIdDia)
         dataManager.removeDisponibilidadDetailsLocal(mCedula)
         dataManager.saveDisponibilidadLocal(mDispList)
-        dataManager.saveDisponibilidadDetailsLocal(DisponibilidadDetailsDTO(0, mCedula, null, mHorasAsignadas, mHorasACumplir))
+        dataManager.saveDisponibilidadDetailsLocal(
+            DisponibilidadDetailsDTO(
+                0,
+                mCedula,
+                null,
+                mHorasAsignadas,
+                mHorasACumplir
+            )
+        )
         viewState.showMessage(R.string.disp_details_save_msg)
     }
 
@@ -56,29 +64,29 @@ class DispDetailsPresenter : BasePresenter<DispDetailsViewContract>, DispDetails
         mCedula = cedula
         mIdDia = idDia
         compositeDisposable.addAll(
-                dataManager.getDisponibilidadDetailsLocal(cedula)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(
-                                { details ->
-                                    mHorasACumplir = details.horasACumplir
-                                    mHorasAsignadas = details.horasAsignadas
-                                }),
-                dataManager.getDisponibilidadLocal(cedula, idDia)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(
-                                { disp ->
-                                    mDispList = disp
-                                    viewState.showList(disp)
-                                },
-                                { throwable -> viewState.onError(throwable.localizedMessage) }
-                        )
+            dataManager.getDisponibilidadDetailsLocal(cedula)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    { details ->
+                        mHorasACumplir = details.horasACumplir
+                        mHorasAsignadas = details.horasAsignadas
+                    }),
+            dataManager.getDisponibilidadLocal(cedula, idDia)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    { disp ->
+                        mDispList = disp
+                        viewState.showList(disp)
+                    },
+                    { throwable -> viewState.onError(throwable.localizedMessage) }
+                )
         )
     }
 
     override fun updateItems(disponibilidad: MutableList<DisponibilidadDTO>) {
-       mDispList = disponibilidad
+        mDispList = disponibilidad
     }
 
     override fun validateHorasSelected(idHoraInicio: Int, idHoraFin: Int): Boolean {
@@ -118,7 +126,8 @@ class DispDetailsPresenter : BasePresenter<DispDetailsViewContract>, DispDetails
      * @param [idHoraFin] Id de la hora de fin
      * @return True si las horas dadas son validas.
      */
-    private fun validateHoras(idHoraInicioDB: Int, idHoraFinDB: Int, idHoraInicio: Int, idHoraFin: Int): Boolean {
+    private fun validateHoras(idHoraInicioDB: Int, idHoraFinDB: Int, idHoraInicio: Int, idHoraFin: Int
+    ): Boolean {
         val result = validateHoras(idHoraInicio, idHoraFin)
         if (!result)
             return false

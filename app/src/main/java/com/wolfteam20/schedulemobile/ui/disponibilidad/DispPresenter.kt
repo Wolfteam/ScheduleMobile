@@ -20,14 +20,15 @@ import javax.inject.Inject
  */
 
 @InjectViewState
-class DispPresenter : BasePresenter<DispViewContract>, DispPresenterContract {
+class DispPresenter @Inject constructor(
+    mCompositeDisposable: CompositeDisposable,
+    mDataManager: DataManagerContract
+) : BasePresenter<DispViewContract>(mCompositeDisposable, mDataManager), DispPresenterContract {
 
     private var mProfesores: MutableList<ProfesorDetailsDTO> = mutableListOf()
     private var mSelectedCedula: Int = -1
 
-    @Inject
-    constructor(mCompositeDisposable: CompositeDisposable, mDataManager: DataManagerContract)
-            : super(mCompositeDisposable, mDataManager) {
+    init {
         subscribe()
     }
 
@@ -37,20 +38,23 @@ class DispPresenter : BasePresenter<DispViewContract>, DispPresenterContract {
 
     override fun onHorasUpdatedLocal(cedula: Int) {
         compositeDisposable.add(dataManager.getDisponibilidadDetailsLocal(cedula)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        { details ->
-                            viewState.updateHoras(details.horasACumplir, details.horasACumplir - details.horasAsignadas)
-                        },
-                        { error ->
-                            viewState.onError(error.localizedMessage)
-                        }
-                )
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                { details ->
+                    viewState.updateHoras(
+                        details.horasACumplir,
+                        details.horasACumplir - details.horasAsignadas
+                    )
+                },
+                { error ->
+                    viewState.onError(error.localizedMessage)
+                }
+            )
         )
     }
 
-    override fun onProfesorSelected(cedula: Int, position: Int, isActivityRecreated : Boolean) {
+    override fun onProfesorSelected(cedula: Int, position: Int, isActivityRecreated: Boolean) {
         if (cedula == -1 && !isActivityRecreated || mSelectedCedula == -1 && isActivityRecreated) {
             mSelectedCedula = cedula
             viewState.enableAllButtons(false)
@@ -62,42 +66,53 @@ class DispPresenter : BasePresenter<DispViewContract>, DispPresenterContract {
         if (mSelectedCedula != cedula && cedula > 0) {
             mSelectedCedula = cedula
             compositeDisposable.add(dataManager.getDisponbilidad(cedula)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(
-                            { disp ->
-                                dataManager.removeDisponibilidadDetailsLocal(cedula)
-                                dataManager.removeDisponibilidadLocal(cedula)
-                                dataManager.saveDisponibilidadLocal(disp.disponibilidad)
-                                dataManager.saveDisponibilidadDetailsLocal(DisponibilidadDetailsDTO(0, cedula, null, disp.horasAsignadas, disp.horasACumplir))
-                                viewState.updateHoras(disp.horasACumplir, disp.horasACumplir - disp.horasAsignadas)
-                                viewState.enableAllButtons(true)
-                            },
-                            { throwable ->
-                                viewState.hideLoading()
-                                viewState.onError(throwable.message)
-                                Timber.e(throwable)
-                            },
-                            { viewState.hideLoading() }
-                    )
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    { disp ->
+                        dataManager.removeDisponibilidadDetailsLocal(cedula)
+                        dataManager.removeDisponibilidadLocal(cedula)
+                        dataManager.saveDisponibilidadLocal(disp.disponibilidad)
+                        dataManager.saveDisponibilidadDetailsLocal(
+                            DisponibilidadDetailsDTO(
+                                0,
+                                cedula,
+                                null,
+                                disp.horasAsignadas,
+                                disp.horasACumplir
+                            )
+                        )
+                        viewState.updateHoras(
+                            disp.horasACumplir,
+                            disp.horasACumplir - disp.horasAsignadas
+                        )
+                        viewState.enableAllButtons(true)
+                    },
+                    { throwable ->
+                        viewState.hideLoading()
+                        viewState.onError(throwable.message)
+                        Timber.e(throwable)
+                    },
+                    { viewState.hideLoading() }
+                )
             )
         } else {
             compositeDisposable.add(dataManager.getDisponibilidadDetailsLocal(mSelectedCedula)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(
-                            { details ->
-                                val horasRestantes = details.horasACumplir - details.horasAsignadas
-                                viewState.updateHoras(details.horasACumplir, horasRestantes)
-                                viewState.enableAllButtons(true)
-                            },
-                            { throwable ->
-                                viewState.hideLoading()
-                                viewState.onError(throwable.message)
-                                Timber.e(throwable)
-                            },
-                            { viewState.hideLoading() }
-                    )
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    { details ->
+                        val horasRestantes = details.horasACumplir - details.horasAsignadas
+                        viewState.updateHoras(details.horasACumplir, horasRestantes)
+                        viewState.enableAllButtons(true)
+                    },
+                    { throwable ->
+                        viewState.hideLoading()
+                        viewState.onError(throwable.message)
+                        Timber.e(throwable)
+                    },
+                    { viewState.hideLoading() }
+                )
             )
         }
     }
@@ -109,23 +124,23 @@ class DispPresenter : BasePresenter<DispViewContract>, DispPresenterContract {
         }
         viewState.showLoading()
         compositeDisposable.add(dataManager.getDisponibilidadLocal(cedula)
-                .flatMap { disp -> return@flatMap dataManager.postDisponibilidad(disp) }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        { response ->
-                            if (response.isSuccessful)
-                                viewState.showMessage(R.string.disp_save_msg)
-                            else
-                                viewState.showMessage(R.string.disp_error_msg)
-                        },
-                        { error ->
-                            viewState.hideLoading()
-                            Timber.e(error)
-                            viewState.onError(error.localizedMessage)
-                        },
-                        { viewState.hideLoading() }
-                )
+            .flatMap { disp -> return@flatMap dataManager.postDisponibilidad(disp) }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                { response ->
+                    if (response.isSuccessful)
+                        viewState.showMessage(R.string.disp_save_msg)
+                    else
+                        viewState.showMessage(R.string.disp_error_msg)
+                },
+                { error ->
+                    viewState.hideLoading()
+                    Timber.e(error)
+                    viewState.onError(error.localizedMessage)
+                },
+                { viewState.hideLoading() }
+            )
         )
     }
 
@@ -144,47 +159,47 @@ class DispPresenter : BasePresenter<DispViewContract>, DispPresenterContract {
         viewState.showLoading()
         if (isAdmin)
             compositeDisposable.add(dataManager.getAllProfesores()
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(
-                            { profesores ->
-                                mProfesores = profesores
-                                val collator = Collator.getInstance(Locale.US)
-                                mProfesores.sortWith(Comparator { c1, c2 ->
-                                    collator.compare(c1.nombre, c2.nombre)
-                                })
-                                mProfesores.add(0, default)
-                                if (profesores.size == 0)
-                                    viewState.onError(R.string.no_prof_found)
-                                else
-                                    viewState.showProfesores(mProfesores)
-                            },
-                            { throwable ->
-                                viewState.hideLoading()
-                                viewState.onError(throwable.message)
-                                Timber.e(throwable)
-                            },
-                            { viewState.hideLoading() }
-                    )
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    { profesores ->
+                        mProfesores = profesores
+                        val collator = Collator.getInstance(Locale.US)
+                        mProfesores.sortWith(Comparator { c1, c2 ->
+                            collator.compare(c1.nombre, c2.nombre)
+                        })
+                        mProfesores.add(0, default)
+                        if (profesores.size == 0)
+                            viewState.onError(R.string.no_prof_found)
+                        else
+                            viewState.showProfesores(mProfesores)
+                    },
+                    { throwable ->
+                        viewState.hideLoading()
+                        viewState.onError(throwable.message)
+                        Timber.e(throwable)
+                    },
+                    { viewState.hideLoading() }
+                )
             )
         else
             compositeDisposable.add(dataManager.getProfesor(dataManager.cedula)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(
-                            { profesor ->
-                                mProfesores.clear()
-                                mProfesores.add(profesor)
-                                mProfesores.add(0, default)
-                                viewState.showProfesores(mProfesores)
-                            },
-                            { throwable ->
-                                viewState.hideLoading()
-                                viewState.onError(throwable.message)
-                                Timber.e(throwable)
-                            },
-                            { viewState.hideLoading() }
-                    )
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    { profesor ->
+                        mProfesores.clear()
+                        mProfesores.add(profesor)
+                        mProfesores.add(0, default)
+                        viewState.showProfesores(mProfesores)
+                    },
+                    { throwable ->
+                        viewState.hideLoading()
+                        viewState.onError(throwable.message)
+                        Timber.e(throwable)
+                    },
+                    { viewState.hideLoading() }
+                )
             )
     }
 }
