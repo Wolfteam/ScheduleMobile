@@ -68,8 +68,8 @@ class DispDetailsFragment : BaseFragment(), DispDetailsViewContract,
     }
 
     override fun initLayout(view: View?, savedInstanceState: Bundle?) {
-        val cedula = activity.intent.getIntExtra("Cedula", -1)
-        val idDia = activity.intent.getIntExtra("IdDia", -1)
+        val cedula = baseActivity.intent.getIntExtra("Cedula", -1)
+        val idDia = baseActivity.intent.getIntExtra("IdDia", -1)
         //Al pasarle true me hace una llamada directa a onCreateOptionsMenu
         setHasOptionsMenu(true)
         (activity as AppCompatActivity).setSupportActionBar(disp_details_fragment_toolbar)
@@ -107,7 +107,7 @@ class DispDetailsFragment : BaseFragment(), DispDetailsViewContract,
         horaFin.maxValue = 14
         horaFin.displayedValues = mHoras
 
-        val dialog: AlertDialog = AlertDialog.Builder(this.context)
+        val dialog: AlertDialog = AlertDialog.Builder(baseActivity)
                 .setTitle(resources.getString(R.string.disp_details_agregar)).setView(view)
                 .setPositiveButton(getString(R.string.save), null)
                 .setNegativeButton(getString(R.string.cancelar), null)

@@ -97,7 +97,7 @@ class DispFragment : BaseFragment(), DispViewContract, AdapterView.OnItemSelecte
     }
 
     override fun startDetailsActivity(idDia: Int) {
-        val intent = DispDetailsActivity.getIntent(context)
+        val intent = DispDetailsActivity.getIntent(baseDrawerActivity)
         intent.putExtra("Cedula", disp_prof_dropdown.selectedItemId.toInt())
         intent.putExtra("IdDia", idDia)
         startActivityForResult(intent, 1)

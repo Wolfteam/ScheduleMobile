@@ -2,9 +2,13 @@
 
 buildscript {
     ext{
-        android_support = '26.1.0'
+        android_support = '27.0.2'
+        butterknife_version = '8.8.1'
+        dagger2_version = "2.14.1"
         kotlin_version = '1.2.21'
-        objectboxVersion = '1.4.0'
+        moxy_version = '1.5.3'
+        objectbox_version = '1.4.0'
+        retrofit_version = '2.3.0'
     }
     repositories {
         google()
@@ -15,7 +19,7 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:3.0.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "io.objectbox:objectbox-gradle-plugin:$objectboxVersion"
+        classpath "io.objectbox:objectbox-gradle-plugin:$objectbox_version"
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
