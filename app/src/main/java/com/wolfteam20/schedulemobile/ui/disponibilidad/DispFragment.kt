@@ -26,11 +26,13 @@ import javax.inject.Inject
  * Created by Efrain.Bastidas on 1/11/2018.
  */
 class DispFragment : BaseFragment(), DispViewContract, AdapterView.OnItemSelectedListener {
+
     @Inject
     @InjectPresenter
     lateinit var mPresenter: DispPresenter
 
-    private lateinit var mAdapter :ProfesoresListSpinnerAdapter
+    private lateinit var mAdapter: ProfesoresListSpinnerAdapter
+    private var isActivityCreated : Boolean = true
 
     @ProvidePresenter
     fun provideHomePresenter(): DispPresenter {
@@ -57,7 +59,8 @@ class DispFragment : BaseFragment(), DispViewContract, AdapterView.OnItemSelecte
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        mPresenter.onProfesorSelected(id.toInt())
+        mPresenter.onProfesorSelected(id.toInt(), position, isActivityCreated)
+        isActivityCreated = false
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -87,6 +90,10 @@ class DispFragment : BaseFragment(), DispViewContract, AdapterView.OnItemSelecte
 
     override fun hideLoading() {
         disp_progress_bar.visibility = View.GONE
+    }
+
+    override fun setItemSelected(position: Int, triggerListener: Boolean) {
+        disp_prof_dropdown.setSelection(position, triggerListener)
     }
 
     override fun startDetailsActivity(idDia: Int) {
@@ -122,7 +129,7 @@ class DispFragment : BaseFragment(), DispViewContract, AdapterView.OnItemSelecte
     }
 
     @OnClick(R.id.btnGuardarCambios)
-   override fun onBtnGuardarCambiosClick() {
+    override fun onBtnGuardarCambiosClick() {
         val horasRestantes = horas_restantes.text.toString().toInt()
         if (horasRestantes == 0)
             mPresenter.saveDisponibilidad(disp_prof_dropdown.selectedItemId.toInt())

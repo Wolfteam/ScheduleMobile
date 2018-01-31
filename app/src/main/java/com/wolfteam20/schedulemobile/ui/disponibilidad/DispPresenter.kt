@@ -21,7 +21,7 @@ import javax.inject.Inject
 
 @InjectViewState
 class DispPresenter : BasePresenter<DispViewContract>, DispPresenterContract {
-    //TODO: Aca ocurre un bug raro, en 4.4.4 al rotar matiene el estado, pero en 7.1.2 no o.o
+
     private var mProfesores: MutableList<ProfesorDetailsDTO> = mutableListOf()
     private var mSelectedCedula: Int = -1
 
@@ -50,14 +50,15 @@ class DispPresenter : BasePresenter<DispViewContract>, DispPresenterContract {
         )
     }
 
-    override fun onProfesorSelected(cedula: Int) {
-        if (cedula == -1) {
+    override fun onProfesorSelected(cedula: Int, position: Int, isActivityRecreated : Boolean) {
+        if (cedula == -1 && !isActivityRecreated || mSelectedCedula == -1 && isActivityRecreated) {
             mSelectedCedula = cedula
             viewState.enableAllButtons(false)
             viewState.updateHoras(0, 0)
             return
         }
         viewState.showLoading()
+        viewState.setItemSelected(position, false)
         if (mSelectedCedula != cedula && cedula > 0) {
             mSelectedCedula = cedula
             compositeDisposable.add(dataManager.getDisponbilidad(cedula)
