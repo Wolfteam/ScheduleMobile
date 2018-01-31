@@ -30,6 +30,7 @@ public class DbHelper implements DbHelperContract {
 
     @Override
     public Observable<List<DisponibilidadDTO>> getDisponibilidadLocal(int cedula) {
+        Timber.i("Obteniendo disponibilidad de la cedula: %s", cedula);
         return Observable.create(subscriber -> {
             try {
                 List<DisponibilidadDTO> disps = mDispBox.query()
@@ -47,6 +48,7 @@ public class DbHelper implements DbHelperContract {
 
     @Override
     public Observable<List<DisponibilidadDTO>> getDisponibilidadLocal(int cedula, int idDia) {
+        Timber.i("Obteniendo disponibilidad de la cedula: "+ cedula + " para el dia: " +idDia);
         return Observable.create(subscriber -> {
             try {
                 List<DisponibilidadDTO> disps = mDispBox.query()
@@ -65,6 +67,7 @@ public class DbHelper implements DbHelperContract {
 
     @Override
     public Observable<DisponibilidadDetailsDTO> getDisponibilidadDetailsLocal(int cedula) {
+        Timber.i("Obteniendo el detalle de la disponibilidad de la cedula: %s", cedula);
         return Observable.create(subscriber -> {
             try{
                 DisponibilidadDetailsDTO disps = mDispDetailsBox.query()
@@ -82,22 +85,26 @@ public class DbHelper implements DbHelperContract {
 
     @Override
     public void saveDisponibilidadLocal(List<DisponibilidadDTO> disponibilidades) {
+        Timber.i("Guardando la disponibilidad");
         if (disponibilidades != null)
             mDispBox.put(disponibilidades);
     }
 
     @Override
     public void saveDisponibilidadDetailsLocal(DisponibilidadDetailsDTO disponibilidadDetailsDTO) {
+        Timber.i("Guardando el detalle de la disponibilidad");
         mDispDetailsBox.put(disponibilidadDetailsDTO);
     }
 
     @Override
     public void removeDisponibilidadLocal(int cedula) {
+        Timber.i("Eliminando la disponibilidad para la cedula:%s", cedula);
         mDispBox.query().equal(DisponibilidadDTO_.cedula, cedula).build().remove();
     }
 
     @Override
     public void removeDisponibilidadLocal(int cedula, int idDia) {
+        Timber.i("Eliminando disponibilidad de la cedula: "+ cedula + " para el dia: " +idDia);
         mDispBox.query()
                 .equal(DisponibilidadDTO_.cedula, cedula)
                 .equal(DisponibilidadDTO_.idDia, idDia)
@@ -106,6 +113,7 @@ public class DbHelper implements DbHelperContract {
 
     @Override
     public void removeDisponibilidadDetailsLocal(int cedula) {
+        Timber.i("Eliminando el detalle de la la disponibilidad para la cedula:%s", cedula);
         mDispDetailsBox.query().equal(DisponibilidadDetailsDTO_.cedula, cedula).build().remove();
     }
 }
