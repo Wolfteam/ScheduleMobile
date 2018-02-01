@@ -31,6 +31,11 @@ public class PreferencesHelper implements PreferencesHelperContract {
     }
 
     @Override
+    public Context getContext() {
+        return mContext;
+    }
+
+    @Override
     public String getFullname() {
         return mPrefs.getString(Constants.PREF_KEY_FULLNAME, null);
     }

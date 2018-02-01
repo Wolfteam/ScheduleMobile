@@ -9,7 +9,7 @@ import com.wolfteam20.schedulemobile.ui.base.BasePresenterContract;
 
 
 @ActivityScope
-public interface LoginPresenterContract<V extends LoginViewContract> extends BasePresenterContract<V> {
+public interface LoginPresenterContract extends BasePresenterContract {
 
     void onBtnSignInClick(String username, String pass);
 

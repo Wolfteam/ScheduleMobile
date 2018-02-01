@@ -6,19 +6,18 @@ import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.wolfteam20.schedulemobile.App;
 import com.wolfteam20.schedulemobile.R;
 import com.wolfteam20.schedulemobile.di.components.ActivityComponent;
 import com.wolfteam20.schedulemobile.di.components.DaggerActivityComponent;
 import com.wolfteam20.schedulemobile.di.modules.ActivityModule;
 import com.wolfteam20.schedulemobile.ui.login.LoginActivity;
-import com.wolfteam20.schedulemobile.utils.NetworkUtilities;
 
 import butterknife.Unbinder;
 
@@ -28,7 +27,7 @@ import butterknife.Unbinder;
  * Created by Efrain Bastidas on 1/2/2018.
  */
 
-public class BaseActivity extends AppCompatActivity implements BaseViewContract {
+public class BaseActivity extends MvpAppCompatActivity implements BaseViewContract {
 
     private ActivityComponent mActivityComponent;
     private Unbinder mUnBinder;
@@ -60,11 +59,6 @@ public class BaseActivity extends AppCompatActivity implements BaseViewContract 
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
-    }
-
-    @Override
-    public boolean isNetworkAvailable() {
-        return NetworkUtilities.isNetworkAvailable(App.getApplication(this));
     }
 
     @Override

@@ -13,18 +13,16 @@ import com.wolfteam20.schedulemobile.data.network.models.ProfesorDetailsDTO
 /**
  * Created by Efrain.Bastidas on 1/12/2018.
  */
-class ProfesoresListSpinnerAdapter : ArrayAdapter<ProfesorDetailsDTO> {
-    private val mContext: Context
-    private val mInflater: LayoutInflater
-    private val mProfesores: MutableList<ProfesorDetailsDTO>
-    private val mLayout : Int
+class ProfesoresListSpinnerAdapter(context: Context, layout: Int) :
+    ArrayAdapter<ProfesorDetailsDTO>(context, layout) {
 
-    constructor(context: Context, layout: Int, profesores: MutableList<ProfesorDetailsDTO>)
-            : super(context, layout, profesores) {
-        mContext = context
+    private val mContext: Context = context
+    private val mInflater: LayoutInflater
+    private var mProfesores: MutableList<ProfesorDetailsDTO> = arrayListOf()
+    private val mLayout: Int = layout
+
+    init {
         mInflater = LayoutInflater.from(mContext)
-        mProfesores = profesores
-        mLayout = layout
     }
 
     override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup?): View {
@@ -47,7 +45,12 @@ class ProfesoresListSpinnerAdapter : ArrayAdapter<ProfesorDetailsDTO> {
         return mProfesores[position].cedula.toLong()
     }
 
-    private fun createItemView(position: Int, convertView: View?, parent: ViewGroup?) : View{
+    fun setItems(profesores: MutableList<ProfesorDetailsDTO>) {
+        mProfesores = profesores
+        notifyDataSetChanged()
+    }
+
+    private fun createItemView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val rowView: View
         val holder: ViewHolder
 

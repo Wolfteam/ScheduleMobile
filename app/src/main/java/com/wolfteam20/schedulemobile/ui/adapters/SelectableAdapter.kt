@@ -69,6 +69,5 @@ abstract class SelectableAdapter<VH : RecyclerView.ViewHolder> : RecyclerView.Ad
         }
         notifyItemChanged(position)
     }
-
 }
 

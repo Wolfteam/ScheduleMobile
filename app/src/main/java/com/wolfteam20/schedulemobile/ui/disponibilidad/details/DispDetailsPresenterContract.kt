@@ -1,11 +1,12 @@
 package com.wolfteam20.schedulemobile.ui.disponibilidad.details
 
+import com.wolfteam20.schedulemobile.data.network.models.DisponibilidadDTO
 import com.wolfteam20.schedulemobile.ui.base.BasePresenterContract
 
 /**
  * Created by Efrain Bastidas on 1/13/2018.
  */
-interface DispDetailsPresenterContract<V : DispDetailsViewContract> : BasePresenterContract<V> {
+interface DispDetailsPresenterContract : BasePresenterContract {
 
     fun addDisponibilidad(idHoraInicio : Int, idHoraFin : Int)
 
@@ -22,5 +23,5 @@ interface DispDetailsPresenterContract<V : DispDetailsViewContract> : BasePresen
      */
     fun validateHorasSelected(idHoraInicio : Int, idHoraFin : Int) : Boolean
 
-
+    fun updateItems(disponibilidad : MutableList<DisponibilidadDTO>)
 }

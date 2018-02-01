@@ -1,7 +1,13 @@
 package com.wolfteam20.schedulemobile.ui.home;
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.pm.PackageManager;
 import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 
+import com.arellomobile.mvp.InjectViewState;
 import com.wolfteam20.schedulemobile.R;
 import com.wolfteam20.schedulemobile.data.DataManagerContract;
 import com.wolfteam20.schedulemobile.ui.base.BasePresenter;
@@ -27,20 +33,22 @@ import timber.log.Timber;
  * Created by Efrain Bastidas on 1/6/2018.
  */
 
-public class HomePresenter<V extends HomeViewContract> extends BasePresenter<V> implements HomePresenterContract<V> {
+@InjectViewState
+public class HomePresenter extends BasePresenter<HomeViewContract> implements HomePresenterContract {
 
     @Inject
     HomePresenter(CompositeDisposable compositeDisposable, DataManagerContract dataManager) {
         super(compositeDisposable, dataManager);
+        subscribe();
     }
 
     @Override
     public void getPlanificacion(int tipoPlanificacion) {
-        if (!getView().isNetworkAvailable()) {
-            getView().onError(R.string.no_network);
+        if (!isNetworkAvailable()) {
+            getViewState().onError(R.string.no_network);
             return;
         }
-        getView().showDownloadProgressIndicator();
+        getViewState().showDownloadProgressIndicator();
         switch (tipoPlanificacion) {
             case 1://Planificacion Academica
                 getCompositeDisposable().add(
@@ -58,13 +66,13 @@ public class HomePresenter<V extends HomeViewContract> extends BasePresenter<V> 
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe(
-                                        success -> getView().onError(success),
+                                        success -> getViewState().onError(success),
                                         throwable -> {
-                                            getView().hideLoading();
-                                            getView().onError(throwable.getMessage());
+                                            getViewState().hideLoading();
+                                            getViewState().onError(throwable.getMessage());
                                             Timber.e(throwable);
                                         },
-                                        () -> getView().stopDownloadProgressIndicator()
+                                        () -> getViewState().stopDownloadProgressIndicator()
                                 )
                 );
                 break;
@@ -84,13 +92,13 @@ public class HomePresenter<V extends HomeViewContract> extends BasePresenter<V> 
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe(
-                                        success -> getView().onError(success),
+                                        success -> getViewState().onError(success),
                                         throwable -> {
-                                            getView().hideLoading();
-                                            getView().onError(throwable.getMessage());
+                                            getViewState().hideLoading();
+                                            getViewState().onError(throwable.getMessage());
                                             Timber.e(throwable);
                                         },
-                                        () -> getView().stopDownloadProgressIndicator()
+                                        () -> getViewState().stopDownloadProgressIndicator()
                                 )
                 );
                 break;
@@ -110,13 +118,13 @@ public class HomePresenter<V extends HomeViewContract> extends BasePresenter<V> 
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe(
-                                        success -> getView().onError(success),
+                                        success -> getViewState().onError(success),
                                         throwable -> {
-                                            getView().hideLoading();
-                                            getView().onError(throwable.getMessage());
+                                            getViewState().hideLoading();
+                                            getViewState().onError(throwable.getMessage());
                                             Timber.e(throwable);
                                         },
-                                        () -> getView().stopDownloadProgressIndicator()
+                                        () -> getViewState().stopDownloadProgressIndicator()
                                 )
                 );
                 break;
@@ -125,11 +133,11 @@ public class HomePresenter<V extends HomeViewContract> extends BasePresenter<V> 
 
     @Override
     public void getCurrentPeriodo() {
-        if (!getView().isNetworkAvailable()) {
-            getView().onError(R.string.no_network);
+        if (!isNetworkAvailable()) {
+            getViewState().onError(R.string.no_network);
             return;
         }
-        getView().showLoading();
+        getViewState().showLoading();
         getCompositeDisposable().add(getDataManager().getCurrentPeriodoAcademico()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -138,19 +146,37 @@ public class HomePresenter<V extends HomeViewContract> extends BasePresenter<V> 
                         {
                             if (!response.isSuccessful()) {
                                 getDataManager().storeAccessToken("");
-                                getView().openActivityOnTokenExpire();
+                                getViewState().openActivityOnTokenExpire();
                                 return;
                             }
-                            getView().showCurrentPeriodo(response.body().getNombrePeriodo());
+                            getViewState().showCurrentPeriodo(response.body().getNombrePeriodo());
                         },
                         throwable -> {
-                            getView().hideLoading();
-                            getView().onError(throwable.getMessage());
+                            getViewState().hideLoading();
+                            getViewState().onError(throwable.getMessage());
                             Timber.e(throwable);
                         },
-                        () -> getView().hideLoading()
+                        () -> getViewState().hideLoading()
                 )
         );
+    }
+
+    @Override
+    public boolean isWritePermissionGranted() {
+        if (ContextCompat.checkSelfPermission(getDataManager().getContext(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale((Activity)
+                    getDataManager().getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                getViewState().showRequestWritePermissionExplanation();
+            } else {
+                // No explanation needed, we can request the permission.
+                // Esto varia si es una Activity (ActivityCompat.requestPermissions()) o un Fragment
+                getViewState().requestWritePermission();
+            }
+            return false;
+        }
+        return true;
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.wolfteam20.schedulemobile.ui.home;
 
-import android.view.View;
+import android.widget.Button;
 
 import com.wolfteam20.schedulemobile.ui.base.BaseViewContract;
 
@@ -9,16 +9,16 @@ import com.wolfteam20.schedulemobile.ui.base.BaseViewContract;
  */
 
 public interface HomeViewContract extends BaseViewContract {
-    void onBtnPlanificacionClick(View view);
-
-    /**
-     * Verifica si tiene permisos de escritura, si no los tiene los pide.
-     * Esto se usa para poder guardar el archivo de planificacion
-     * @return True en caso de tenerlos
-     */
-    boolean isWritePermissionGranted();
+    void onBtnPlanificacionClick(Button button);
 
     void hideLoading();
+
+    void requestWritePermission();
+
+    /**
+     * Muestra un alertdialog explicando porque se nitan los permisos de escritura
+     */
+    void showRequestWritePermissionExplanation();
 
     void showCurrentPeriodo(String periodo);
 

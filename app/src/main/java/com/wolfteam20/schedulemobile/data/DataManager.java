@@ -102,6 +102,11 @@ public class DataManager implements DataManagerContract {
     }
 
     @Override
+    public Context getContext() {
+        return mContext;
+    }
+
+    @Override
     public String getFullname() {
         return mPreferencesHelper.getFullname();
     }
