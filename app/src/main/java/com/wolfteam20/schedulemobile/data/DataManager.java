@@ -4,11 +4,16 @@ import android.content.Context;
 
 import com.wolfteam20.schedulemobile.data.db.DbHelperContract;
 import com.wolfteam20.schedulemobile.data.network.ApiSchedule;
+import com.wolfteam20.schedulemobile.data.network.models.AulaDetailsDTO;
 import com.wolfteam20.schedulemobile.data.network.models.DisponibilidadDTO;
 import com.wolfteam20.schedulemobile.data.network.models.DisponibilidadDetailsDTO;
+import com.wolfteam20.schedulemobile.data.network.models.MateriaDetailsDTO;
 import com.wolfteam20.schedulemobile.data.network.models.PeriodoAcademicoDTO;
 import com.wolfteam20.schedulemobile.data.network.models.ProfesorDetailsDTO;
+import com.wolfteam20.schedulemobile.data.network.models.ProfesorMateriaDetailsDTO;
+import com.wolfteam20.schedulemobile.data.network.models.SeccionesDetailsDTO;
 import com.wolfteam20.schedulemobile.data.network.models.TokenDTO;
+import com.wolfteam20.schedulemobile.data.network.models.UsuarioDetailsDTO;
 import com.wolfteam20.schedulemobile.data.preferences.PreferencesHelperContract;
 import com.wolfteam20.schedulemobile.di.qualifiers.ApplicationContext;
 
@@ -42,8 +47,38 @@ public class DataManager implements DataManagerContract {
     }
 
     @Override
+    public Observable<List<AulaDetailsDTO>> getAllAulas() {
+        return mApiSchedule.getAllAulas();
+    }
+
+    @Override
+    public Observable<List<MateriaDetailsDTO>> getAllMaterias() {
+        return mApiSchedule.getAllMaterias();
+    }
+
+    @Override
+    public Observable<List<PeriodoAcademicoDTO>> getAllPeriodosAcademicos() {
+        return mApiSchedule.getAllPeriodosAcademicos();
+    }
+
+    @Override
     public Observable<List<ProfesorDetailsDTO>> getAllProfesores() {
         return mApiSchedule.getAllProfesores();
+    }
+
+    @Override
+    public Observable<List<ProfesorMateriaDetailsDTO>> getAllProfesorMateria() {
+        return mApiSchedule.getAllProfesorMateria();
+    }
+
+    @Override
+    public Observable<List<SeccionesDetailsDTO>> getAllSecciones() {
+        return mApiSchedule.getAllSecciones();
+    }
+
+    @Override
+    public Observable<List<UsuarioDetailsDTO>> getAllUsuarios() {
+        return mApiSchedule.getAllUsuarios();
     }
 
     @Override
@@ -127,6 +162,11 @@ public class DataManager implements DataManagerContract {
     }
 
     @Override
+    public Observable<List<AulaDetailsDTO>> getAllAulasLocal() {
+        return mDbHelper.getAllAulasLocal();
+    }
+
+    @Override
     public Observable<List<DisponibilidadDTO>> getDisponibilidadLocal(int cedula) {
         return mDbHelper.getDisponibilidadLocal(cedula);
     }
@@ -142,6 +182,11 @@ public class DataManager implements DataManagerContract {
     }
 
     @Override
+    public void saveAulasLocal(List<AulaDetailsDTO> aulas) {
+        mDbHelper.saveAulasLocal(aulas);
+    }
+
+    @Override
     public void saveDisponibilidadLocal(List<DisponibilidadDTO> disponibilidades) {
         mDbHelper.saveDisponibilidadLocal(disponibilidades);
     }
@@ -149,6 +194,16 @@ public class DataManager implements DataManagerContract {
     @Override
     public void saveDisponibilidadDetailsLocal(DisponibilidadDetailsDTO disponibilidadDetailsDTO) {
         mDbHelper.saveDisponibilidadDetailsLocal(disponibilidadDetailsDTO);
+    }
+
+    @Override
+    public void removeAulaLocal(int idAula) {
+        mDbHelper.removeAulaLocal(idAula);
+    }
+
+    @Override
+    public void removeAulasLocal() {
+        mDbHelper.removeAulasLocal();
     }
 
     @Override

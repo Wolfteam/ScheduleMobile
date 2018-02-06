@@ -1,10 +1,15 @@
 package com.wolfteam20.schedulemobile.data.network;
 
+import com.wolfteam20.schedulemobile.data.network.models.AulaDetailsDTO;
 import com.wolfteam20.schedulemobile.data.network.models.DisponibilidadDTO;
 import com.wolfteam20.schedulemobile.data.network.models.DisponibilidadDetailsDTO;
+import com.wolfteam20.schedulemobile.data.network.models.MateriaDetailsDTO;
 import com.wolfteam20.schedulemobile.data.network.models.PeriodoAcademicoDTO;
 import com.wolfteam20.schedulemobile.data.network.models.ProfesorDetailsDTO;
+import com.wolfteam20.schedulemobile.data.network.models.ProfesorMateriaDetailsDTO;
+import com.wolfteam20.schedulemobile.data.network.models.SeccionesDetailsDTO;
 import com.wolfteam20.schedulemobile.data.network.models.TokenDTO;
+import com.wolfteam20.schedulemobile.data.network.models.UsuarioDetailsDTO;
 
 import java.util.List;
 
@@ -34,12 +39,31 @@ public interface ApiSchedule {
     @POST("token")
     Observable<Response<TokenDTO>> getToken(@Field("username") String username, @Field("password") String password, @Field("isMobile") Boolean isMobile);
 
+
+    @GET("api/Aulas")
+    Observable<List<AulaDetailsDTO>> getAllAulas();
+
+    @GET("api/Materias")
+    Observable<List<MateriaDetailsDTO>> getAllMaterias();
+
+    @GET("api/PeriodoCarrera")
+    Observable<List<PeriodoAcademicoDTO>> getAllPeriodosAcademicos();
+
     /**
      * Obtiene una lista con todos los profesores
      * @return List<ProfesorDetailsDTO>
      */
     @GET("api/Profesor")
     Observable<List<ProfesorDetailsDTO>> getAllProfesores();
+
+    @GET("api/ProfesorMateria")
+    Observable<List<ProfesorMateriaDetailsDTO>> getAllProfesorMateria();
+
+    @GET("api/Secciones")
+    Observable<List<SeccionesDetailsDTO>> getAllSecciones();
+
+    @GET("api/Account")
+    Observable<List<UsuarioDetailsDTO>> getAllUsuarios();
 
     /**
      * Obtiene el periodo academico actual

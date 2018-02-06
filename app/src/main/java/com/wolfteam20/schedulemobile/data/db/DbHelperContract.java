@@ -1,5 +1,6 @@
 package com.wolfteam20.schedulemobile.data.db;
 
+import com.wolfteam20.schedulemobile.data.network.models.AulaDetailsDTO;
 import com.wolfteam20.schedulemobile.data.network.models.DisponibilidadDTO;
 import com.wolfteam20.schedulemobile.data.network.models.DisponibilidadDetailsDTO;
 
@@ -13,15 +14,23 @@ import io.reactivex.Observable;
  */
 
 public interface DbHelperContract {
+    Observable<List<AulaDetailsDTO>> getAllAulasLocal();
+
     Observable<List<DisponibilidadDTO>> getDisponibilidadLocal(int cedula);
 
     Observable<List<DisponibilidadDTO>> getDisponibilidadLocal(int cedula, int idDia);
 
     Observable<DisponibilidadDetailsDTO> getDisponibilidadDetailsLocal(int cedula);
 
+    void saveAulasLocal(List<AulaDetailsDTO> aulas);
+
     void saveDisponibilidadLocal(List<DisponibilidadDTO> disponibilidades);
 
     void saveDisponibilidadDetailsLocal(DisponibilidadDetailsDTO disponibilidadDetailsDTO);
+
+    void removeAulaLocal(int idAula);
+
+    void removeAulasLocal();
 
     void removeDisponibilidadLocal(int cedula);
 
