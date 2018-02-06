@@ -55,7 +55,7 @@ public class HomeFragment extends BaseFragment implements HomeViewContract, Swip
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.home_fragment, container, false);
         setUnBinder(ButterKnife.bind(this, view));
         mSwipeRefreshLayout.setOnRefreshListener(this);

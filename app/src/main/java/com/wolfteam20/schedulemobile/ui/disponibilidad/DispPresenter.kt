@@ -155,10 +155,16 @@ class DispPresenter @Inject constructor(
             return
         }
         val isAdmin = dataManager.isUserAdmin
-        val default = ProfesorDetailsDTO(-1, "Seleccione una opcion", "", null)
+        val default = ProfesorDetailsDTO()
+        default.let {
+            it.nombre = "Seleccione una opcion"
+            it.cedula = -1
+            it.apellido = ""
+            it.prioridad = null
+        }
         viewState.showLoading()
         if (isAdmin)
-            compositeDisposable.add(dataManager.getAllProfesores()
+            compositeDisposable.add(dataManager.allProfesores
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
