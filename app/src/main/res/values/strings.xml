@@ -39,6 +39,7 @@
     <string name="drawer_menu_profesores">Profesores</string>
     <string name="drawer_menu_profesores_materias">Profesores Materias</string>
     <string name="drawer_menu_secciones">Secciones</string>
+    <string name="drawer_menu_usuarios">Usuarios</string>
     <string name="drawer_menu_logout">Cerrar Sesion</string>
 
     <!--Login Footer-->
@@ -67,6 +68,8 @@
     <string name="disp_details_guardar">Disponibilidad Guardada</string>
     <string name="disp_details_hora_inicio">Seleccione hora inicio</string>
     <string name="disp_details_hora_fin">Seleccione hora fin</string>
+    <string name="editardb_activity">Editar DB</string>
+    <string name="editardb_description">Editar Tablas de la db</string>
 
     <!--Permisos-->
     <string name="permisos_title">Permisos Requeridos</string>
