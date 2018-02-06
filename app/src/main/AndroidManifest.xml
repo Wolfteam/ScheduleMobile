@@ -36,6 +36,11 @@
             android:label="@string/disp_activity"
             android:theme="@style/AppTheme">
         </activity>
+        <activity
+            android:name=".ui.editardb.EditarDBActivity"
+            android:label="@string/editardb_activity"
+            android:theme="@style/AppTheme">
+        </activity>
     </application>
 
 </manifest>
