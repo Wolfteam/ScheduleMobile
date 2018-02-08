@@ -25,7 +25,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
-            buildConfigField "String", "URLBaseAPI", "\"http://192.168.1.102/ScheduleAPI/\""
+            buildConfigField "String", "URLBaseAPI", "\"http://192.168.1.103/ScheduleAPI/\""
         }
     }
     compileOptions {
@@ -96,6 +96,7 @@ dependencies {
     //Toasty
     implementation 'com.github.GrenderG:Toasty:1.2.8'
 
+    implementation 'com.github.kobakei:MaterialFabSpeedDial:1.1.8'
     //JWTDecode.Android
     //compile 'com.auth0.android:jwtdecode:1.1.1'
 
