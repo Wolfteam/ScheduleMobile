@@ -38,8 +38,8 @@ class AulasListAdapter(clickListener: EditarDBClickListenerContract) :
     override fun onBindViewHolder(holder: AulasListViewHolder?, position: Int) {
         if (holder is AulasListViewHolder) {
             val aula = mAulasList[position]
-            //val isItemSelected = isSelected(position)
-            holder.bind(aula)
+            val isItemSelected = isSelected(position)
+            holder.bind(aula, isItemSelected)
         }
     }
 
@@ -63,7 +63,7 @@ class AulasListAdapter(clickListener: EditarDBClickListenerContract) :
             }
         }
 
-        fun bind(aula: AulaDetailsDTO) = with(itemView) {
+        fun bind(aula: AulaDetailsDTO, isItemSelected: Boolean) = with(itemView) {
             val nombreAula =
                 if (aula.nombreAula.length > 5) aula.nombreAula else "Aula: ${aula.nombreAula}"
             val tipo =
@@ -72,7 +72,8 @@ class AulasListAdapter(clickListener: EditarDBClickListenerContract) :
             aula_list_item_nombre.text = nombreAula
             aula_list_item_capacidad.text = String.format("Capacidad: %d", aula.capacidad)
             aula_list_item_tipo.text = tipo
-
+            aulas_list_item_selected_overlay.visibility =
+                    if (isItemSelected) View.VISIBLE else View.INVISIBLE
         }
     }
 }

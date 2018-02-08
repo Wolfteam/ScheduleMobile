@@ -46,6 +46,4 @@ class AulasPresenter @Inject constructor(
                     })
         )
     }
-
-
 }

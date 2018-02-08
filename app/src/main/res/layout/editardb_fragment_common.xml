@@ -22,16 +22,24 @@
             android:scrollbars="vertical" />
 
 
-        <android.support.design.widget.FloatingActionButton
+        <!--<android.support.design.widget.FloatingActionButton-->
+            <!--android:id="@+id/editardb_fragment_common_fab"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_margin="16dp"-->
+            <!--android:clickable="true"-->
+            <!--android:focusable="true"-->
+            <!--android:src="@android:drawable/ic_menu_add"-->
+            <!--android:visibility="gone"-->
+            <!--app:layout_anchor="@id/editardb_fragment_common_recycler_view"-->
+            <!--app:layout_anchorGravity="bottom|right|end" />-->
+        
+        <io.github.kobakei.materialfabspeeddial.FabSpeedDial
             android:id="@+id/editardb_fragment_common_fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:src="@android:drawable/ic_menu_add"
-            android:visibility="gone"
-            app:layout_anchor="@id/editardb_fragment_common_recycler_view"
-            app:layout_anchorGravity="bottom|right|end" />
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:fab_menu="@menu/editardb_fab_menu">
+
+        </io.github.kobakei.materialfabspeeddial.FabSpeedDial>
     </android.support.design.widget.CoordinatorLayout>
 </android.support.v4.widget.SwipeRefreshLayout>

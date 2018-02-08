@@ -49,6 +49,9 @@ class AulasFragment : BaseFragment(), AulasViewContract, EditarDBClickListenerCo
     }
 
     override fun initLayout(view: View?, savedInstanceState: Bundle?) {
+        editardb_fragment_common_fab.addOnMenuItemClickListener { miniFab, label, itemId ->
+            Toasty.info(context!!, "Hiciste click en el item $itemId con el label ${label?.text}").show()
+        }
         val llm = LinearLayoutManager(context)
         editardb_fragment_common_recycler_view.layoutManager = llm
         editardb_fragment_common_recycler_view.addItemDecoration(
@@ -96,7 +99,6 @@ class AulasFragment : BaseFragment(), AulasViewContract, EditarDBClickListenerCo
     }
 
     override fun onItemLongClicked(position: Int): Boolean {
-        //TODO: OCURRE UN BUG ACA
         toggleSelection(position)
         return true
     }
