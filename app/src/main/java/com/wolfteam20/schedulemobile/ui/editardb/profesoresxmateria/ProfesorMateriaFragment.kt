@@ -67,12 +67,12 @@ class ProfesorMateriaFragment : BaseFragment(), ProfesorMateriaViewContract,
         return true
     }
 
-    override fun showLoading() {
+    override fun showSwipeToRefresh() {
         if (!editardb_fragment_common_swipe_to_refresh.isRefreshing)
             editardb_fragment_common_swipe_to_refresh.isRefreshing = true
     }
 
-    override fun hideLoading() {
+    override fun hideSwipeToRefresh() {
         editardb_fragment_common_swipe_to_refresh.isRefreshing = false
     }
 
@@ -86,6 +86,10 @@ class ProfesorMateriaFragment : BaseFragment(), ProfesorMateriaViewContract,
 
     override fun showList(pm: MutableList<ProfesorMateriaDetailsDTO>) {
         mAdapter.setItems(pm)
+    }
+
+    override fun startDetailsActivity() {
+        Toasty.warning(context!!, "Not implemented").show()
     }
 
 }

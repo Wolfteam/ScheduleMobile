@@ -27,7 +27,7 @@ class ProfesorMateriaPresenter @Inject constructor(
             viewState.onError(R.string.no_network)
             return
         }
-        viewState.showLoading()
+        viewState.showSwipeToRefresh()
         compositeDisposable.add(
             dataManager.allProfesorMateria
                 .observeOn(AndroidSchedulers.mainThread())
@@ -35,11 +35,11 @@ class ProfesorMateriaPresenter @Inject constructor(
                 .subscribe(
                     { pm ->
                         viewState.showList(pm)
-                        viewState.hideLoading()
+                        viewState.hideSwipeToRefresh()
                         viewState.showFAB()
                     },
                     { error ->
-                        viewState.hideLoading()
+                        viewState.hideSwipeToRefresh()
                         viewState.onError(error.localizedMessage)
                         Timber.e(error)
                     })

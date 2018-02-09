@@ -26,7 +26,7 @@ class PeriodosPresenter @Inject constructor(
             viewState.onError(R.string.no_network)
             return
         }
-        viewState.showLoading()
+        viewState.showSwipeToRefresh()
         compositeDisposable.add(
             dataManager.allPeriodosAcademicos
                 .observeOn(AndroidSchedulers.mainThread())
@@ -34,11 +34,11 @@ class PeriodosPresenter @Inject constructor(
                 .subscribe(
                     { periodos ->
                         viewState.showList(periodos)
-                        viewState.hideLoading()
+                        viewState.hideSwipeToRefresh()
                         viewState.showFAB()
                     },
                     { error ->
-                        viewState.hideLoading()
+                        viewState.hideSwipeToRefresh()
                         viewState.onError(error.localizedMessage)
                         Timber.e(error)
                     })

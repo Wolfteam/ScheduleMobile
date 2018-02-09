@@ -26,7 +26,7 @@ class UsuariosPresenter @Inject constructor(
             viewState.onError(R.string.no_network)
             return
         }
-        viewState.showLoading()
+        viewState.showSwipeToRefresh()
         compositeDisposable.add(
             dataManager.allUsuarios
                 .observeOn(AndroidSchedulers.mainThread())
@@ -34,11 +34,11 @@ class UsuariosPresenter @Inject constructor(
                 .subscribe(
                     { usuarios ->
                         viewState.showList(usuarios)
-                        viewState.hideLoading()
+                        viewState.hideSwipeToRefresh()
                         viewState.showFAB()
                     },
                     { error ->
-                        viewState.hideLoading()
+                        viewState.hideSwipeToRefresh()
                         viewState.onError(error.localizedMessage)
                         Timber.e(error)
                     })

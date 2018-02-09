@@ -58,6 +58,14 @@ class MateriasFragment : BaseFragment(), MateriasViewContract, EditarDBClickList
         editardb_fragment_common_recycler_view.adapter = mAdapter
     }
 
+    override fun onItemClicked(id: Long) {
+        Toasty.warning(context!!, "Not implemented").show()
+    }
+
+    override fun onItemLongClicked(position: Int): Boolean {
+        return true
+    }
+
     override fun showFAB() {
         editardb_fragment_common_fab.visibility = View.VISIBLE
     }
@@ -66,12 +74,12 @@ class MateriasFragment : BaseFragment(), MateriasViewContract, EditarDBClickList
         editardb_fragment_common_fab.visibility = View.GONE
     }
 
-    override fun showLoading() {
+    override fun showSwipeToRefresh() {
         if (!editardb_fragment_common_swipe_to_refresh.isRefreshing)
             editardb_fragment_common_swipe_to_refresh.isRefreshing = true
     }
 
-    override fun hideLoading() {
+    override fun hideSwipeToRefresh() {
         editardb_fragment_common_swipe_to_refresh.isRefreshing = false
     }
 
@@ -79,13 +87,8 @@ class MateriasFragment : BaseFragment(), MateriasViewContract, EditarDBClickList
         mAdapter.setItems(materias)
     }
 
-
-    override fun onItemClicked(id: Long) {
+    override fun startDetailsActivity() {
         Toasty.warning(context!!, "Not implemented").show()
-    }
-
-    override fun onItemLongClicked(position: Int): Boolean {
-        return true
     }
 
     companion object {

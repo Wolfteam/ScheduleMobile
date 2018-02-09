@@ -66,12 +66,12 @@ class SeccionesFragment : BaseFragment(), SeccionesViewContract, EditarDBClickLi
         return true
     }
 
-    override fun showLoading() {
+    override fun showSwipeToRefresh() {
         if (!editardb_fragment_common_swipe_to_refresh.isRefreshing)
             editardb_fragment_common_swipe_to_refresh.isRefreshing = true
     }
 
-    override fun hideLoading() {
+    override fun hideSwipeToRefresh() {
         editardb_fragment_common_swipe_to_refresh.isRefreshing = false
     }
 
@@ -85,6 +85,10 @@ class SeccionesFragment : BaseFragment(), SeccionesViewContract, EditarDBClickLi
 
     override fun showList(secciones: MutableList<SeccionesDetailsDTO>) {
         mAdapter.setItems(secciones)
+    }
+
+    override fun startDetailsActivity() {
+        Toasty.warning(context!!, "Not implemented").show()
     }
 
 }

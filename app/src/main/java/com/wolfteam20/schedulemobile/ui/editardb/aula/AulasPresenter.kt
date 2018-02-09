@@ -3,6 +3,7 @@ package com.wolfteam20.schedulemobile.ui.editardb.aula
 import com.arellomobile.mvp.InjectViewState
 import com.wolfteam20.schedulemobile.R
 import com.wolfteam20.schedulemobile.data.DataManagerContract
+import com.wolfteam20.schedulemobile.data.network.models.AulaDetailsDTO
 import com.wolfteam20.schedulemobile.ui.base.BasePresenter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -25,25 +26,61 @@ class AulasPresenter @Inject constructor(
             viewState.onError(R.string.no_network)
             return
         }
-        viewState.showLoading()
+        viewState.showSwipeToRefresh()
         compositeDisposable.add(
-            dataManager.allAulas
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(
-                    { aulas ->
-                        aulas.forEach { aula -> aula.tipo.target = aula.tipoAula }
-                        dataManager.removeAulasLocal()
-                        dataManager.saveAulasLocal(aulas)
-                        viewState.showList(aulas)
-                        viewState.hideLoading()
-                        viewState.showFAB()
-                    },
-                    { error ->
-                        viewState.hideLoading()
-                        viewState.onError(error.localizedMessage)
-                        Timber.e(error)
-                    })
+                dataManager.allAulas
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(
+                            { aulas ->
+                                aulas.forEach { aula -> aula.tipo.target = aula.tipoAula }
+                                dataManager.removeAulasLocal()
+                                dataManager.saveAulasLocal(aulas)
+                                viewState.showList(aulas)
+                                viewState.hideSwipeToRefresh()
+                                viewState.showFAB()
+                            },
+                            { error ->
+                                viewState.hideSwipeToRefresh()
+                                viewState.onError(error.localizedMessage)
+                                Timber.e(error)
+                            }
+                    )
         )
+    }
+
+    override fun onFABDeleteClicked(aulas: MutableList<AulaDetailsDTO>) {
+        if (aulas.size == 0) {
+            viewState.showMessage("Debe seleccionar al menos un item")
+            return
+        }
+
+        if (!isNetworkAvailable) {
+            viewState.onError(R.string.no_network)
+            return
+        }
+
+        val idAulas = aulas.joinToString(
+                ",",
+                transform = { return@joinToString it.idAula.toString() }
+        )
+        viewState.showSwipeToRefresh()
+        compositeDisposable.add(
+                dataManager.removeAulas(idAulas)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(
+                            {
+                                viewState.hideSwipeToRefresh()
+                                viewState.removeSelectedListItems()
+                            },
+                            { error ->
+                                viewState.hideSwipeToRefresh()
+                                viewState.onError(error.localizedMessage)
+                                Timber.e(error)
+                            }
+                    )
+        )
+
     }
 }

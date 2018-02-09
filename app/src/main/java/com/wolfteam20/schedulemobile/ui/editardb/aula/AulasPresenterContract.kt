@@ -1,5 +1,6 @@
 package com.wolfteam20.schedulemobile.ui.editardb.aula
 
+import com.wolfteam20.schedulemobile.data.network.models.AulaDetailsDTO
 import com.wolfteam20.schedulemobile.ui.base.BasePresenterContract
 
 /**
@@ -7,4 +8,5 @@ import com.wolfteam20.schedulemobile.ui.base.BasePresenterContract
  */
 interface AulasPresenterContract : BasePresenterContract {
     fun subscribe()
+    fun onFABDeleteClicked(aulas : MutableList<AulaDetailsDTO>)
 }

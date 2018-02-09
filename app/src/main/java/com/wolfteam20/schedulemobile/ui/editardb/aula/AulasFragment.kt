@@ -50,27 +50,32 @@ class AulasFragment : BaseFragment(), AulasViewContract, EditarDBClickListenerCo
 
     override fun initLayout(view: View?, savedInstanceState: Bundle?) {
         editardb_fragment_common_fab.addOnMenuItemClickListener { miniFab, label, itemId ->
-            Toasty.info(context!!, "Hiciste click en el item $itemId con el label ${label?.text}").show()
+            when (itemId) {
+                R.id.editardb_fab_add -> {
+                    Toasty.success(context!!, "Activity").show()
+                }
+                else -> mPresenter.onFABDeleteClicked(mAdapter.getItems(mAdapter.getSelectedItems()))
+            }
         }
         val llm = LinearLayoutManager(context)
         editardb_fragment_common_recycler_view.layoutManager = llm
         editardb_fragment_common_recycler_view.addItemDecoration(
-            DividerItemDecoration(
-                editardb_fragment_common_recycler_view.context,
-                llm.orientation
-            )
+                DividerItemDecoration(
+                        editardb_fragment_common_recycler_view.context,
+                        llm.orientation
+                )
         )
         editardb_fragment_common_recycler_view.itemAnimator = DefaultItemAnimator()
         editardb_fragment_common_recycler_view.adapter = mAdapter
         editardb_fragment_common_swipe_to_refresh.setOnRefreshListener { mPresenter.subscribe() }
     }
 
-    override fun showLoading() {
+    override fun showSwipeToRefresh() {
         if (!editardb_fragment_common_swipe_to_refresh.isRefreshing)
             editardb_fragment_common_swipe_to_refresh.isRefreshing = true
     }
 
-    override fun hideLoading() {
+    override fun hideSwipeToRefresh() {
         editardb_fragment_common_swipe_to_refresh.isRefreshing = false
     }
 
@@ -86,6 +91,13 @@ class AulasFragment : BaseFragment(), AulasViewContract, EditarDBClickListenerCo
         mAdapter.setItems(aulas)
     }
 
+    override fun startDetailsActivity() {
+        Toasty.warning(context!!, "Not implemented").show()
+    }
+
+    override fun removeSelectedListItems() {
+        mAdapter.removeItems(mAdapter.getSelectedItems())
+    }
 
     /**
      * Selecciona/Deselecciona un item en la [position] indicada

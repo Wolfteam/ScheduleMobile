@@ -8,4 +8,5 @@ import com.wolfteam20.schedulemobile.ui.editardb.EditarDBViewContract
  */
 interface AulasViewContract : EditarDBViewContract {
     fun showList(aulas : MutableList<AulaDetailsDTO>)
+    fun removeSelectedListItems()
 }

@@ -26,7 +26,7 @@ class SeccionesPresenter @Inject constructor(
             viewState.onError(R.string.no_network)
             return
         }
-        viewState.showLoading()
+        viewState.showSwipeToRefresh()
         compositeDisposable.add(
             dataManager.allSecciones
                 .observeOn(AndroidSchedulers.mainThread())
@@ -34,11 +34,11 @@ class SeccionesPresenter @Inject constructor(
                 .subscribe(
                     { secciones ->
                         viewState.showList(secciones)
-                        viewState.hideLoading()
+                        viewState.hideSwipeToRefresh()
                         viewState.showFAB()
                     },
                     { error ->
-                        viewState.hideLoading()
+                        viewState.hideSwipeToRefresh()
                         viewState.onError(error.localizedMessage)
                         Timber.e(error)
                     })
