@@ -14,6 +14,7 @@
     <string name="save">Guardar</string>
     <string name="yes">Si</string>
     <string name="no">No</string>
+    <string name="add">Agregar</string>
     <string name="delete">Borrar</string>
     <string name="cancelar">Cancelar</string>
     <string name="error">Ocurrio un error</string>

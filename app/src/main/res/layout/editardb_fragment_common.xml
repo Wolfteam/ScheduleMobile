@@ -11,7 +11,6 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-
         <android.support.v7.widget.RecyclerView
             android:id="@+id/editardb_fragment_common_recycler_view"
             android:layout_width="match_parent"
@@ -23,23 +22,40 @@
 
 
         <!--<android.support.design.widget.FloatingActionButton-->
-            <!--android:id="@+id/editardb_fragment_common_fab"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_margin="16dp"-->
-            <!--android:clickable="true"-->
-            <!--android:focusable="true"-->
-            <!--android:src="@android:drawable/ic_menu_add"-->
-            <!--android:visibility="gone"-->
-            <!--app:layout_anchor="@id/editardb_fragment_common_recycler_view"-->
-            <!--app:layout_anchorGravity="bottom|right|end" />-->
-        
+        <!--android:id="@+id/editardb_fragment_common_fab"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_margin="16dp"-->
+        <!--android:clickable="true"-->
+        <!--android:focusable="true"-->
+        <!--android:src="@android:drawable/ic_menu_add"-->
+        <!--android:visibility="gone"-->
+        <!--app:layout_anchor="@id/editardb_fragment_common_recycler_view"-->
+        <!--app:layout_anchorGravity="bottom|right|end" />-->
+
         <io.github.kobakei.materialfabspeeddial.FabSpeedDial
             android:id="@+id/editardb_fragment_common_fab"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:fab_menu="@menu/editardb_fab_menu">
+
+            app:fab_menu="@menu/editardb_fab_menu"
+
+            app:fab_miniFabBackgroundColorList="@array/fab_mini_colors"
+
+            app:fab_miniFabDrawableTint="@android:color/black"
+
+            app:fab_miniFabRippleColor="@android:color/white"
+
+            app:fab_miniFabTextColor="@color/white">
 
         </io.github.kobakei.materialfabspeeddial.FabSpeedDial>
+        <!--app:fab_miniFabBackgroundColor="@cofab_mini_addmini"
+                    app:fab_extraMargin="-8dp"-->
+        <!-- app:fab_miniFabDrawableTintList="@array/black_array"-->
+        <!--app:fab_miniFabRippleColorList="@array/white_array"-->
+        <!--app:fab_miniFabTextColor="@cofab_mini_addmini"-->
+        <!--app:fab_miniFabTextColorList="@array/black_array"-->
+        <!--app:fab_miniFabTextBackground="@drawable/label"-->
+        <!--app:fab_miniFabTextBackgroundList="@array/labels"-->
     </android.support.design.widget.CoordinatorLayout>
 </android.support.v4.widget.SwipeRefreshLayout>
