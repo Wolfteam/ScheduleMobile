@@ -13,15 +13,18 @@ import com.wolfteam20.schedulemobile.data.network.models.UsuarioDetailsDTO;
 
 import java.util.List;
 
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 import retrofit2.http.Streaming;
 
 /**
@@ -120,4 +123,7 @@ public interface ApiSchedule {
      */
     @POST("api/Disponibilidad")
     Observable<Response<ResponseBody>> postDisponibilidad(@Body List<DisponibilidadDTO> disponibilidades);
+
+    @DELETE("api/Aulas")
+    Completable removeAulas(@Query("idAulas") String idAulas);
 }

@@ -21,6 +21,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
@@ -117,6 +118,11 @@ public class DataManager implements DataManagerContract {
     }
 
     @Override
+    public Completable removeAulas(String idAulas) {
+        return mApiSchedule.removeAulas(idAulas);
+    }
+
+    @Override
     public String getToken() {
         return mPreferencesHelper.getToken();
     }
@@ -173,7 +179,7 @@ public class DataManager implements DataManagerContract {
 
     @Override
     public Observable<List<DisponibilidadDTO>> getDisponibilidadLocal(int cedula, int idDia) {
-       return mDbHelper.getDisponibilidadLocal(cedula, idDia);
+        return mDbHelper.getDisponibilidadLocal(cedula, idDia);
     }
 
     @Override
