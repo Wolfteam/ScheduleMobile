@@ -13,6 +13,7 @@ import javax.inject.Inject;
 
 import io.objectbox.Box;
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import timber.log.Timber;
 
 //import com.wolfteam20.schedulemobile.data.network.models.AulaDetailsDTO_;
@@ -44,6 +45,24 @@ public class DbHelper implements DbHelperContract {
                 subscriber.onNext(aulas);
                 subscriber.onComplete();
             } catch (Exception e) {
+                Timber.e(e);
+                subscriber.onError(e);
+            }
+        });
+    }
+
+    @Override
+    public Single<AulaDetailsDTO> getAulaLocal(long idAula) {
+        Timber.i("Obteniendo el aula con id: %s", idAula);
+        return Single.create(subscriber -> {
+            try {
+                AulaDetailsDTO aula = mAulaDetailsBox.query()
+                        .equal(AulaDetailsDTO_.idAula, idAula)
+                        .build()
+                        .findFirst();
+                subscriber.onSuccess(aula);
+            }
+            catch (Exception e){
                 Timber.e(e);
                 subscriber.onError(e);
             }
@@ -126,7 +145,7 @@ public class DbHelper implements DbHelperContract {
     }
 
     @Override
-    public void removeAulaLocal(int idAula) {
+    public void removeAulaLocal(long idAula) {
         Timber.i("Eliminando el aula con id: %s", idAula);
         mAulaDetailsBox.query().equal(AulaDetailsDTO_.idAula, idAula).build().remove();
     }

@@ -23,6 +23,7 @@ import javax.inject.Inject;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 
@@ -173,6 +174,11 @@ public class DataManager implements DataManagerContract {
     }
 
     @Override
+    public Single<AulaDetailsDTO> getAulaLocal(long idAula) {
+        return mDbHelper.getAulaLocal(idAula);
+    }
+
+    @Override
     public Observable<List<DisponibilidadDTO>> getDisponibilidadLocal(int cedula) {
         return mDbHelper.getDisponibilidadLocal(cedula);
     }
@@ -203,7 +209,7 @@ public class DataManager implements DataManagerContract {
     }
 
     @Override
-    public void removeAulaLocal(int idAula) {
+    public void removeAulaLocal(long idAula) {
         mDbHelper.removeAulaLocal(idAula);
     }
 

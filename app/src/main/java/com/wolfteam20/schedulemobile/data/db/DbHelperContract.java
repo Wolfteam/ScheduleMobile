@@ -7,6 +7,7 @@ import com.wolfteam20.schedulemobile.data.network.models.DisponibilidadDetailsDT
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 
 
 /**
@@ -15,6 +16,8 @@ import io.reactivex.Observable;
 
 public interface DbHelperContract {
     Observable<List<AulaDetailsDTO>> getAllAulasLocal();
+
+    Single<AulaDetailsDTO> getAulaLocal(long idAula);
 
     Observable<List<DisponibilidadDTO>> getDisponibilidadLocal(int cedula);
 
@@ -28,7 +31,7 @@ public interface DbHelperContract {
 
     void saveDisponibilidadDetailsLocal(DisponibilidadDetailsDTO disponibilidadDetailsDTO);
 
-    void removeAulaLocal(int idAula);
+    void removeAulaLocal(long idAula);
 
     void removeAulasLocal();
 
