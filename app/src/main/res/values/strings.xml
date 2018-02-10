@@ -15,6 +15,7 @@
     <string name="yes">Si</string>
     <string name="no">No</string>
     <string name="add">Agregar</string>
+    <string name="edit">Editar</string>
     <string name="delete">Borrar</string>
     <string name="cancelar">Cancelar</string>
     <string name="error">Ocurrio un error</string>
@@ -71,6 +72,10 @@
     <string name="disp_details_hora_fin">Seleccione hora fin</string>
     <string name="editardb_activity">Editar DB</string>
     <string name="editardb_description">Editar Tablas de la db</string>
+    <string name="editardb_details_activity">Editar</string>
+    <string name="aulas_nombre">Nombre del aula</string>
+    <string name="aulas_capacidad">Capacidad del aula</string>
+    <string name="aulas_tipo">Tipo de aula</string>
 
     <!--Permisos-->
     <string name="permisos_title">Permisos Requeridos</string>
