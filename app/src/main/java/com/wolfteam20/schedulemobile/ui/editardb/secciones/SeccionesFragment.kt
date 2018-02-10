@@ -25,12 +25,12 @@ class SeccionesFragment : BaseFragment(), SeccionesViewContract, EditarDBClickLi
 
     @Inject
     @InjectPresenter
-    lateinit var mPresenter : SeccionesPresenter
+    lateinit var mPresenter: SeccionesPresenter
 
-    private val mAdapter =  SeccionesListAdapter(this)
+    private val mAdapter = SeccionesListAdapter(this)
 
     @ProvidePresenter
-    fun provideSeccionesPresenter() : SeccionesPresenter {
+    fun provideSeccionesPresenter(): SeccionesPresenter {
         activityComponent.inject(this)
         mPresenter.subscribe()
         return mPresenter
@@ -87,8 +87,11 @@ class SeccionesFragment : BaseFragment(), SeccionesViewContract, EditarDBClickLi
         mAdapter.setItems(secciones)
     }
 
-    override fun startDetailsActivity() {
+    override fun startDetailsActivity(id: Long) {
         Toasty.warning(context!!, "Not implemented").show()
     }
 
+    override fun toggleItemSelection(position: Int) {
+        mAdapter.toggleSelection(position)
+    }
 }

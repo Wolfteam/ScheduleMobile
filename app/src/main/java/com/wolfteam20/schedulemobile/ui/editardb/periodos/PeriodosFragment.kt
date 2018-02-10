@@ -25,12 +25,12 @@ class PeriodosFragment : BaseFragment(), PeriodosViewContract, EditarDBClickList
 
     @Inject
     @InjectPresenter
-    lateinit var mPresenter : PeriodosPresenter
+    lateinit var mPresenter: PeriodosPresenter
 
-    private val mAdapter =  PeriodoListAdapter(this)
+    private val mAdapter = PeriodoListAdapter(this)
 
     @ProvidePresenter
-    fun providePeriodoPresenter() : PeriodosPresenter {
+    fun providePeriodoPresenter(): PeriodosPresenter {
         activityComponent.inject(this)
         mPresenter.subscribe()
         return mPresenter
@@ -87,8 +87,11 @@ class PeriodosFragment : BaseFragment(), PeriodosViewContract, EditarDBClickList
         mAdapter.setItems(periodos)
     }
 
-    override fun startDetailsActivity() {
+    override fun startDetailsActivity(id: Long) {
         Toasty.warning(context!!, "Not implemented").show()
     }
 
+    override fun toggleItemSelection(position: Int) {
+        mAdapter.toggleSelection(position)
+    }
 }

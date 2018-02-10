@@ -25,12 +25,12 @@ class ProfesoresFragment : BaseFragment(), ProfesoresViewContract, EditarDBClick
 
     @Inject
     @InjectPresenter
-    lateinit var mPresenter : ProfesoresPresenter
+    lateinit var mPresenter: ProfesoresPresenter
 
-    private val mAdapter =  ProfesoresListAdapter(this)
+    private val mAdapter = ProfesoresListAdapter(this)
 
     @ProvidePresenter
-    fun provideProfesorPresenter() : ProfesoresPresenter {
+    fun provideProfesorPresenter(): ProfesoresPresenter {
         activityComponent.inject(this)
         mPresenter.subscribe()
         return mPresenter
@@ -87,8 +87,12 @@ class ProfesoresFragment : BaseFragment(), ProfesoresViewContract, EditarDBClick
         mAdapter.setItems(profesores)
     }
 
-    override fun startDetailsActivity() {
+    override fun startDetailsActivity(id: Long) {
         Toasty.warning(context!!, "Not implemented").show()
+    }
+
+    override fun toggleItemSelection(position: Int) {
+        mAdapter.toggleSelection(position)
     }
 
 }

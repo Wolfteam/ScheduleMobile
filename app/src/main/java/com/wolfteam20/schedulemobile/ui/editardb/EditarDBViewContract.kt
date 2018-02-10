@@ -12,5 +12,14 @@ interface EditarDBViewContract : BaseViewContract {
 //    fun hideLoading()
     fun showFAB()
     fun hideFAB()
-    fun startDetailsActivity()
+
+    /**
+     * Inicia la detail activity pasandole el id del objeto a ser buscado en la db
+     */
+    fun startDetailsActivity(id: Long)
+
+    /**
+     * Selecciona/Deselecciona un item en la [position] indicada
+     */
+    fun toggleItemSelection(position: Int)
 }

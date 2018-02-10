@@ -86,8 +86,12 @@ class UsuariosFragment : BaseFragment(), UsuariosViewContract, EditarDBClickList
         mAdapter.setItems(usuarios)
     }
 
-    override fun startDetailsActivity() {
+    override fun startDetailsActivity(id: Long) {
         Toasty.warning(context!!, "Not implemented").show()
+    }
+
+    override fun toggleItemSelection(position: Int) {
+        mAdapter.toggleSelection(position)
     }
 
 }

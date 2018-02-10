@@ -16,7 +16,7 @@ import com.wolfteam20.schedulemobile.data.network.models.AulaDetailsDTO
 import com.wolfteam20.schedulemobile.ui.adapters.AulasListAdapter
 import com.wolfteam20.schedulemobile.ui.base.BaseFragment
 import com.wolfteam20.schedulemobile.ui.editardb.EditarDBClickListenerContract
-import es.dmoral.toasty.Toasty
+import com.wolfteam20.schedulemobile.ui.editardb.details.EditarDBDetailsActivity
 import kotlinx.android.synthetic.main.editardb_fragment_common.*
 import javax.inject.Inject
 
@@ -51,19 +51,17 @@ class AulasFragment : BaseFragment(), AulasViewContract, EditarDBClickListenerCo
     override fun initLayout(view: View?, savedInstanceState: Bundle?) {
         editardb_fragment_common_fab.addOnMenuItemClickListener { miniFab, label, itemId ->
             when (itemId) {
-                R.id.editardb_fab_add -> {
-                    Toasty.success(context!!, "Activity").show()
-                }
+                R.id.editardb_fab_add -> mPresenter.onFABAddClicked()
                 else -> mPresenter.onFABDeleteClicked(mAdapter.getItems(mAdapter.getSelectedItems()))
             }
         }
         val llm = LinearLayoutManager(context)
         editardb_fragment_common_recycler_view.layoutManager = llm
         editardb_fragment_common_recycler_view.addItemDecoration(
-                DividerItemDecoration(
-                        editardb_fragment_common_recycler_view.context,
-                        llm.orientation
-                )
+            DividerItemDecoration(
+                editardb_fragment_common_recycler_view.context,
+                llm.orientation
+            )
         )
         editardb_fragment_common_recycler_view.itemAnimator = DefaultItemAnimator()
         editardb_fragment_common_recycler_view.adapter = mAdapter
@@ -91,27 +89,24 @@ class AulasFragment : BaseFragment(), AulasViewContract, EditarDBClickListenerCo
         mAdapter.setItems(aulas)
     }
 
-    override fun startDetailsActivity() {
-        Toasty.warning(context!!, "Not implemented").show()
+    override fun startDetailsActivity(id: Long) {
+        startActivity(EditarDBDetailsActivity.getIntent(context!!, 1, id))
     }
 
     override fun removeSelectedListItems() {
         mAdapter.removeItems(mAdapter.getSelectedItems())
     }
 
-    /**
-     * Selecciona/Deselecciona un item en la [position] indicada
-     */
-    private fun toggleSelection(position: Int) {
+    override fun toggleItemSelection(position: Int) {
         mAdapter.toggleSelection(position)
     }
 
     override fun onItemClicked(id: Long) {
-        Toasty.warning(context!!, "Not implemented").show()
+        mPresenter.onItemClicked(id)
     }
 
     override fun onItemLongClicked(position: Int): Boolean {
-        toggleSelection(position)
+        mPresenter.onItemLongClicked(position)
         return true
     }
 

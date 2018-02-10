@@ -24,6 +24,7 @@ import javax.inject.Inject
  * Created by Efrain Bastidas on 2/2/2018.
  */
 class MateriasFragment : BaseFragment(), MateriasViewContract, EditarDBClickListenerContract {
+
     @Inject
     @InjectPresenter
     lateinit var mPresenter : MateriasPresenter
@@ -87,8 +88,12 @@ class MateriasFragment : BaseFragment(), MateriasViewContract, EditarDBClickList
         mAdapter.setItems(materias)
     }
 
-    override fun startDetailsActivity() {
+    override fun startDetailsActivity(id: Long) {
         Toasty.warning(context!!, "Not implemented").show()
+    }
+
+    override fun toggleItemSelection(position: Int) {
+        mAdapter.toggleSelection(position)
     }
 
     companion object {

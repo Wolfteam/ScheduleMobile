@@ -49,6 +49,18 @@ class AulasPresenter @Inject constructor(
         )
     }
 
+    override fun onItemClicked(id: Long) {
+        viewState.startDetailsActivity(id)
+    }
+
+    override fun onItemLongClicked(position: Int) {
+        viewState.toggleItemSelection(position)
+    }
+
+    override fun onFABAddClicked() {
+        viewState.startDetailsActivity(0)
+    }
+
     override fun onFABDeleteClicked(aulas: MutableList<AulaDetailsDTO>) {
         if (aulas.size == 0) {
             viewState.showMessage("Debe seleccionar al menos un item")

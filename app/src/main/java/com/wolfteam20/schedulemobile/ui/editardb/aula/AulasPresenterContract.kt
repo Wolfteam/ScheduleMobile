@@ -8,5 +8,8 @@ import com.wolfteam20.schedulemobile.ui.base.BasePresenterContract
  */
 interface AulasPresenterContract : BasePresenterContract {
     fun subscribe()
+    fun onItemClicked(id:Long)
+    fun onItemLongClicked(position: Int)
+    fun onFABAddClicked()
     fun onFABDeleteClicked(aulas : MutableList<AulaDetailsDTO>)
 }

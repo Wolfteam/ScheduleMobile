@@ -26,12 +26,12 @@ class ProfesorMateriaFragment : BaseFragment(), ProfesorMateriaViewContract,
 
     @Inject
     @InjectPresenter
-    lateinit var mPresenter : ProfesorMateriaPresenter
+    lateinit var mPresenter: ProfesorMateriaPresenter
 
-    private val mAdapter =  ProfesoresMateriasListAdapter(this)
+    private val mAdapter = ProfesoresMateriasListAdapter(this)
 
     @ProvidePresenter
-    fun provideProfesorMateriaPresenter() : ProfesorMateriaPresenter {
+    fun provideProfesorMateriaPresenter(): ProfesorMateriaPresenter {
         activityComponent.inject(this)
         mPresenter.subscribe()
         return mPresenter
@@ -88,8 +88,12 @@ class ProfesorMateriaFragment : BaseFragment(), ProfesorMateriaViewContract,
         mAdapter.setItems(pm)
     }
 
-    override fun startDetailsActivity() {
+    override fun startDetailsActivity(id: Long) {
         Toasty.warning(context!!, "Not implemented").show()
+    }
+
+    override fun toggleItemSelection(position: Int) {
+        mAdapter.toggleSelection(position)
     }
 
 }
