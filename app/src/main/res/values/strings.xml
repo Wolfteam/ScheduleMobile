@@ -21,6 +21,7 @@
     <string name="error">Ocurrio un error</string>
     <string name="no_network">No hay conexion disponible</string>
     <string name="cerrar_sesion">Cerrar Sesion</string>
+    <string name="are_you_sure">¿Esta seguro que desea continuar?</string>
     <string name="cerrar_sesion_msg">¿Esta seguro que desea salir?</string>
     <string name="wrong_username_password">Usuario o clave invalidas</string>
     <string name="no_prof_found">No se encontraron profesores</string>
