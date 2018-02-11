@@ -1,15 +1,12 @@
 package com.wolfteam20.schedulemobile.ui.editardb.details
 
-import android.app.Fragment
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import com.wolfteam20.schedulemobile.R
 import com.wolfteam20.schedulemobile.ui.base.BaseActivity
 import com.wolfteam20.schedulemobile.ui.base.BaseFragment
-import com.wolfteam20.schedulemobile.ui.editardb.aula.AulasFragment
 import com.wolfteam20.schedulemobile.ui.editardb.details.aulas.AulasDetailsFragment
-import kotlinx.android.synthetic.main.base_activity.*
 
 /**
  * Created by Efrain.Bastidas on 10/2/2018.
@@ -38,10 +35,16 @@ class EditarDBDetailsActivity : BaseActivity() {
     }
 
     companion object {
-        fun getIntent(context: Context, fragment: Int, id: Long): Intent {
+        /**
+         * Obtiene un intent de EditarDBDetailsActivity, guardando en el mismo
+         * el [fragment] a inflar, el [id] del objeto correspondiente (valido cuando se va editar)
+         * y la [position] del item en la recycler view (valido cuando se va editar)
+         */
+        fun getIntent(context: Context, fragment: Int, id: Long = 0, position: Int = 0): Intent {
             return Intent(context, EditarDBDetailsActivity::class.java)
                 .putExtra("Fragment_TO_LOAD", fragment)
                 .putExtra("ID", id)
+                .putExtra("POSITION", position)
         }
     }
 }
