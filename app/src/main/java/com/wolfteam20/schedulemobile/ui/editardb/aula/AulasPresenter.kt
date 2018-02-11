@@ -28,25 +28,25 @@ class AulasPresenter @Inject constructor(
         }
         viewState.showSwipeToRefresh()
         compositeDisposable.add(
-                dataManager.allAulas
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeOn(Schedulers.io())
-                    .subscribe(
-                            { aulas ->
-                                aulas.forEach { aula -> aula.tipo.target = aula.tipoAula }
-                                aulas.sortBy { it.nombreAula }
-                                dataManager.removeAulasLocal()
-                                dataManager.saveAulasLocal(aulas)
-                                viewState.showList(aulas)
-                                viewState.hideSwipeToRefresh()
-                                viewState.showFAB()
-                            },
-                            { error ->
-                                viewState.hideSwipeToRefresh()
-                                viewState.onError(error.localizedMessage)
-                                Timber.e(error)
-                            }
-                    )
+            dataManager.allAulas
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(
+                    { aulas ->
+                        aulas.forEach { aula -> aula.tipo.target = aula.tipoAula }
+                        aulas.sortBy { it.nombreAula }
+                        dataManager.removeAulasLocal()
+                        dataManager.saveAulasLocal(aulas)
+                        viewState.showList(aulas)
+                        viewState.hideSwipeToRefresh()
+                        viewState.showFAB()
+                    },
+                    { error ->
+                        viewState.hideSwipeToRefresh()
+                        viewState.onError(error.localizedMessage)
+                        Timber.e(error)
+                    }
+                )
         )
     }
 
@@ -66,6 +66,18 @@ class AulasPresenter @Inject constructor(
         viewState.showConfirmDelete()
     }
 
+
+    override fun onActionMode() {
+        viewState.startActionMode()
+    }
+
+    override fun onToggleItemSelection(itemsToSelect: Int) {
+        if (itemsToSelect == 0)
+            viewState.stopActionMode()
+        else
+            viewState.setActionModeTitle(itemsToSelect.toString())
+    }
+
     override fun deleteItems(aulas: MutableList<AulaDetailsDTO>) {
         if (aulas.size == 0) {
             viewState.showMessage("Debe seleccionar al menos un item")
@@ -78,30 +90,27 @@ class AulasPresenter @Inject constructor(
         }
 
         val idAulas = aulas.joinToString(
-                ",",
-                transform = { return@joinToString it.idAula.toString() }
+            ",",
+            transform = { return@joinToString it.idAula.toString() }
         )
         viewState.showSwipeToRefresh()
         compositeDisposable.add(
-                dataManager.removeAulas(idAulas)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeOn(Schedulers.io())
-                    .subscribe(
-                            {
-                                viewState.hideSwipeToRefresh()
-                                viewState.removeSelectedListItems()
-                            },
-                            { error ->
-                                viewState.hideSwipeToRefresh()
-                                viewState.onError(error.localizedMessage)
-                                Timber.e(error)
-                            }
-                    )
+            dataManager.removeAulas(idAulas)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(
+                    {
+                        viewState.hideSwipeToRefresh()
+                        viewState.removeSelectedListItems()
+                        viewState.stopActionMode()
+                    },
+                    { error ->
+                        viewState.hideSwipeToRefresh()
+                        viewState.onError(error.localizedMessage)
+                        Timber.e(error)
+                    }
+                )
         )
 
-    }
-
-    override fun onActionMode() {
-        viewState.startActionMode()
     }
 }

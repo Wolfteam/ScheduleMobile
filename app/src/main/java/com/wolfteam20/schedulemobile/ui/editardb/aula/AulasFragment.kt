@@ -119,23 +119,26 @@ class AulasFragment : BaseFragment(), AulasViewContract, EditarDBClickListenerCo
 
     override fun removeSelectedListItems() {
         mAdapter.removeItems(mAdapter.getSelectedItems())
-        mActionMode?.finish()
     }
 
     override fun toggleItemSelection(itemPosition: Int) {
         mAdapter.toggleSelection(itemPosition)
-        val count = mAdapter.getSelectedItemCount()
-
-        if (count == 0) {
-            mActionMode?.finish()
-        } else {
-            mActionMode?.title = count.toString()
-            mActionMode?.invalidate()
-        }
+        mPresenter.onToggleItemSelection(mAdapter.getSelectedItemCount())
     }
 
     override fun startActionMode() {
         mActionMode = baseDrawerActivity.startSupportActionMode(mActionModeCallback)
+    }
+
+    override fun setActionModeTitle(title: String) {
+        mActionMode?.title = title
+        mActionMode?.invalidate()
+    }
+
+    override fun stopActionMode() {
+        mAdapter.clearSelection()
+        mActionMode?.finish()
+        mActionMode = null
     }
 
     override fun showConfirmDelete() {
@@ -185,8 +188,7 @@ class AulasFragment : BaseFragment(), AulasViewContract, EditarDBClickListenerCo
         }
 
         override fun onDestroyActionMode(mode: ActionMode) {
-            mAdapter.clearSelection()
-            mActionMode = null
+            mPresenter.onToggleItemSelection(0)
         }
     }
 

@@ -7,14 +7,20 @@ import com.wolfteam20.schedulemobile.ui.editardb.EditarDBViewContract
 /**
  * Created by Efrain Bastidas on 2/3/2018.
  */
-@StateStrategyType(AddToEndSingleStrategy::class)
 interface AulasViewContract : EditarDBViewContract {
     fun showList(aulas: MutableList<AulaDetailsDTO>)
 
     @StateStrategyType(OneExecutionStateStrategy::class)
     fun removeSelectedListItems()
 
+    @StateStrategyType(AddToEndSingleStrategy::class)
     fun startActionMode()
+
+    @StateStrategyType(AddToEndSingleStrategy::class)
+    fun setActionModeTitle(title: String)
+
+    @StateStrategyType(AddToEndSingleStrategy::class)
+    fun stopActionMode()
 
     @StateStrategyType(SkipStrategy::class)
     fun showConfirmDelete()

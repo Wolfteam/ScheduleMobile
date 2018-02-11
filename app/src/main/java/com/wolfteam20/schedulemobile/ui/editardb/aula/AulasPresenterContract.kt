@@ -13,5 +13,6 @@ interface AulasPresenterContract : BasePresenterContract {
     fun onFABAddClicked()
     fun onFABDeleteClicked()
     fun onActionMode()
+    fun onToggleItemSelection(itemsToSelect: Int)
     fun deleteItems(aulas: MutableList<AulaDetailsDTO>)
 }
