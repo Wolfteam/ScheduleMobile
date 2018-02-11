@@ -125,21 +125,21 @@ public class DbHelper implements DbHelperContract {
     }
 
     @Override
-    public void saveAulasLocal(List<AulaDetailsDTO> aulas) {
+    public void addAulasLocal(List<AulaDetailsDTO> aulas) {
         Timber.i("Guardando la lista de aulas");
         if (aulas != null && aulas.size() > 0)
             mAulaDetailsBox.put(aulas);
     }
 
     @Override
-    public void saveDisponibilidadLocal(List<DisponibilidadDTO> disponibilidades) {
+    public void addDisponibilidadLocal(List<DisponibilidadDTO> disponibilidades) {
         Timber.i("Guardando la disponibilidad");
         if (disponibilidades != null)
             mDispBox.put(disponibilidades);
     }
 
     @Override
-    public void saveDisponibilidadDetailsLocal(DisponibilidadDetailsDTO disponibilidadDetailsDTO) {
+    public void addDisponibilidadDetailsLocal(DisponibilidadDetailsDTO disponibilidadDetailsDTO) {
         Timber.i("Guardando el detalle de la disponibilidad");
         mDispDetailsBox.put(disponibilidadDetailsDTO);
     }
@@ -154,6 +154,12 @@ public class DbHelper implements DbHelperContract {
     public void removeAulasLocal() {
         Timber.i("Eliminando todas las aulas");
         mAulaDetailsBox.query().build().remove();
+    }
+
+    @Override
+    public void updateAulaLocal(AulaDetailsDTO aula) {
+        Timber.i("Actualizando la aula con id: %s", aula.getIdAula());
+        mAulaDetailsBox.put(aula);
     }
 
     @Override

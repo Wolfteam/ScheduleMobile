@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.wolfteam20.schedulemobile.data.db.DbHelperContract;
 import com.wolfteam20.schedulemobile.data.network.ApiSchedule;
+import com.wolfteam20.schedulemobile.data.network.models.AulaDTO;
 import com.wolfteam20.schedulemobile.data.network.models.AulaDetailsDTO;
 import com.wolfteam20.schedulemobile.data.network.models.DisponibilidadDTO;
 import com.wolfteam20.schedulemobile.data.network.models.DisponibilidadDetailsDTO;
@@ -114,8 +115,8 @@ public class DataManager implements DataManagerContract {
     }
 
     @Override
-    public Observable<Response<ResponseBody>> postDisponibilidad(List<DisponibilidadDTO> disponibilidades) {
-        return mApiSchedule.postDisponibilidad(disponibilidades);
+    public Observable<Response<ResponseBody>> addDisponibilidad(List<DisponibilidadDTO> disponibilidades) {
+        return mApiSchedule.addDisponibilidad(disponibilidades);
     }
 
     @Override
@@ -131,6 +132,16 @@ public class DataManager implements DataManagerContract {
     @Override
     public String getToken() {
         return mPreferencesHelper.getToken();
+    }
+
+    @Override
+    public Completable addAula(AulaDTO aula) {
+        return mApiSchedule.addAula(aula);
+    }
+
+    @Override
+    public Completable updateAula(AulaDTO aula) {
+        return mApiSchedule.updateAula(aula);
     }
 
     @Override
@@ -199,18 +210,18 @@ public class DataManager implements DataManagerContract {
     }
 
     @Override
-    public void saveAulasLocal(List<AulaDetailsDTO> aulas) {
-        mDbHelper.saveAulasLocal(aulas);
+    public void addAulasLocal(List<AulaDetailsDTO> aulas) {
+        mDbHelper.addAulasLocal(aulas);
     }
 
     @Override
-    public void saveDisponibilidadLocal(List<DisponibilidadDTO> disponibilidades) {
-        mDbHelper.saveDisponibilidadLocal(disponibilidades);
+    public void addDisponibilidadLocal(List<DisponibilidadDTO> disponibilidades) {
+        mDbHelper.addDisponibilidadLocal(disponibilidades);
     }
 
     @Override
-    public void saveDisponibilidadDetailsLocal(DisponibilidadDetailsDTO disponibilidadDetailsDTO) {
-        mDbHelper.saveDisponibilidadDetailsLocal(disponibilidadDetailsDTO);
+    public void addDisponibilidadDetailsLocal(DisponibilidadDetailsDTO disponibilidadDetailsDTO) {
+        mDbHelper.addDisponibilidadDetailsLocal(disponibilidadDetailsDTO);
     }
 
     @Override
@@ -221,6 +232,11 @@ public class DataManager implements DataManagerContract {
     @Override
     public void removeAulasLocal() {
         mDbHelper.removeAulasLocal();
+    }
+
+    @Override
+    public void updateAulaLocal(AulaDetailsDTO aula) {
+        mDbHelper.updateAulaLocal(aula);
     }
 
     @Override

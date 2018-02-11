@@ -36,7 +36,7 @@ class AulasPresenter @Inject constructor(
                         aulas.forEach { aula -> aula.tipo.target = aula.tipoAula }
                         aulas.sortBy { it.nombreAula }
                         dataManager.removeAulasLocal()
-                        dataManager.saveAulasLocal(aulas)
+                        dataManager.addAulasLocal(aulas)
                         viewState.showList(aulas)
                         viewState.hideSwipeToRefresh()
                         viewState.showFAB()

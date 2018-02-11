@@ -45,8 +45,8 @@ class DispDetailsPresenter @Inject constructor(
     override fun saveDisponibilidadLocal() {
         dataManager.removeDisponibilidadLocal(mCedula, mIdDia)
         dataManager.removeDisponibilidadDetailsLocal(mCedula)
-        dataManager.saveDisponibilidadLocal(mDispList)
-        dataManager.saveDisponibilidadDetailsLocal(
+        dataManager.addDisponibilidadLocal(mDispList)
+        dataManager.addDisponibilidadDetailsLocal(
             DisponibilidadDetailsDTO(
                 0,
                 mCedula,

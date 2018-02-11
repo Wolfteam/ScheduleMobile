@@ -72,8 +72,8 @@ class DispPresenter @Inject constructor(
                     { disp ->
                         dataManager.removeDisponibilidadDetailsLocal(cedula)
                         dataManager.removeDisponibilidadLocal(cedula)
-                        dataManager.saveDisponibilidadLocal(disp.disponibilidad)
-                        dataManager.saveDisponibilidadDetailsLocal(
+                        dataManager.addDisponibilidadLocal(disp.disponibilidad)
+                        dataManager.addDisponibilidadDetailsLocal(
                             DisponibilidadDetailsDTO(
                                 0,
                                 cedula,
@@ -124,7 +124,7 @@ class DispPresenter @Inject constructor(
         }
         viewState.showLoading()
         compositeDisposable.add(dataManager.getDisponibilidadLocal(cedula)
-            .flatMap { disp -> return@flatMap dataManager.postDisponibilidad(disp) }
+            .flatMap { disp -> return@flatMap dataManager.addDisponibilidad(disp) }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(

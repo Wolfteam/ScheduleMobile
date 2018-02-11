@@ -15,9 +15,10 @@ import io.reactivex.Single;
  */
 
 public interface DbHelperContract {
-    Observable<List<AulaDetailsDTO>> getAllAulasLocal();
 
-    Single<AulaDetailsDTO> getAulaLocal(long idAula);
+    void addDisponibilidadLocal(List<DisponibilidadDTO> disponibilidades);
+
+    void addDisponibilidadDetailsLocal(DisponibilidadDetailsDTO disponibilidadDetailsDTO);
 
     Observable<List<DisponibilidadDTO>> getDisponibilidadLocal(int cedula);
 
@@ -25,19 +26,21 @@ public interface DbHelperContract {
 
     Observable<DisponibilidadDetailsDTO> getDisponibilidadDetailsLocal(int cedula);
 
-    void saveAulasLocal(List<AulaDetailsDTO> aulas);
-
-    void saveDisponibilidadLocal(List<DisponibilidadDTO> disponibilidades);
-
-    void saveDisponibilidadDetailsLocal(DisponibilidadDetailsDTO disponibilidadDetailsDTO);
-
-    void removeAulaLocal(long idAula);
-
-    void removeAulasLocal();
-
     void removeDisponibilidadLocal(int cedula);
 
     void removeDisponibilidadLocal(int cedula, int idDia);
 
     void removeDisponibilidadDetailsLocal(int cedula);
+
+    void addAulasLocal(List<AulaDetailsDTO> aulas);
+
+    Observable<List<AulaDetailsDTO>> getAllAulasLocal();
+
+    Single<AulaDetailsDTO> getAulaLocal(long idAula);
+
+    void removeAulaLocal(long idAula);
+
+    void removeAulasLocal();
+
+    void updateAulaLocal(AulaDetailsDTO aula);
 }
