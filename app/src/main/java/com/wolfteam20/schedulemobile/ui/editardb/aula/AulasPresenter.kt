@@ -34,6 +34,7 @@ class AulasPresenter @Inject constructor(
                     .subscribe(
                             { aulas ->
                                 aulas.forEach { aula -> aula.tipo.target = aula.tipoAula }
+                                aulas.sortBy { it.nombreAula }
                                 dataManager.removeAulasLocal()
                                 dataManager.saveAulasLocal(aulas)
                                 viewState.showList(aulas)
@@ -49,19 +50,23 @@ class AulasPresenter @Inject constructor(
         )
     }
 
-    override fun onItemClicked(id: Long) {
-        viewState.startDetailsActivity(id)
+    override fun onItemClicked(itemID: Long, itemPosition: Int) {
+        viewState.startDetailsActivity(itemID, itemPosition)
     }
 
-    override fun onItemLongClicked(position: Int) {
-        viewState.toggleItemSelection(position)
+    override fun onItemLongClicked(itemPosition: Int) {
+        viewState.toggleItemSelection(itemPosition)
     }
 
     override fun onFABAddClicked() {
-        viewState.startDetailsActivity(0)
+        viewState.startDetailsActivity()
     }
 
-    override fun onFABDeleteClicked(aulas: MutableList<AulaDetailsDTO>) {
+    override fun onFABDeleteClicked() {
+        viewState.showConfirmDelete()
+    }
+
+    override fun deleteItems(aulas: MutableList<AulaDetailsDTO>) {
         if (aulas.size == 0) {
             viewState.showMessage("Debe seleccionar al menos un item")
             return
@@ -94,5 +99,9 @@ class AulasPresenter @Inject constructor(
                     )
         )
 
+    }
+
+    override fun onActionMode() {
+        viewState.startActionMode()
     }
 }
