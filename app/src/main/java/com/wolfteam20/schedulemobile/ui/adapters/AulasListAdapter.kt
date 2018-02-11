@@ -25,7 +25,7 @@ class AulasListAdapter(clickListener: EditarDBClickListenerContract) :
         // Inflate the custom layout
         val aulaView = inflater.inflate(R.layout.aulas_fragment_list_item, parent, false)
         // Return a new holder instance
-        return AulasListAdapter.AulasListViewHolder(aulaView, mClickListener)
+        return AulasListViewHolder(aulaView, mClickListener)
     }
 
     override fun getItemCount(): Int {
@@ -61,7 +61,7 @@ class AulasListAdapter(clickListener: EditarDBClickListenerContract) :
      * Remueve un item de la lista en la [position] indicada y
      * notifica  de los cambios al adapter
      */
-    private fun removeItem(position: Int) {
+    fun removeItem(position: Int) {
         mAulasList.removeAt(position)
         notifyItemRemoved(position)
     }
@@ -107,14 +107,14 @@ class AulasListAdapter(clickListener: EditarDBClickListenerContract) :
         notifyItemRangeRemoved(positionStart, itemCount)
     }
 
-    class AulasListViewHolder(root: View, clickListener: EditarDBClickListenerContract) :
+    inner class AulasListViewHolder(root: View, clickListener: EditarDBClickListenerContract) :
         RecyclerView.ViewHolder(root) {
 
         private val mClickListener = clickListener
 
         init {
             root.setOnClickListener {
-                mClickListener.onItemClicked(itemId)
+                mClickListener.onItemClicked(getItemId(layoutPosition), layoutPosition)
             }
             root.setOnLongClickListener {
                 mClickListener.onItemLongClicked(layoutPosition)

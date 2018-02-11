@@ -24,7 +24,7 @@ class MateriasListAdapter(clickListener: EditarDBClickListenerContract) :
         // Inflate the custom layout
         val materiaView = inflater.inflate(R.layout.materias_fragment_list_item, parent, false)
         // Return a new holder instance
-        return MateriasListAdapter.MateriasListViewHolder(materiaView, mClickListener)
+        return MateriasListViewHolder(materiaView, mClickListener)
     }
 
     override fun getItemCount(): Int {
@@ -49,14 +49,14 @@ class MateriasListAdapter(clickListener: EditarDBClickListenerContract) :
     }
 
 
-    class MateriasListViewHolder(root: View, clickListener: EditarDBClickListenerContract) :
+    inner class MateriasListViewHolder(root: View, clickListener: EditarDBClickListenerContract) :
         RecyclerView.ViewHolder(root) {
 
         private val mClickListener = clickListener
 
         init {
             root.setOnClickListener {
-                mClickListener.onItemClicked(itemId)
+                mClickListener.onItemClicked(getItemId(layoutPosition), layoutPosition)
             }
             root.setOnLongClickListener {
                 mClickListener.onItemLongClicked(layoutPosition)

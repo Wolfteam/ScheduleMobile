@@ -26,7 +26,7 @@ class PeriodoListAdapter(clickListener: EditarDBClickListenerContract) :
         // Inflate the custom layout
         val periodoView = inflater.inflate(R.layout.periodo_fragment_list_item, parent, false)
         // Return a new holder instance
-        return PeriodoListAdapter.PeriodosListViewHolder(periodoView, mClickListener)
+        return PeriodosListViewHolder(periodoView, mClickListener)
     }
 
     override fun getItemCount(): Int {
@@ -51,14 +51,14 @@ class PeriodoListAdapter(clickListener: EditarDBClickListenerContract) :
     }
 
 
-    class PeriodosListViewHolder(root: View, clickListener: EditarDBClickListenerContract) :
+    inner class PeriodosListViewHolder(root: View, clickListener: EditarDBClickListenerContract) :
         RecyclerView.ViewHolder(root) {
 
         private val mClickListener = clickListener
 
         init {
             root.setOnClickListener {
-                mClickListener.onItemClicked(itemId)
+                mClickListener.onItemClicked(getItemId(layoutPosition), layoutPosition)
             }
             root.setOnLongClickListener {
                 mClickListener.onItemLongClicked(layoutPosition)
@@ -67,7 +67,7 @@ class PeriodoListAdapter(clickListener: EditarDBClickListenerContract) :
         }
 
         fun bind(periodo: PeriodoAcademicoDTO) = with(itemView) {
-            val sdf =   SimpleDateFormat("yyyy/MM/dd", Locale.getDefault())
+            val sdf = SimpleDateFormat("yyyy/MM/dd", Locale.getDefault())
             periodo_list_item_fecha_creacion.text =
                     String.format("Creado: %s", sdf.format(periodo.fechaCreacion))
             periodo_list_item_nombre.text = periodo.nombrePeriodo

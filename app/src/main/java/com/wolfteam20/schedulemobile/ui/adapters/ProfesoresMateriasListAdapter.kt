@@ -28,10 +28,7 @@ class ProfesoresMateriasListAdapter(clickListener: EditarDBClickListenerContract
         val profesorView =
             inflater.inflate(R.layout.profesorxmateria_fragment_list_item, parent, false)
         // Return a new holder instance
-        return ProfesoresMateriasListAdapter.ProfesoresMateriasListViewHolder(
-            profesorView,
-            mClickListener
-        )
+        return ProfesoresMateriasListViewHolder(profesorView, mClickListener)
     }
 
     override fun getItemCount(): Int {
@@ -55,14 +52,17 @@ class ProfesoresMateriasListAdapter(clickListener: EditarDBClickListenerContract
         notifyDataSetChanged()
     }
 
-    class ProfesoresMateriasListViewHolder(root: View, clickListener: EditarDBClickListenerContract) :
+    inner class ProfesoresMateriasListViewHolder(
+        root: View,
+        clickListener: EditarDBClickListenerContract
+    ) :
         RecyclerView.ViewHolder(root) {
 
         private val mClickListener = clickListener
 
         init {
             root.setOnClickListener {
-                mClickListener.onItemClicked(itemId)
+                mClickListener.onItemClicked(getItemId(layoutPosition), layoutPosition)
             }
             root.setOnLongClickListener {
                 mClickListener.onItemLongClicked(layoutPosition)

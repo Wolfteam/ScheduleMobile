@@ -58,11 +58,11 @@ class PeriodosFragment : BaseFragment(), PeriodosViewContract, EditarDBClickList
         editardb_fragment_common_recycler_view.adapter = mAdapter
     }
 
-    override fun onItemClicked(id: Long) {
+    override fun onItemClicked(itemID: Long, itemPosition: Int) {
         Toasty.warning(context!!, "Not implemented").show()
     }
 
-    override fun onItemLongClicked(position: Int): Boolean {
+    override fun onItemLongClicked(itemPosition: Int): Boolean {
         return true
     }
 
@@ -87,11 +87,11 @@ class PeriodosFragment : BaseFragment(), PeriodosViewContract, EditarDBClickList
         mAdapter.setItems(periodos)
     }
 
-    override fun startDetailsActivity(id: Long) {
+    override fun startDetailsActivity(itemID: Long, itemPosition: Int) {
         Toasty.warning(context!!, "Not implemented").show()
     }
 
-    override fun toggleItemSelection(position: Int) {
-        mAdapter.toggleSelection(position)
+    override fun toggleItemSelection(itemPosition: Int) {
+        mAdapter.toggleSelection(itemPosition)
     }
 }

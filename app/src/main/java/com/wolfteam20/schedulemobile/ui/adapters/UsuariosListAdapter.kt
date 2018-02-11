@@ -24,7 +24,7 @@ class UsuariosListAdapter(clickListener: EditarDBClickListenerContract) :
         // Inflate the custom layout
         val usuarioView = inflater.inflate(R.layout.usuarios_fragment_list_item, parent, false)
         // Return a new holder instance
-        return UsuariosListAdapter.UsuariosListViewHolder(usuarioView, mClickListener)
+        return UsuariosListViewHolder(usuarioView, mClickListener)
     }
 
     override fun getItemCount(): Int {
@@ -49,14 +49,14 @@ class UsuariosListAdapter(clickListener: EditarDBClickListenerContract) :
     }
 
 
-    class UsuariosListViewHolder(root: View, clickListener: EditarDBClickListenerContract) :
+    inner class UsuariosListViewHolder(root: View, clickListener: EditarDBClickListenerContract) :
         RecyclerView.ViewHolder(root) {
 
         private val mClickListener = clickListener
 
         init {
             root.setOnClickListener {
-                mClickListener.onItemClicked(itemId)
+                mClickListener.onItemClicked(getItemId(layoutPosition), layoutPosition)
             }
             root.setOnLongClickListener {
                 mClickListener.onItemLongClicked(layoutPosition)
