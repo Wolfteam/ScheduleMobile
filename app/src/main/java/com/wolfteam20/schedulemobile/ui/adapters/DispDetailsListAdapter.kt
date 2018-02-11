@@ -13,15 +13,19 @@ import kotlinx.android.synthetic.main.disponibilidad_details_list_item.view.*
 /**
  * Created by Efrain.Bastidas on 1/15/2018.
  */
-class DispDetailsListAdapter(presenter: DispDetailsPresenter, horas: Array<String>, clickListener: DispDetailsListViewHolder.ClickListener)
-    : SelectableAdapter<DispDetailsListAdapter.DispDetailsListViewHolder>() {
+class DispDetailsListAdapter(
+    presenter: DispDetailsPresenter,
+    horas: Array<String>,
+    clickListener: DispDetailsListViewHolder.ClickListener
+) : SelectableAdapter<DispDetailsListAdapter.DispDetailsListViewHolder>() {
 
     private val mClickListener: DispDetailsListViewHolder.ClickListener = clickListener
     private val mPresenter: DispDetailsPresenter = presenter
     private var mDisponibilidadList: MutableList<DisponibilidadDTO> = mutableListOf()
     private var mHoras = horas
 
-    class DispDetailsListViewHolder(root: View, clickListener: ClickListener) : RecyclerView.ViewHolder(root) {
+    class DispDetailsListViewHolder(root: View, clickListener: ClickListener) :
+        RecyclerView.ViewHolder(root) {
 
         private val mClickListener: ClickListener = clickListener
 
@@ -35,14 +39,14 @@ class DispDetailsListAdapter(presenter: DispDetailsPresenter, horas: Array<Strin
                 mClickListener.onItemClicked(layoutPosition)
             }
             root.setOnLongClickListener {
-                mClickListener.onItemLongClicked(layoutPosition)
-                return@setOnLongClickListener false
+                return@setOnLongClickListener mClickListener.onItemLongClicked(layoutPosition)
             }
         }
 
         fun bind(text: String, isSelected: Boolean, position: Int) = with(itemView) {
             disp_details_from_to_hours.text = text
-            disp_details_selected_overlay.visibility = if (isSelected) View.VISIBLE else View.INVISIBLE
+            disp_details_selected_overlay.visibility =
+                    if (isSelected) View.VISIBLE else View.INVISIBLE
         }
     }
 
@@ -54,7 +58,11 @@ class DispDetailsListAdapter(presenter: DispDetailsPresenter, horas: Array<Strin
         if (holder is DispDetailsListViewHolder) {
             val disponibilidad = mDisponibilidadList[position]
             val isItemSelected = isSelected(position)
-            holder.bind(getTextToShow(disponibilidad.idHoraInicio, disponibilidad.idHoraFin), isItemSelected, position)
+            holder.bind(
+                getTextToShow(disponibilidad.idHoraInicio, disponibilidad.idHoraFin),
+                isItemSelected,
+                position
+            )
         }
     }
 
@@ -62,7 +70,8 @@ class DispDetailsListAdapter(presenter: DispDetailsPresenter, horas: Array<Strin
         val context = parent.context
         val inflater = LayoutInflater.from(context)
         // Inflate the custom layout
-        val dispDetailsView = inflater.inflate(R.layout.disponibilidad_details_list_item, parent, false)
+        val dispDetailsView =
+            inflater.inflate(R.layout.disponibilidad_details_list_item, parent, false)
         // Return a new holder instance
         return DispDetailsListViewHolder(dispDetailsView, mClickListener)
     }

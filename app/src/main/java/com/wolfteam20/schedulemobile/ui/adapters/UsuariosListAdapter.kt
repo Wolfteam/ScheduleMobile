@@ -18,7 +18,10 @@ class UsuariosListAdapter(clickListener: EditarDBClickListenerContract) :
     private var mUsuariosList: MutableList<UsuarioDetailsDTO> = mutableListOf()
     private val mClickListener = clickListener
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UsuariosListAdapter.UsuariosListViewHolder {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): UsuariosListAdapter.UsuariosListViewHolder {
         val context = parent.context
         val inflater = LayoutInflater.from(context)
         // Inflate the custom layout
@@ -35,7 +38,10 @@ class UsuariosListAdapter(clickListener: EditarDBClickListenerContract) :
         return mUsuariosList[position].cedula
     }
 
-    override fun onBindViewHolder(holder: UsuariosListAdapter.UsuariosListViewHolder?, position: Int) {
+    override fun onBindViewHolder(
+        holder: UsuariosListAdapter.UsuariosListViewHolder?,
+        position: Int
+    ) {
         if (holder is UsuariosListAdapter.UsuariosListViewHolder) {
             val usuario = mUsuariosList[position]
             //val isItemSelected = isSelected(position)
@@ -59,8 +65,7 @@ class UsuariosListAdapter(clickListener: EditarDBClickListenerContract) :
                 mClickListener.onItemClicked(getItemId(layoutPosition), layoutPosition)
             }
             root.setOnLongClickListener {
-                mClickListener.onItemLongClicked(layoutPosition)
-                return@setOnLongClickListener false
+                return@setOnLongClickListener mClickListener.onItemLongClicked(layoutPosition)
             }
         }
 

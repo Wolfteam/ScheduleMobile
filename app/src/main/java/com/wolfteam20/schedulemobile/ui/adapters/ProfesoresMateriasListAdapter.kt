@@ -65,8 +65,7 @@ class ProfesoresMateriasListAdapter(clickListener: EditarDBClickListenerContract
                 mClickListener.onItemClicked(getItemId(layoutPosition), layoutPosition)
             }
             root.setOnLongClickListener {
-                mClickListener.onItemLongClicked(layoutPosition)
-                return@setOnLongClickListener false
+                return@setOnLongClickListener mClickListener.onItemLongClicked(layoutPosition)
             }
         }
 
