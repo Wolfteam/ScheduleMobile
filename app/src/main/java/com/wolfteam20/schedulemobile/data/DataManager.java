@@ -124,6 +124,11 @@ public class DataManager implements DataManagerContract {
     }
 
     @Override
+    public Completable removeAula(long idAula) {
+        return mApiSchedule.removeAula(idAula);
+    }
+
+    @Override
     public String getToken() {
         return mPreferencesHelper.getToken();
     }

@@ -43,12 +43,24 @@ public interface ApiSchedule {
     Observable<Response<TokenDTO>> getToken(@Field("username") String username, @Field("password") String password, @Field("isMobile") Boolean isMobile);
 
 
+    /**
+     * Obtiene una lista con todas las aulas
+     * @return List de AulaDetailsDTO
+     */
     @GET("api/Aulas")
     Observable<List<AulaDetailsDTO>> getAllAulas();
 
+    /**
+     * Obtiene una lista con todas las materias
+     * @return List de MateriaDetailsDTO
+     */
     @GET("api/Materias")
     Observable<List<MateriaDetailsDTO>> getAllMaterias();
 
+    /**
+     * Obtiene una lista con todos los periodos academicos creados
+     * @return List de PeriodoAcademicoDTO
+     */
     @GET("api/PeriodoCarrera")
     Observable<List<PeriodoAcademicoDTO>> getAllPeriodosAcademicos();
 
@@ -59,12 +71,24 @@ public interface ApiSchedule {
     @GET("api/Profesor")
     Observable<List<ProfesorDetailsDTO>> getAllProfesores();
 
+    /**
+     * Obtiene una lista de relaciones profesor-materia
+     * @return List de ProfesorMateriaDetailsDTO
+     */
     @GET("api/ProfesorMateria")
     Observable<List<ProfesorMateriaDetailsDTO>> getAllProfesorMateria();
 
+    /**
+     * Obtiene una lista de las secciones acorde al periodo academico activo
+     * @return List de SeccionesDetailsDTO
+     */
     @GET("api/Secciones")
     Observable<List<SeccionesDetailsDTO>> getAllSecciones();
 
+    /**
+     * Obtiene una lista con todos los usuarios creados.
+     * @return List de UsuarioDetailsDTO
+     */
     @GET("api/Account")
     Observable<List<UsuarioDetailsDTO>> getAllUsuarios();
 
@@ -124,6 +148,19 @@ public interface ApiSchedule {
     @POST("api/Disponibilidad")
     Observable<Response<ResponseBody>> postDisponibilidad(@Body List<DisponibilidadDTO> disponibilidades);
 
+    /**
+     * Remueve varias aulas
+     * @param idAulas Id de las aulas a remover (e.g: 1,2,3,4)
+     * @return Completable
+     */
     @DELETE("api/Aulas")
     Completable removeAulas(@Query("idAulas") String idAulas);
+
+    /**
+     * Remueve una aula en particular
+     * @param idAula Id del aula a remover
+     * @return Completable
+     */
+    @DELETE("api/Aulas/{idAula}")
+    Completable removeAula(@Path("idAula") long idAula);
 }
