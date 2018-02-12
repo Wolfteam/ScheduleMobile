@@ -5,6 +5,7 @@ buildscript {
         android_support = '27.0.2'
         butterknife_version = '8.8.1'
         dagger2_version = "2.14.1"
+        gradle_version = "3.0.1"
         kotlin_version = '1.2.21'
         moxy_version = '1.5.3'
         objectbox_version = '1.4.0'

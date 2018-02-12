@@ -4,11 +4,14 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'io.objectbox'
 
-androidExtensions{
+androidExtensions {
     experimental = true
 }
 
 android {
+    dataBinding {
+        enabled = true
+    }
     compileSdkVersion 27
     defaultConfig {
         applicationId "com.wolfteam20.schedulemobile"
@@ -40,6 +43,8 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    //Necesario
+    kapt "com.android.databinding:compiler:$gradle_version"
 
     //ButterKnife
     implementation "com.jakewharton:butterknife:$butterknife_version"
@@ -96,7 +101,11 @@ dependencies {
     //Toasty
     implementation 'com.github.GrenderG:Toasty:1.2.8'
 
+    //MaterialFabSpeedDial
     implementation 'com.github.kobakei:MaterialFabSpeedDial:1.1.8'
+
+    //Data Binding Validator
+    implementation 'com.github.Ilhasoft:data-binding-validator:1.0.0'
     //JWTDecode.Android
     //compile 'com.auth0.android:jwtdecode:1.1.1'
 
