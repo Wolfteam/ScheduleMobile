@@ -3,7 +3,10 @@ package com.wolfteam20.schedulemobile.di.modules;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.wolfteam20.schedulemobile.BuildConfig;
+import com.wolfteam20.schedulemobile.data.network.ApiSchedule;
 import com.wolfteam20.schedulemobile.data.network.ApiScheduleContract;
+import com.wolfteam20.schedulemobile.di.qualifiers.ApiScheduleContext;
+import com.wolfteam20.schedulemobile.di.qualifiers.ApplicationContext;
 import com.wolfteam20.schedulemobile.di.scopes.ApplicationScope;
 
 import dagger.Module;
@@ -21,8 +24,15 @@ public class ApiScheduleModule {
 
     @Provides
     @ApplicationScope
+    @ApplicationContext
     ApiScheduleContract provideScheduleService(Retrofit retrofit) {
         return retrofit.create(ApiScheduleContract.class);
+    }
+
+    @Provides
+    @ApiScheduleContext
+    ApiScheduleContract provideApiSchedule(ApiSchedule apiSchedule){
+        return apiSchedule;
     }
 
     @Provides

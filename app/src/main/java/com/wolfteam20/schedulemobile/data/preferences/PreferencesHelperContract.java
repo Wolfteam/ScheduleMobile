@@ -9,13 +9,6 @@ import android.content.Context;
 
 public interface PreferencesHelperContract {
     /**
-     * Obtiene la cedula del usuario autenticado
-     *
-     * @return int Cedula del usuario
-     */
-    int getCedula();
-
-    /**
      * Obtiene el contexto de con el cual se intancio las SharedPreferences
      *
      * @return Context
@@ -23,18 +16,18 @@ public interface PreferencesHelperContract {
     Context getContext();
 
     /**
-     * Obtiene el nombre completo del usuario autenticado
+     * Guarda el token de acceso en SharedPreferences
      *
-     * @return String Nombre completo del usuario
+     * @param token Token dado por ScheduleAPI
      */
-    String getFullname();
+    void storeAccessToken(String token);
 
     /**
-     * Obtiene el usernmae del usuario autenticado
+     * Guarda los datos del usuario asociados al token
      *
-     * @return String Username del usuario
+     * @param token Token de autenticacion
      */
-    String getUsername();
+    void storeUser(String token);
 
     /**
      * Obtiene el token de acceso
@@ -51,16 +44,23 @@ public interface PreferencesHelperContract {
     boolean isUserAdmin();
 
     /**
-     * Guarda el token de acceso en SharedPreferences
+     * Obtiene la cedula del usuario autenticado
      *
-     * @param token Token dado por ScheduleAPI
+     * @return int Cedula del usuario
      */
-    void storeAccessToken(String token);
+    int getCedula();
 
     /**
-     * Guarda los datos del usuario asociados al token
+     * Obtiene el nombre completo del usuario autenticado
      *
-     * @param token Token de autenticacion
+     * @return String Nombre completo del usuario
      */
-    void storeUser(String token);
+    String getFullname();
+
+    /**
+     * Obtiene el usernmae del usuario autenticado
+     *
+     * @return String Username del usuario
+     */
+    String getUsername();
 }

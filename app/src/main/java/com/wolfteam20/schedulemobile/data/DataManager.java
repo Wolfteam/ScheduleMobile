@@ -16,6 +16,7 @@ import com.wolfteam20.schedulemobile.data.network.models.SeccionesDetailsDTO;
 import com.wolfteam20.schedulemobile.data.network.models.TokenDTO;
 import com.wolfteam20.schedulemobile.data.network.models.UsuarioDetailsDTO;
 import com.wolfteam20.schedulemobile.data.preferences.PreferencesHelperContract;
+import com.wolfteam20.schedulemobile.di.qualifiers.ApiScheduleContext;
 import com.wolfteam20.schedulemobile.di.qualifiers.ApplicationContext;
 
 import java.util.List;
@@ -25,11 +26,8 @@ import javax.inject.Inject;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
-import timber.log.Timber;
 
 /**
  * Created by Efrain.Bastidas on 1/4/2018.
@@ -44,7 +42,7 @@ public class DataManager implements DataManagerContract {
     @Inject
     DataManager(@ApplicationContext Context context,
                 PreferencesHelperContract prefs,
-                ApiScheduleContract apiScheduleContract,
+                @ApiScheduleContext ApiScheduleContract apiScheduleContract,
                 DbHelperContract dbHelper) {
         mContext = context;
         mPreferencesHelper = prefs;
@@ -129,10 +127,7 @@ public class DataManager implements DataManagerContract {
 
     @Override
     public Completable removeAula(long idAula) {
-        return mApiScheduleContract.removeAula(idAula)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .doOnError(Timber::e);
+        return mApiScheduleContract.removeAula(idAula);
     }
 
     @Override
@@ -142,18 +137,12 @@ public class DataManager implements DataManagerContract {
 
     @Override
     public Completable addAula(AulaDTO aula) {
-        return mApiScheduleContract.addAula(aula)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .doOnError(Timber::e);
+        return mApiScheduleContract.addAula(aula);
     }
 
     @Override
     public Completable updateAula(long idAula, AulaDTO aula) {
-        return mApiScheduleContract.updateAula(idAula, aula)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .doOnError(Timber::e);
+        return mApiScheduleContract.updateAula(idAula, aula);
     }
 
     @Override
@@ -203,10 +192,7 @@ public class DataManager implements DataManagerContract {
 
     @Override
     public Single<AulaDetailsDTO> getAulaLocal(long idAula) {
-        return mDbHelper.getAulaLocal(idAula)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .doOnError(Timber::e);
+        return mDbHelper.getAulaLocal(idAula);
     }
 
     @Override
