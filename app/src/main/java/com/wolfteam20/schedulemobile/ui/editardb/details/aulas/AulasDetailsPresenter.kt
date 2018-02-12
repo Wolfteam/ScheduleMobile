@@ -3,14 +3,10 @@ package com.wolfteam20.schedulemobile.ui.editardb.details.aulas
 import com.arellomobile.mvp.InjectViewState
 import com.wolfteam20.schedulemobile.R
 import com.wolfteam20.schedulemobile.data.DataManagerContract
+import com.wolfteam20.schedulemobile.data.network.models.AulaDTO
 import com.wolfteam20.schedulemobile.data.network.models.AulaDetailsDTO
 import com.wolfteam20.schedulemobile.ui.base.BasePresenter
-import com.wolfteam20.schedulemobile.ui.editardb.details.EditarDBDetailsViewContract
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
-import timber.log.Timber
-import java.text.FieldPosition
 import javax.inject.Inject
 
 /**
@@ -19,6 +15,7 @@ import javax.inject.Inject
 private const val DELETE_OPERATION = 0
 private const val CANCEL_OPERATION = 1
 private const val ADD_OPERATION = 2
+private const val UPDATE_OPERATION = 3
 
 @InjectViewState
 class AulasDetailsPresenter @Inject constructor(
@@ -27,29 +24,26 @@ class AulasDetailsPresenter @Inject constructor(
 ) : BasePresenter<AulasDetailsViewContract>(mCompositeDisposable, mDataManager),
     AulasDetailsPresenterContract {
 
-    private lateinit var mAula: AulaDetailsDTO
+    private var mIDAula: Long = 0
     private var mAulaPosition: Int = 0
+    private var isInEditMode = true
 
     override fun subscribe(idAula: Long, position: Int) {
-        if (idAula == 0L)
+        if (idAula == 0L) {
+            isInEditMode = false
             return
+        }
         mAulaPosition = position
         viewState.showLoading()
-        compositeDisposable.add(
-            dataManager.getAulaLocal(idAula)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(
-                    { aula ->
-                        mAula = aula
-                        viewState.showItem(aula)
-                        viewState.hideLoading()
-                    },
-                    { error ->
-                        viewState.hideLoading()
-                        viewState.onError(error.localizedMessage)
-                    }
-                )
+        compositeDisposable.add(dataManager.getAulaLocal(idAula)
+            .subscribe(
+                { aula ->
+                    mIDAula = aula.idAula
+                    viewState.showItem(aula)
+                    viewState.hideLoading()
+                },
+                { error -> onError(error) }
+            )
         )
         //aca tambien deberia jalarme la data para el spinner
     }
@@ -63,7 +57,7 @@ class AulasDetailsPresenter @Inject constructor(
     }
 
     override fun onSaveClicked() {
-
+        viewState.prepareData(isInEditMode)
     }
 
     override fun deleteAula() {
@@ -72,20 +66,69 @@ class AulasDetailsPresenter @Inject constructor(
             return
         }
         viewState.showLoading()
-        compositeDisposable.add(
-            dataManager.removeAula(mAula.idAula)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(
-                    {
-                        dataManager.removeAulaLocal(mAula.idAula)
-                        viewState.finishActivity(DELETE_OPERATION, mAulaPosition)
-                    },
-                    { error ->
-                        viewState.hideKeyboard()
-                        Timber.e(error)
-                        viewState.onError(error.localizedMessage)
-                    })
+        viewState.hideKeyboard()
+        compositeDisposable.add(dataManager.removeAula(mIDAula)
+            .subscribe(
+                {
+                    dataManager.removeAulaLocal(mIDAula)
+                    viewState.finishActivity(DELETE_OPERATION, mAulaPosition)
+                },
+                { error -> onError(error) }
+            )
         )
+    }
+
+    override fun addAula(aula: AulaDTO) {
+        if (!isNetworkAvailable) {
+            viewState.onError(R.string.no_network)
+            return
+        }
+
+        val aulaDetails = getAulaDetails(aula)
+        viewState.showLoading()
+        viewState.hideKeyboard()
+        compositeDisposable.add(dataManager.addAula(aula)
+            .subscribe(
+                {
+                    dataManager.addAulaLocal(aulaDetails)
+                    viewState.finishActivity(ADD_OPERATION)
+                },
+                { error -> onError(error) }
+            )
+        )
+    }
+
+    override fun updateAula(aula: AulaDTO) {
+        if (!isNetworkAvailable) {
+            viewState.onError(R.string.no_network)
+            return
+        }
+
+        val aulaDetails = getAulaDetails(aula)
+        viewState.showLoading()
+        viewState.hideKeyboard()
+        compositeDisposable.add(dataManager.updateAula(mIDAula, aula)
+            .subscribe(
+                {
+                    dataManager.updateAulaLocal(aulaDetails)
+                    viewState.finishActivity(UPDATE_OPERATION, mAulaPosition)
+                },
+                { error -> onError(error) }
+            )
+        )
+    }
+
+    private fun getAulaDetails(aula: AulaDTO): AulaDetailsDTO {
+        val aulaDetails = AulaDetailsDTO()
+        aulaDetails.idAula = mIDAula
+        aulaDetails.capacidad = aula.capacidad
+        aulaDetails.nombreAula = aula.nombreAula
+        aulaDetails.tipo.targetId = 1
+        return aulaDetails
+    }
+
+    private fun onError(error: Throwable) {
+        viewState.hideLoading()
+        viewState.onError(error.localizedMessage)
     }
 }

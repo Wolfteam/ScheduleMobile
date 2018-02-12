@@ -1,5 +1,7 @@
 package com.wolfteam20.schedulemobile.ui.editardb.details.aulas
 
+import com.wolfteam20.schedulemobile.data.network.models.AulaDTO
+import com.wolfteam20.schedulemobile.data.network.models.AulaDetailsDTO
 import com.wolfteam20.schedulemobile.ui.base.BasePresenterContract
 import java.text.ParsePosition
 
@@ -12,4 +14,6 @@ interface AulasDetailsPresenterContract : BasePresenterContract {
     fun onDeleteClicked()
     fun onSaveClicked()
     fun deleteAula()
+    fun addAula(aula: AulaDTO)
+    fun updateAula(aula: AulaDTO)
 }

@@ -14,6 +14,10 @@ import com.wolfteam20.schedulemobile.ui.editardb.details.EditarDBDetailsViewCont
 interface AulasDetailsViewContract : EditarDBDetailsViewContract {
     fun showItem(aula: AulaDetailsDTO)
 
+    //Este metodo quizas lo mueva a EditarDBDetailsViewContract
     @StateStrategyType(SkipStrategy::class)
     fun finishActivity(operation: Int, position: Int = 0)
+
+    @StateStrategyType(SkipStrategy::class)
+    fun prepareData(isInEditMode: Boolean)
 }

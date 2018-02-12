@@ -13,6 +13,11 @@ import com.wolfteam20.schedulemobile.ui.base.BaseFragment
 import kotlinx.android.synthetic.main.aulas_details_fragment.*
 import kotlinx.android.synthetic.main.editardb_details_toolbar.*
 import javax.inject.Inject
+import android.databinding.DataBindingUtil
+import android.databinding.ViewDataBinding
+import br.com.ilhasoft.support.validation.Validator
+import com.wolfteam20.schedulemobile.data.network.models.AulaDTO
+
 
 /**
  * Created by Efrain.Bastidas on 10/2/2018.
@@ -22,6 +27,7 @@ class AulasDetailsFragment : BaseFragment(), AulasDetailsViewContract {
     @Inject
     @InjectPresenter
     lateinit var mPresenter: AulasDetailsPresenter
+    private lateinit var mValidator: Validator
 
     @ProvidePresenter
     fun provideHomePresenter(): AulasDetailsPresenter {
@@ -34,8 +40,21 @@ class AulasDetailsFragment : BaseFragment(), AulasDetailsViewContract {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.aulas_details_fragment, container, false)
+        val view = inflater.inflate(R.layout.aulas_details_fragment, container, false)
+        val binding = DataBindingUtil.bind<ViewDataBinding>(view)
+        mValidator = Validator(binding)
+        binding.root.setOnClickListener {
+            mValidator.validate()
+        }
+        return view
     }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putString("aula_nombre", aula_nombre.text.toString())
+        outState.putString("aula_capacidad", aula_capacidad.text.toString())
+        super.onSaveInstanceState(outState)
+    }
+
 
     override fun initLayout(view: View?, savedInstanceState: Bundle?) {
         setHasOptionsMenu(true)
@@ -53,16 +72,29 @@ class AulasDetailsFragment : BaseFragment(), AulasDetailsViewContract {
         appCompatActivity.supportActionBar?.setDisplayShowHomeEnabled(true)
 
         mPresenter.subscribe(id, position)
+        //TODO: No se muestra el texto al rotar
+        savedInstanceState?.let {
+            aula_nombre.setText(it.getString("aula_nombre"))
+            aula_capacidad.setText(it.getString("aula_capacidad"))
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        inflater?.inflate(R.menu.editardb_details_menu, menu)
+        val id = baseActivity.intent.extras.getLong("ID", 0)
+        //Add mode
+        if (id == 0L)
+            inflater?.inflate(R.menu.editardb_details_add_menu, menu)
+        //Edit mode
+        else
+            inflater?.inflate(R.menu.editardb_details_edit_menu, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        if (!mValidator.validate() && item?.itemId != R.id.editardb_details_close)
+            return true
         when (item?.itemId) {
-            R.id.editardb_details_delete -> mPresenter.onDeleteClicked()
-            R.id.editardb_details_save -> mPresenter.onSaveClicked()
+            R.id.editardb_details_edit_delete -> mPresenter.onDeleteClicked()
+            R.id.editardb_details_add_save, R.id.editardb_details_edit_save -> mPresenter.onSaveClicked()
             else -> mPresenter.onCancelClicked()
         }
         return true
@@ -99,4 +131,17 @@ class AulasDetailsFragment : BaseFragment(), AulasDetailsViewContract {
         baseActivity.onBackPressed()
     }
 
+    override fun prepareData(isInEditMode: Boolean) {
+        //TODO Setear esta data , npi si dara error el id en la db local
+        val aula = AulaDTO(
+            0,
+            aula_nombre.text.toString(),
+            aula_capacidad.text.toString().toInt(),
+            1
+        )
+        if (isInEditMode)
+            mPresenter.updateAula(aula)
+        else
+            mPresenter.addAula(aula)
+    }
 }
