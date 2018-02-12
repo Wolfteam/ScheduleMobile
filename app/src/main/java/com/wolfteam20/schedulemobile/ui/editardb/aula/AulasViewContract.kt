@@ -24,4 +24,7 @@ interface AulasViewContract : EditarDBViewContract {
 
     @StateStrategyType(SkipStrategy::class)
     fun showConfirmDelete()
+
+    @StateStrategyType(SkipStrategy::class)
+    fun showNoItemsSelected()
 }

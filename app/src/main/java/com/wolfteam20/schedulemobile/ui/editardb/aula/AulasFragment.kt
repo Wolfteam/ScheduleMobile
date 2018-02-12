@@ -18,6 +18,7 @@ import com.wolfteam20.schedulemobile.ui.adapters.AulasListAdapter
 import com.wolfteam20.schedulemobile.ui.base.BaseFragment
 import com.wolfteam20.schedulemobile.ui.editardb.EditarDBClickListenerContract
 import com.wolfteam20.schedulemobile.ui.editardb.details.EditarDBDetailsActivity
+import es.dmoral.toasty.Toasty
 import kotlinx.android.synthetic.main.editardb_fragment_common.*
 import javax.inject.Inject
 
@@ -25,6 +26,10 @@ import javax.inject.Inject
  * Created by Efrain Bastidas on 2/2/2018.
  */
 private const val EDITARDB_DETAILS_REQUEST_CODE = 100
+private const val DELETE_OPERATION = 0
+private const val CANCEL_OPERATION = 1
+private const val ADD_OPERATION = 2
+private const val UPDATE_OPERATION = 3
 
 class AulasFragment : BaseFragment(), AulasViewContract, EditarDBClickListenerContract {
 
@@ -55,7 +60,7 @@ class AulasFragment : BaseFragment(), AulasViewContract, EditarDBClickListenerCo
         editardb_fragment_common_fab.addOnMenuItemClickListener { _, _, itemId ->
             when (itemId) {
                 R.id.editardb_fab_add -> mPresenter.onFABAddClicked()
-                else -> mPresenter.onFABDeleteClicked()
+                else -> mPresenter.onFABDeleteClicked(mAdapter.getSelectedItemCount())
             }
         }
         val llm = LinearLayoutManager(context)
@@ -76,13 +81,12 @@ class AulasFragment : BaseFragment(), AulasViewContract, EditarDBClickListenerCo
             if (resultCode == Activity.RESULT_OK) {
                 val operation = data?.getIntExtra("OPERATION", 0)
                 when (operation) {
-                    0 -> {
+                    DELETE_OPERATION -> {
                         val position = data.getIntExtra("POSITION", 0)
                         mAdapter.removeItem(position)
                     }
-                    1 -> {
-                    }
-                //aca quizas solo sincronizar contra la db
+                    CANCEL_OPERATION -> { }
+                //TODO Manejar el caso Add/Update correctamente
                     else -> mPresenter.subscribe()
                 }
             }
@@ -152,6 +156,10 @@ class AulasFragment : BaseFragment(), AulasViewContract, EditarDBClickListenerCo
         dialog.show()
     }
 
+    override fun showNoItemsSelected() {
+        Toasty.info(context!!, resources.getString(R.string.no_items_selected)).show()
+    }
+
     override fun onItemClicked(itemID: Long, itemPosition: Int) {
         if (mActionMode != null)
             mPresenter.onItemLongClicked(itemPosition)
@@ -180,7 +188,7 @@ class AulasFragment : BaseFragment(), AulasViewContract, EditarDBClickListenerCo
         override fun onActionItemClicked(mode: ActionMode, item: MenuItem): Boolean {
             return when (item.itemId) {
                 R.id.delete -> {
-                    mPresenter.onFABDeleteClicked()
+                    mPresenter.onFABDeleteClicked(mAdapter.getSelectedItemCount())
                     true
                 }
                 else -> false

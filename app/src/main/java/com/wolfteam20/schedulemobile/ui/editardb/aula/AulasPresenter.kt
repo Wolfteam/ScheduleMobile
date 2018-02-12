@@ -62,8 +62,11 @@ class AulasPresenter @Inject constructor(
         viewState.startDetailsActivity()
     }
 
-    override fun onFABDeleteClicked() {
-        viewState.showConfirmDelete()
+    override fun onFABDeleteClicked(itemsSelected: Int) {
+        if (itemsSelected == 0)
+            viewState.showNoItemsSelected()
+        else
+            viewState.showConfirmDelete()
     }
 
 
@@ -79,11 +82,6 @@ class AulasPresenter @Inject constructor(
     }
 
     override fun deleteItems(aulas: MutableList<AulaDetailsDTO>) {
-        if (aulas.size == 0) {
-            viewState.showMessage("Debe seleccionar al menos un item")
-            return
-        }
-
         if (!isNetworkAvailable) {
             viewState.onError(R.string.no_network)
             return
