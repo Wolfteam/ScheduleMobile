@@ -9,6 +9,7 @@ import com.wolfteam20.schedulemobile.di.components.DaggerApplicationComponent;
 import com.wolfteam20.schedulemobile.di.modules.ApplicationContextModule;
 
 import io.objectbox.BoxStore;
+import io.objectbox.DebugFlags;
 import io.objectbox.android.AndroidObjectBrowser;
 import timber.log.Timber;
 
@@ -30,7 +31,9 @@ public class App extends Application {
                 .builder()
                 .applicationContextModule(new ApplicationContextModule(this))
                 .build();
-        mBoxStore = MyObjectBox.builder().androidContext(this).build();
+        mBoxStore = MyObjectBox.builder().androidContext(this)
+                .debugFlags(DebugFlags.LOG_QUERIES)
+                .build();
         if (BuildConfig.DEBUG) {
             new AndroidObjectBrowser(mBoxStore).start(this);
         }
@@ -38,11 +41,11 @@ public class App extends Application {
         mApplicationComponent.inject(this);
     }
 
-    public ApplicationComponent getApplicationComponent(){
+    public ApplicationComponent getApplicationComponent() {
         return mApplicationComponent;
     }
 
-    public static App getApplication(Activity activity){
+    public static App getApplication(Activity activity) {
         return (App) activity.getApplication();
     }
 

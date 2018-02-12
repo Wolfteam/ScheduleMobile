@@ -20,6 +20,7 @@
     <string name="cancelar">Cancelar</string>
     <string name="error">Ocurrio un error</string>
     <string name="no_network">No hay conexion disponible</string>
+    <string name="no_items_selected">No hay items seleccionados</string>
     <string name="cerrar_sesion">Cerrar Sesion</string>
     <string name="are_you_sure">¿Esta seguro que desea continuar?</string>
     <string name="cerrar_sesion_msg">¿Esta seguro que desea salir?</string>
