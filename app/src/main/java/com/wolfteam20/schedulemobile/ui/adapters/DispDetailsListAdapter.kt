@@ -43,7 +43,7 @@ class DispDetailsListAdapter(
             }
         }
 
-        fun bind(text: String, isSelected: Boolean, position: Int) = with(itemView) {
+        fun bind(text: String, isSelected: Boolean) = with(itemView) {
             disp_details_from_to_hours.text = text
             disp_details_selected_overlay.visibility =
                     if (isSelected) View.VISIBLE else View.INVISIBLE
@@ -60,8 +60,7 @@ class DispDetailsListAdapter(
             val isItemSelected = isSelected(position)
             holder.bind(
                 getTextToShow(disponibilidad.idHoraInicio, disponibilidad.idHoraFin),
-                isItemSelected,
-                position
+                isItemSelected
             )
         }
     }

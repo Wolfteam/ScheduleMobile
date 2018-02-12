@@ -3,7 +3,7 @@ package com.wolfteam20.schedulemobile.di.components;
 import com.wolfteam20.schedulemobile.App;
 import com.wolfteam20.schedulemobile.data.DataManagerContract;
 import com.wolfteam20.schedulemobile.data.db.DbHelperContract;
-import com.wolfteam20.schedulemobile.data.network.ApiSchedule;
+import com.wolfteam20.schedulemobile.data.network.ApiScheduleContract;
 import com.wolfteam20.schedulemobile.data.preferences.PreferencesHelperContract;
 import com.wolfteam20.schedulemobile.di.modules.ApiScheduleModule;
 import com.wolfteam20.schedulemobile.di.modules.DataManagerModule;
@@ -26,7 +26,7 @@ public interface ApplicationComponent {
 
     DbHelperContract getDbHelper();
 
-    ApiSchedule getScheduleService();
+    ApiScheduleContract getScheduleService();
 
     PreferencesHelperContract getPreferencesHelper();
 }

@@ -24,6 +24,7 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.Streaming;
@@ -32,10 +33,11 @@ import retrofit2.http.Streaming;
  * Created by Efrain.Bastidas on 1/2/2018.
  */
 
-public interface ApiSchedule {
+public interface ApiScheduleContract {
 
     /**
      * Obtiene un token que contiene los privilegiso acorde al usuario
+     *
      * @param username Username
      * @param password Password
      * @return TokenDTO
@@ -46,6 +48,7 @@ public interface ApiSchedule {
 
     /**
      * Obtiene el periodo academico actual
+     *
      * @return PeriodoAcademicoDTO
      */
     @GET("api/PeriodoCarrera/Current")
@@ -53,6 +56,7 @@ public interface ApiSchedule {
 
     /**
      * Obtiene la planificacion academica
+     *
      * @return ResponseBody Que contiene los bits del archivo a guardar
      */
     @GET("api/HorarioProfesor/PlanificacionAcademica")
@@ -61,6 +65,7 @@ public interface ApiSchedule {
 
     /**
      * Obtiene la planificacion por aulas
+     *
      * @return ResponseBody Que contiene los bits del archivo a guardar
      */
     @GET("api/HorarioProfesor/PlanificacionAulas")
@@ -69,6 +74,7 @@ public interface ApiSchedule {
 
     /**
      * Obtiene la planificacion por horarios
+     *
      * @return ResponseBody Que contiene los bits del archivo a guardar
      */
     @GET("api/HorarioProfesor/PlanificacionHorario")
@@ -77,6 +83,7 @@ public interface ApiSchedule {
 
     /**
      * Obtiene una lista con todos los profesores
+     *
      * @return List<ProfesorDetailsDTO>
      */
     @GET("api/Profesor")
@@ -84,6 +91,7 @@ public interface ApiSchedule {
 
     /**
      * Obtiene un profesor en particular
+     *
      * @param cedula Cedula del profesor a obtener
      * @return ProfesorDTO
      */
@@ -92,6 +100,7 @@ public interface ApiSchedule {
 
     /**
      * Obtiene la disponibilidad de un profesor en particular
+     *
      * @param cedula Cedula del profesor
      * @return DisponibilidadDetailsDTO
      */
@@ -101,6 +110,7 @@ public interface ApiSchedule {
     /**
      * Guarda la disponibilidades pasadas por parametro
      * y reescribe las existentes
+     *
      * @param disponibilidades Disponibilidades a guardar
      * @return ResponseBody
      */
@@ -109,6 +119,7 @@ public interface ApiSchedule {
 
     /**
      * Obtiene una lista con todas las aulas
+     *
      * @return List de AulaDetailsDTO
      */
     @GET("api/Aulas")
@@ -116,6 +127,7 @@ public interface ApiSchedule {
 
     /**
      * Remueve varias aulas
+     *
      * @param idAulas Id de las aulas a remover (e.g: 1,2,3,4)
      * @return Completable
      */
@@ -124,6 +136,7 @@ public interface ApiSchedule {
 
     /**
      * Remueve una aula en particular
+     *
      * @param idAula Id del aula a remover
      * @return Completable
      */
@@ -132,6 +145,7 @@ public interface ApiSchedule {
 
     /**
      * Agrega un aula en particular
+     *
      * @param aula Aula a crear
      * @return Completable
      */
@@ -140,14 +154,16 @@ public interface ApiSchedule {
 
     /**
      * Actualiza un aula en particular
+     *
      * @param aula Aula a crear
      * @return Completable
      */
-    @POST("api/Aulas")
-    Completable updateAula(@Body AulaDTO aula);
+    @PUT("api/Aulas/{idAula}")
+    Completable updateAula(@Path("idAula") long idAula, @Body AulaDTO aula);
 
     /**
      * Obtiene una lista con todas las materias
+     *
      * @return List de MateriaDetailsDTO
      */
     @GET("api/Materias")
@@ -155,6 +171,7 @@ public interface ApiSchedule {
 
     /**
      * Obtiene una lista con todos los periodos academicos creados
+     *
      * @return List de PeriodoAcademicoDTO
      */
     @GET("api/PeriodoCarrera")
@@ -162,6 +179,7 @@ public interface ApiSchedule {
 
     /**
      * Obtiene una lista de relaciones profesor-materia
+     *
      * @return List de ProfesorMateriaDetailsDTO
      */
     @GET("api/ProfesorMateria")
@@ -169,6 +187,7 @@ public interface ApiSchedule {
 
     /**
      * Obtiene una lista de las secciones acorde al periodo academico activo
+     *
      * @return List de SeccionesDetailsDTO
      */
     @GET("api/Secciones")
@@ -176,6 +195,7 @@ public interface ApiSchedule {
 
     /**
      * Obtiene una lista con todos los usuarios creados.
+     *
      * @return List de UsuarioDetailsDTO
      */
     @GET("api/Account")

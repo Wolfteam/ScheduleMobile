@@ -42,5 +42,7 @@ public interface DbHelperContract {
 
     void removeAulasLocal();
 
+    void addAulaLocal(AulaDetailsDTO aula);
+
     void updateAulaLocal(AulaDetailsDTO aula);
 }

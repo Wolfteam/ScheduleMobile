@@ -3,7 +3,7 @@ package com.wolfteam20.schedulemobile.data;
 import android.content.Context;
 
 import com.wolfteam20.schedulemobile.data.db.DbHelperContract;
-import com.wolfteam20.schedulemobile.data.network.ApiSchedule;
+import com.wolfteam20.schedulemobile.data.network.ApiScheduleContract;
 import com.wolfteam20.schedulemobile.data.network.models.AulaDTO;
 import com.wolfteam20.schedulemobile.data.network.models.AulaDetailsDTO;
 import com.wolfteam20.schedulemobile.data.network.models.DisponibilidadDTO;
@@ -25,8 +25,11 @@ import javax.inject.Inject;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
+import timber.log.Timber;
 
 /**
  * Created by Efrain.Bastidas on 1/4/2018.
@@ -35,98 +38,101 @@ import retrofit2.Response;
 public class DataManager implements DataManagerContract {
     private Context mContext;
     private PreferencesHelperContract mPreferencesHelper;
-    private ApiSchedule mApiSchedule;
+    private ApiScheduleContract mApiScheduleContract;
     private DbHelperContract mDbHelper;
 
     @Inject
     DataManager(@ApplicationContext Context context,
                 PreferencesHelperContract prefs,
-                ApiSchedule apiSchedule,
+                ApiScheduleContract apiScheduleContract,
                 DbHelperContract dbHelper) {
         mContext = context;
         mPreferencesHelper = prefs;
-        mApiSchedule = apiSchedule;
+        mApiScheduleContract = apiScheduleContract;
         mDbHelper = dbHelper;
     }
 
     @Override
     public Observable<List<AulaDetailsDTO>> getAllAulas() {
-        return mApiSchedule.getAllAulas();
+        return mApiScheduleContract.getAllAulas();
     }
 
     @Override
     public Observable<List<MateriaDetailsDTO>> getAllMaterias() {
-        return mApiSchedule.getAllMaterias();
+        return mApiScheduleContract.getAllMaterias();
     }
 
     @Override
     public Observable<List<PeriodoAcademicoDTO>> getAllPeriodosAcademicos() {
-        return mApiSchedule.getAllPeriodosAcademicos();
+        return mApiScheduleContract.getAllPeriodosAcademicos();
     }
 
     @Override
     public Observable<List<ProfesorDetailsDTO>> getAllProfesores() {
-        return mApiSchedule.getAllProfesores();
+        return mApiScheduleContract.getAllProfesores();
     }
 
     @Override
     public Observable<List<ProfesorMateriaDetailsDTO>> getAllProfesorMateria() {
-        return mApiSchedule.getAllProfesorMateria();
+        return mApiScheduleContract.getAllProfesorMateria();
     }
 
     @Override
     public Observable<List<SeccionesDetailsDTO>> getAllSecciones() {
-        return mApiSchedule.getAllSecciones();
+        return mApiScheduleContract.getAllSecciones();
     }
 
     @Override
     public Observable<List<UsuarioDetailsDTO>> getAllUsuarios() {
-        return mApiSchedule.getAllUsuarios();
+        return mApiScheduleContract.getAllUsuarios();
     }
 
     @Override
     public Observable<Response<PeriodoAcademicoDTO>> getCurrentPeriodoAcademico() {
-        return mApiSchedule.getCurrentPeriodoAcademico();
+        return mApiScheduleContract.getCurrentPeriodoAcademico();
     }
 
     @Override
     public Observable<DisponibilidadDetailsDTO> getDisponbilidad(int cedula) {
-        return mApiSchedule.getDisponbilidad(cedula);
+        return mApiScheduleContract.getDisponbilidad(cedula);
     }
 
     @Override
     public Observable<Response<ResponseBody>> getPlanificacionAcademica() {
-        return mApiSchedule.getPlanificacionAcademica();
+        return mApiScheduleContract.getPlanificacionAcademica();
     }
 
     @Override
     public Observable<Response<ResponseBody>> getPlanificacionAulas() {
-        return mApiSchedule.getPlanificacionAulas();
+        return mApiScheduleContract.getPlanificacionAulas();
     }
 
     @Override
     public Observable<Response<ResponseBody>> getPlanificacionHorario() {
-        return mApiSchedule.getPlanificacionHorario();
+        return mApiScheduleContract.getPlanificacionHorario();
     }
 
     @Override
     public Observable<ProfesorDetailsDTO> getProfesor(int cedula) {
-        return mApiSchedule.getProfesor(cedula);
+        return mApiScheduleContract.getProfesor(cedula);
     }
 
     @Override
     public Observable<Response<ResponseBody>> addDisponibilidad(List<DisponibilidadDTO> disponibilidades) {
-        return mApiSchedule.addDisponibilidad(disponibilidades);
+        return mApiScheduleContract.addDisponibilidad(disponibilidades);
     }
 
     @Override
     public Completable removeAulas(String idAulas) {
-        return mApiSchedule.removeAulas(idAulas);
+        return mApiScheduleContract.removeAulas(idAulas);
     }
 
     @Override
     public Completable removeAula(long idAula) {
-        return mApiSchedule.removeAula(idAula);
+        return mApiScheduleContract.removeAula(idAula)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .doOnError(Timber::e);
     }
 
     @Override
@@ -136,17 +142,23 @@ public class DataManager implements DataManagerContract {
 
     @Override
     public Completable addAula(AulaDTO aula) {
-        return mApiSchedule.addAula(aula);
+        return mApiScheduleContract.addAula(aula)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .doOnError(Timber::e);
     }
 
     @Override
-    public Completable updateAula(AulaDTO aula) {
-        return mApiSchedule.updateAula(aula);
+    public Completable updateAula(long idAula, AulaDTO aula) {
+        return mApiScheduleContract.updateAula(idAula, aula)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .doOnError(Timber::e);
     }
 
     @Override
     public Observable<Response<TokenDTO>> getToken(String username, String password, Boolean isMobile) {
-        return mApiSchedule.getToken(username, password, isMobile);
+        return mApiScheduleContract.getToken(username, password, isMobile);
     }
 
     @Override
@@ -191,7 +203,10 @@ public class DataManager implements DataManagerContract {
 
     @Override
     public Single<AulaDetailsDTO> getAulaLocal(long idAula) {
-        return mDbHelper.getAulaLocal(idAula);
+        return mDbHelper.getAulaLocal(idAula)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .doOnError(Timber::e);
     }
 
     @Override
@@ -232,6 +247,11 @@ public class DataManager implements DataManagerContract {
     @Override
     public void removeAulasLocal() {
         mDbHelper.removeAulasLocal();
+    }
+
+    @Override
+    public void addAulaLocal(AulaDetailsDTO aula) {
+        mDbHelper.addAulaLocal(aula);
     }
 
     @Override

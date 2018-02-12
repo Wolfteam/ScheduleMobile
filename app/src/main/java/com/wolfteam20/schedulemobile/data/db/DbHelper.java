@@ -157,6 +157,12 @@ public class DbHelper implements DbHelperContract {
     }
 
     @Override
+    public void addAulaLocal(AulaDetailsDTO aula) {
+        Timber.i("Agregando el aula con id %s", aula.getIdAula());
+        mAulaDetailsBox.put(aula);
+    }
+
+    @Override
     public void updateAulaLocal(AulaDetailsDTO aula) {
         Timber.i("Actualizando la aula con id: %s", aula.getIdAula());
         mAulaDetailsBox.put(aula);
