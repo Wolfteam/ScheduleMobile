@@ -1,4 +1,4 @@
-package com.wolfteam20.schedulemobile.ui.editardb.details
+package com.wolfteam20.schedulemobile.ui.editardb
 
 import android.content.Context
 import android.content.Intent
@@ -6,13 +6,13 @@ import android.os.Bundle
 import com.wolfteam20.schedulemobile.R
 import com.wolfteam20.schedulemobile.ui.base.BaseActivity
 import com.wolfteam20.schedulemobile.ui.base.BaseFragment
-import com.wolfteam20.schedulemobile.ui.editardb.details.aulas.AulasDetailsFragment
+import com.wolfteam20.schedulemobile.ui.editardb.aula.details.AulasDetailsFragment
 
 /**
  * Created by Efrain.Bastidas on 10/2/2018.
  */
 class EditarDBDetailsActivity : BaseActivity() {
-    lateinit var mFragmentToLoad: BaseFragment
+    private lateinit var mFragmentToLoad: BaseFragment
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,7 +21,8 @@ class EditarDBDetailsActivity : BaseActivity() {
         val fragmentToLoad = intent.extras.getInt("Fragment_TO_LOAD",1)
 
         when (fragmentToLoad) {
-            1 -> mFragmentToLoad = AulasDetailsFragment()
+            1 -> mFragmentToLoad =
+                    AulasDetailsFragment()
         }
 
         supportFragmentManager
