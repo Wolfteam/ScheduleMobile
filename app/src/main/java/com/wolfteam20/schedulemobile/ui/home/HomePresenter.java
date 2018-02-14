@@ -139,8 +139,6 @@ public class HomePresenter extends BasePresenter<HomeViewContract> implements Ho
         }
         getViewState().showLoading();
         getCompositeDisposable().add(getDataManager().getCurrentPeriodoAcademico()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         response ->
                         {

@@ -34,8 +34,6 @@ public class LoginPresenter extends BasePresenter<LoginViewContract> implements 
         }
         getViewState().showLoading();
         getCompositeDisposable().add(getDataManager().getToken(username, password, true)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response ->
                         {
                             if (response.isSuccessful()) {

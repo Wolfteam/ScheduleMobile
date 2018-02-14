@@ -65,16 +65,12 @@ class DispDetailsPresenter @Inject constructor(
         mIdDia = idDia
         compositeDisposable.addAll(
             dataManager.getDisponibilidadDetailsLocal(cedula)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     { details ->
                         mHorasACumplir = details.horasACumplir
                         mHorasAsignadas = details.horasAsignadas
                     }),
             dataManager.getDisponibilidadLocal(cedula, idDia)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     { disp ->
                         mDispList = disp
