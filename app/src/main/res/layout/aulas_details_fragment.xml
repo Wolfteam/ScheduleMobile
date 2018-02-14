@@ -10,7 +10,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/md_grey_500"
+            android:background="@color/md_grey_800"
             android:orientation="vertical">
 
             <include layout="@layout/editardb_details_toolbar" />
@@ -34,7 +34,7 @@
                     android:layout_height="wrap_content">
 
                     <android.support.design.widget.TextInputEditText
-                        android:id="@+id/aula_nombre"
+                        android:id="@+id/aula_details_nombre"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/aulas_nombre"
@@ -57,7 +57,7 @@
                     android:layout_height="wrap_content">
 
                     <android.support.design.widget.TextInputEditText
-                        android:id="@+id/aula_capacidad"
+                        android:id="@+id/aula_details_capacidad"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/aulas_capacidad"
@@ -76,13 +76,12 @@
                     android:layout_height="16dp" />
 
                 <Spinner
-                    android:id="@+id/aula_tipo_dropdown"
+                    android:id="@+id/aula_details_tipo_dropdown"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:dropDownWidth="match_parent"
-                    android:popupBackground="@color/md_blue_400"
-                    android:spinnerMode="dropdown"
-                    android:tooltipText="Seleccione el tipo de aula" />
+                    android:popupBackground="@color/md_grey_850"
+                    android:spinnerMode="dropdown" />
             </LinearLayout>
         </LinearLayout>
     </android.support.design.widget.CoordinatorLayout>

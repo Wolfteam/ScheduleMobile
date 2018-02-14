@@ -1,33 +1,36 @@
-package com.wolfteam20.schedulemobile.ui.editardb.details.aulas
+package com.wolfteam20.schedulemobile.ui.editardb.aula.details
 
+import android.databinding.DataBindingUtil
+import android.databinding.ViewDataBinding
 import android.os.Bundle
+import android.os.Parcelable
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.view.*
+import br.com.ilhasoft.support.validation.Validator
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wolfteam20.schedulemobile.R
 import com.wolfteam20.schedulemobile.data.network.models.AulaDetailsDTO
+import com.wolfteam20.schedulemobile.data.network.models.TipoAulaMateriaDTO
+import com.wolfteam20.schedulemobile.ui.adapters.TipoAulaMateriaListSpinnerAdapter
 import com.wolfteam20.schedulemobile.ui.base.BaseActivity
 import com.wolfteam20.schedulemobile.ui.base.BaseFragment
 import kotlinx.android.synthetic.main.aulas_details_fragment.*
 import kotlinx.android.synthetic.main.editardb_details_toolbar.*
 import javax.inject.Inject
-import android.databinding.DataBindingUtil
-import android.databinding.ViewDataBinding
-import br.com.ilhasoft.support.validation.Validator
-import com.wolfteam20.schedulemobile.data.network.models.AulaDTO
 
 
 /**
  * Created by Efrain.Bastidas on 10/2/2018.
  */
-class AulasDetailsFragment : BaseFragment(), AulasDetailsViewContract {
-
+class AulasDetailsFragment : BaseFragment(),
+    AulasDetailsViewContract {
     @Inject
     @InjectPresenter
     lateinit var mPresenter: AulasDetailsPresenter
     private lateinit var mValidator: Validator
+    private lateinit var mAdapter: TipoAulaMateriaListSpinnerAdapter
 
     @ProvidePresenter
     fun provideHomePresenter(): AulasDetailsPresenter {
@@ -50,11 +53,10 @@ class AulasDetailsFragment : BaseFragment(), AulasDetailsViewContract {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        outState.putString("aula_nombre", aula_nombre.text.toString())
-        outState.putString("aula_capacidad", aula_capacidad.text.toString())
+        outState.putString("aula_nombre", aula_details_nombre.text.toString())
+        outState.putString("aula_capacidad", aula_details_capacidad.text.toString())
         super.onSaveInstanceState(outState)
     }
-
 
     override fun initLayout(view: View?, savedInstanceState: Bundle?) {
         setHasOptionsMenu(true)
@@ -71,11 +73,19 @@ class AulasDetailsFragment : BaseFragment(), AulasDetailsViewContract {
         appCompatActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         appCompatActivity.supportActionBar?.setDisplayShowHomeEnabled(true)
 
-        mPresenter.subscribe(id, position)
+        mAdapter = TipoAulaMateriaListSpinnerAdapter(
+            baseActivity,
+            R.layout.editardb_details_spinner_common
+        )
+        aula_details_tipo_dropdown.adapter = mAdapter
+
+        val model = baseActivity.intent.extras.getParcelable<AulaDetailsDTO>("ITEM")
+        mPresenter.subscribe(id, position, model)
+
         //TODO: No se muestra el texto al rotar
         savedInstanceState?.let {
-            aula_nombre.setText(it.getString("aula_nombre"))
-            aula_capacidad.setText(it.getString("aula_capacidad"))
+            aula_details_nombre.setText(it.getString("aula_nombre"))
+            aula_details_capacidad.setText(it.getString("aula_capacidad"))
         }
     }
 
@@ -90,11 +100,12 @@ class AulasDetailsFragment : BaseFragment(), AulasDetailsViewContract {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        if (!mValidator.validate() && item?.itemId != R.id.editardb_details_close)
-            return true
         when (item?.itemId) {
             R.id.editardb_details_edit_delete -> mPresenter.onDeleteClicked()
-            R.id.editardb_details_add_save, R.id.editardb_details_edit_save -> mPresenter.onSaveClicked()
+            R.id.editardb_details_add_save, R.id.editardb_details_edit_save -> {
+                if (mValidator.validate())
+                    mPresenter.onSaveClicked()
+            }
             else -> mPresenter.onCancelClicked()
         }
         return true
@@ -108,9 +119,21 @@ class AulasDetailsFragment : BaseFragment(), AulasDetailsViewContract {
         aulas_details_progress_bar.visibility = View.GONE
     }
 
+    override fun enableAllViews(enabled: Boolean) {
+        aula_details_nombre.isEnabled = enabled
+        aula_details_capacidad.isEnabled = enabled
+        aula_details_tipo_dropdown.isEnabled = enabled
+    }
+
     override fun showItem(aula: AulaDetailsDTO) {
-        aula_nombre.setText(aula.nombreAula)
-        aula_capacidad.setText(aula.capacidad.toString())
+        aula_details_nombre.setText(aula.nombreAula)
+        aula_details_capacidad.setText(aula.capacidad.toString())
+        val itemPosition = mAdapter.getPosition(aula.tipoAula.idTipo)
+        aula_details_tipo_dropdown.setSelection(itemPosition)
+    }
+
+    override fun setTipoAulaSpinnerItems(tipos: MutableList<TipoAulaMateriaDTO>) {
+        mAdapter.setItems(tipos)
     }
 
     override fun showConfirmDeleteDialog() {
@@ -124,20 +147,20 @@ class AulasDetailsFragment : BaseFragment(), AulasDetailsViewContract {
         dialog.show()
     }
 
-    override fun finishActivity(operation: Int, position: Int) {
+    override fun finishActivity(operation: Int, position: Int, item: Parcelable?) {
         baseActivity.intent.putExtra("OPERATION", operation)
         baseActivity.intent.putExtra("POSITION", position)
+        baseActivity.intent.putExtra("ITEM", item)
         baseActivity.setResult(BaseActivity.RESULT_OK, baseActivity.intent)
         baseActivity.onBackPressed()
     }
 
     override fun prepareData(isInEditMode: Boolean) {
-        //TODO Setear esta data , npi si dara error el id en la db local
-        val aula = AulaDTO(
+        val aula = AulaDetailsDTO(
             0,
-            aula_nombre.text.toString(),
-            aula_capacidad.text.toString().toInt(),
-            1
+            aula_details_nombre.text.toString(),
+            aula_details_capacidad.text.toString().toInt(),
+            mAdapter.getItem(aula_details_tipo_dropdown.selectedItemId)
         )
         if (isInEditMode)
             mPresenter.updateAula(aula)

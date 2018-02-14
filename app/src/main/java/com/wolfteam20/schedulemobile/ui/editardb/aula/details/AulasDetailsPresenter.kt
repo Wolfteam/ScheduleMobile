@@ -1,4 +1,4 @@
-package com.wolfteam20.schedulemobile.ui.editardb.details.aulas
+package com.wolfteam20.schedulemobile.ui.editardb.aula.details
 
 import com.arellomobile.mvp.InjectViewState
 import com.wolfteam20.schedulemobile.R
@@ -28,24 +28,41 @@ class AulasDetailsPresenter @Inject constructor(
     private var mAulaPosition: Int = 0
     private var isInEditMode = true
 
-    override fun subscribe(idAula: Long, position: Int) {
+    override fun subscribe(idAula: Long, position: Int, model: AulaDetailsDTO?) {
+        viewState.enableAllViews(false)
+        viewState.showLoading()
+
         if (idAula == 0L) {
             isInEditMode = false
+            compositeDisposable.add(dataManager.allTipoAulaMateria
+                .subscribe(
+                    { tipos ->
+                        viewState.enableAllViews(true)
+                        viewState.setTipoAulaSpinnerItems(tipos)
+                        viewState.hideLoading()
+                    },
+                    { error -> onError(error) }
+                )
+            )
             return
         }
+
+        mIDAula = model?.idAula!!
         mAulaPosition = position
-        viewState.showLoading()
-        compositeDisposable.add(dataManager.getAulaLocal(idAula)
+
+        compositeDisposable.add(dataManager.allTipoAulaMateria
             .subscribe(
-                { aula ->
-                    mIDAula = aula.idAula
-                    viewState.showItem(aula)
+                { tipos ->
+                    viewState.enableAllViews(true)
+                    viewState.setTipoAulaSpinnerItems(tipos)
                     viewState.hideLoading()
+                    model.let {
+                        viewState.showItem(it)
+                    }
                 },
                 { error -> onError(error) }
             )
         )
-        //aca tambien deberia jalarme la data para el spinner
     }
 
     override fun onCancelClicked() {
@@ -61,70 +78,56 @@ class AulasDetailsPresenter @Inject constructor(
     }
 
     override fun deleteAula() {
+        viewState.hideKeyboard()
         if (!isNetworkAvailable) {
             viewState.onError(R.string.no_network)
             return
         }
+
         viewState.showLoading()
-        viewState.hideKeyboard()
         compositeDisposable.add(dataManager.removeAula(mIDAula)
             .subscribe(
-                {
-                    dataManager.removeAulaLocal(mIDAula)
-                    viewState.finishActivity(DELETE_OPERATION, mAulaPosition)
-                },
+                { viewState.finishActivity(DELETE_OPERATION, mAulaPosition) },
                 { error -> onError(error) }
             )
         )
     }
 
-    override fun addAula(aula: AulaDTO) {
+    override fun addAula(aula: AulaDetailsDTO) {
+        viewState.hideKeyboard()
         if (!isNetworkAvailable) {
             viewState.onError(R.string.no_network)
             return
         }
 
-        val aulaDetails = getAulaDetails(aula)
+        val dto = AulaDTO(0, aula.nombreAula, aula.capacidad, aula.tipoAula.idTipo)
+
         viewState.showLoading()
-        viewState.hideKeyboard()
-        compositeDisposable.add(dataManager.addAula(aula)
+        compositeDisposable.add(dataManager.addAula(dto)
             .subscribe(
-                {
-                    dataManager.addAulaLocal(aulaDetails)
-                    viewState.finishActivity(ADD_OPERATION)
-                },
+                { viewState.finishActivity(ADD_OPERATION) },
                 { error -> onError(error) }
             )
         )
     }
 
-    override fun updateAula(aula: AulaDTO) {
+    override fun updateAula(aula: AulaDetailsDTO) {
+        viewState.hideKeyboard()
         if (!isNetworkAvailable) {
             viewState.onError(R.string.no_network)
             return
         }
 
-        val aulaDetails = getAulaDetails(aula)
+        aula.idAula = mIDAula
+        val dto = AulaDTO(mIDAula, aula.nombreAula, aula.capacidad, aula.tipoAula.idTipo)
+
         viewState.showLoading()
-        viewState.hideKeyboard()
-        compositeDisposable.add(dataManager.updateAula(mIDAula, aula)
+        compositeDisposable.add(dataManager.updateAula(mIDAula, dto)
             .subscribe(
-                {
-                    dataManager.updateAulaLocal(aulaDetails)
-                    viewState.finishActivity(UPDATE_OPERATION, mAulaPosition)
-                },
+                { viewState.finishActivity(UPDATE_OPERATION, mAulaPosition, aula) },
                 { error -> onError(error) }
             )
         )
-    }
-
-    private fun getAulaDetails(aula: AulaDTO): AulaDetailsDTO {
-        val aulaDetails = AulaDetailsDTO()
-        aulaDetails.idAula = mIDAula
-        aulaDetails.capacidad = aula.capacidad
-        aulaDetails.nombreAula = aula.nombreAula
-        aulaDetails.tipo.targetId = 1
-        return aulaDetails
     }
 
     private fun onError(error: Throwable) {
