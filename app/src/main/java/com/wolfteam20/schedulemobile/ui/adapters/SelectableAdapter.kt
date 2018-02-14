@@ -4,21 +4,18 @@ import android.support.v7.widget.RecyclerView
 import android.util.SparseBooleanArray
 
 
-
-
-
-
 /**
  * Created by Efrain.Bastidas on 1/19/2018.
  */
-abstract class SelectableAdapter<VH : RecyclerView.ViewHolder> : RecyclerView.Adapter<VH>() {
+abstract class SelectableAdapter<VH : RecyclerView.ViewHolder> : RecyclerView.Adapter<VH>(),
+    SelectableAdapterContract {
 
-    private var mSelectedItems : SparseBooleanArray = SparseBooleanArray()
+    private var mSelectedItems: SparseBooleanArray = SparseBooleanArray()
 
     /**
      * Clear the selection status for all items
      */
-    fun clearSelection() {
+    override fun clearSelection() {
         val selection = getSelectedItems()
         mSelectedItems.clear()
         for (i in selection) {
@@ -31,18 +28,17 @@ abstract class SelectableAdapter<VH : RecyclerView.ViewHolder> : RecyclerView.Ad
      * @param position Position of the item to check
      * @return true if the item is selected, false otherwise
      */
-    fun isSelected(position: Int): Boolean {
+    override fun isSelected(position: Int): Boolean {
         return getSelectedItems().contains(position)
     }
-
 
 
     /**
      * Indicates the list of selected items
      * @return List of selected items ids
      */
-    fun getSelectedItems(): ArrayList<Int> {
-        val items : ArrayList<Int> = ArrayList(mSelectedItems.size())
+    override fun getSelectedItems(): ArrayList<Int> {
+        val items: ArrayList<Int> = ArrayList(mSelectedItems.size())
         (0 until mSelectedItems.size()).mapTo(items) {
             mSelectedItems.keyAt(it)
         }
@@ -53,7 +49,7 @@ abstract class SelectableAdapter<VH : RecyclerView.ViewHolder> : RecyclerView.Ad
      * Count the selected items
      * @return Selected items count
      */
-    fun getSelectedItemCount(): Int {
+    override fun getSelectedItemCount(): Int {
         return mSelectedItems.size()
     }
 
@@ -61,7 +57,7 @@ abstract class SelectableAdapter<VH : RecyclerView.ViewHolder> : RecyclerView.Ad
      * Toggle the selection status of the item at a given position
      * @param position Position of the item to toggle the selection status for
      */
-    fun toggleSelection(position: Int) {
+    override fun toggleSelection(position: Int) {
         if (mSelectedItems.get(position, false)) {
             mSelectedItems.delete(position)
         } else {
