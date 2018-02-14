@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
-import android.support.v7.view.ActionMode
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
@@ -15,10 +14,9 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wolfteam20.schedulemobile.R
 import com.wolfteam20.schedulemobile.data.network.models.AulaDetailsDTO
 import com.wolfteam20.schedulemobile.ui.adapters.AulasListAdapter
-import com.wolfteam20.schedulemobile.ui.base.BaseFragment
-import com.wolfteam20.schedulemobile.ui.editardb.EditarDBClickListenerContract
-import com.wolfteam20.schedulemobile.ui.editardb.details.EditarDBDetailsActivity
-import es.dmoral.toasty.Toasty
+import com.wolfteam20.schedulemobile.ui.editardb.ActionModeCallback
+import com.wolfteam20.schedulemobile.ui.editardb.base.ItemBaseFragment
+import com.wolfteam20.schedulemobile.ui.editardb.base.ItemClickListenerContract
 import kotlinx.android.synthetic.main.editardb_fragment_common.*
 import javax.inject.Inject
 
@@ -31,29 +29,20 @@ private const val CANCEL_OPERATION = 1
 private const val ADD_OPERATION = 2
 private const val UPDATE_OPERATION = 3
 
-class AulasFragment : BaseFragment(), AulasViewContract, EditarDBClickListenerContract {
-
+class AulasFragment : ItemBaseFragment(), AulasViewContract,
+    ItemClickListenerContract {
     @Inject
     @InjectPresenter
     lateinit var mPresenter: AulasPresenter
 
     private val mAdapter = AulasListAdapter(this)
-    private val mActionModeCallback = ActionModeCallback()
-    private var mActionMode: ActionMode? = null
+    private lateinit var mActionModeCallback: ActionModeCallback<AulasViewContract>
 
     @ProvidePresenter
     fun provideHomePresenter(): AulasPresenter {
         activityComponent.inject(this)
         mPresenter.subscribe()
         return mPresenter
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.editardb_fragment_common, container, false)
     }
 
     override fun initLayout(view: View?, savedInstanceState: Bundle?) {
@@ -74,51 +63,39 @@ class AulasFragment : BaseFragment(), AulasViewContract, EditarDBClickListenerCo
         editardb_fragment_common_recycler_view.itemAnimator = DefaultItemAnimator()
         editardb_fragment_common_recycler_view.adapter = mAdapter
         editardb_fragment_common_swipe_to_refresh.setOnRefreshListener { mPresenter.subscribe() }
+
+        mActionModeCallback = ActionModeCallback(mPresenter, mAdapter)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == EDITARDB_DETAILS_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                 val operation = data?.getIntExtra("OPERATION", 0)
+                val position = data?.getIntExtra("POSITION", 0)
+                val item = data?.getParcelableExtra<AulaDetailsDTO>("ITEM")
                 when (operation) {
                     DELETE_OPERATION -> {
-                        val position = data.getIntExtra("POSITION", 0)
-                        mAdapter.removeItem(position)
+                        mAdapter.removeItem(position!!)
                     }
-                    CANCEL_OPERATION -> { }
-                //TODO Manejar el caso Add/Update correctamente
-                    else -> mPresenter.subscribe()
+                    CANCEL_OPERATION -> {
+                    }
+                    UPDATE_OPERATION -> mPresenter.onItemUpdated(item!!, position!!)
+                    else -> mPresenter.onItemAdded(0)
                 }
             }
         }
-    }
-
-    override fun showSwipeToRefresh() {
-        if (!editardb_fragment_common_swipe_to_refresh.isRefreshing)
-            editardb_fragment_common_swipe_to_refresh.isRefreshing = true
-    }
-
-    override fun hideSwipeToRefresh() {
-        editardb_fragment_common_swipe_to_refresh.isRefreshing = false
-    }
-
-    override fun showFAB() {
-        editardb_fragment_common_fab.visibility = View.VISIBLE
-    }
-
-    override fun hideFAB() {
-        editardb_fragment_common_fab.visibility = View.GONE
     }
 
     override fun showList(aulas: MutableList<AulaDetailsDTO>) {
         mAdapter.setItems(aulas)
     }
 
-    override fun startDetailsActivity(itemID: Long, itemPosition: Int) {
-        startActivityForResult(
-            EditarDBDetailsActivity.getIntent(context!!, 1, itemID, itemPosition),
-            EDITARDB_DETAILS_REQUEST_CODE
-        )
+    override fun addItem(aula: AulaDetailsDTO) {
+        mAdapter.addItem(aula)
+    }
+
+    override fun updateItem(position: Int, aula: AulaDetailsDTO) {
+        mAdapter.updateItem(position, aula)
     }
 
     override fun removeSelectedListItems() {
@@ -132,11 +109,6 @@ class AulasFragment : BaseFragment(), AulasViewContract, EditarDBClickListenerCo
 
     override fun startActionMode() {
         mActionMode = baseDrawerActivity.startSupportActionMode(mActionModeCallback)
-    }
-
-    override fun setActionModeTitle(title: String) {
-        mActionMode?.title = title
-        mActionMode?.invalidate()
     }
 
     override fun stopActionMode() {
@@ -156,15 +128,11 @@ class AulasFragment : BaseFragment(), AulasViewContract, EditarDBClickListenerCo
         dialog.show()
     }
 
-    override fun showNoItemsSelected() {
-        Toasty.info(context!!, resources.getString(R.string.no_items_selected)).show()
-    }
-
     override fun onItemClicked(itemID: Long, itemPosition: Int) {
         if (mActionMode != null)
             mPresenter.onItemLongClicked(itemPosition)
         else
-            mPresenter.onItemClicked(itemID, itemPosition)
+            mPresenter.onItemClicked(itemID, itemPosition, mAdapter.getItem(itemPosition))
     }
 
     override fun onItemLongClicked(itemPosition: Int): Boolean {
@@ -173,31 +141,6 @@ class AulasFragment : BaseFragment(), AulasViewContract, EditarDBClickListenerCo
         }
         mPresenter.onItemLongClicked(itemPosition)
         return true
-    }
-
-    private inner class ActionModeCallback : ActionMode.Callback {
-        override fun onCreateActionMode(mode: ActionMode, menu: Menu): Boolean {
-            mode.menuInflater.inflate(R.menu.delete_menu, menu)
-            return true
-        }
-
-        override fun onPrepareActionMode(mode: ActionMode, menu: Menu): Boolean {
-            return false
-        }
-
-        override fun onActionItemClicked(mode: ActionMode, item: MenuItem): Boolean {
-            return when (item.itemId) {
-                R.id.delete -> {
-                    mPresenter.onFABDeleteClicked(mAdapter.getSelectedItemCount())
-                    true
-                }
-                else -> false
-            }
-        }
-
-        override fun onDestroyActionMode(mode: ActionMode) {
-            mPresenter.onToggleItemSelection(0)
-        }
     }
 
     companion object {

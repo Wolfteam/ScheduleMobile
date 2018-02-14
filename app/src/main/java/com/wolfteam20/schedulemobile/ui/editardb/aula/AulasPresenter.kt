@@ -4,11 +4,8 @@ import com.arellomobile.mvp.InjectViewState
 import com.wolfteam20.schedulemobile.R
 import com.wolfteam20.schedulemobile.data.DataManagerContract
 import com.wolfteam20.schedulemobile.data.network.models.AulaDetailsDTO
-import com.wolfteam20.schedulemobile.ui.base.BasePresenter
-import io.reactivex.android.schedulers.AndroidSchedulers
+import com.wolfteam20.schedulemobile.ui.editardb.base.ItemBasePresenter
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
-import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -19,7 +16,8 @@ import javax.inject.Inject
 class AulasPresenter @Inject constructor(
     mCompositeDisposable: CompositeDisposable,
     mDataManager: DataManagerContract
-) : BasePresenter<AulasViewContract>(mCompositeDisposable, mDataManager), AulasPresenterContract {
+) : ItemBasePresenter<AulasViewContract>(mCompositeDisposable, mDataManager),
+    AulasPresenterContract {
 
     override fun subscribe() {
         if (!isNetworkAvailable) {
@@ -27,58 +25,25 @@ class AulasPresenter @Inject constructor(
             return
         }
         viewState.showSwipeToRefresh()
-        compositeDisposable.add(
-            dataManager.allAulas
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(
-                    { aulas ->
-                        aulas.forEach { aula -> aula.tipo.target = aula.tipoAula }
-                        aulas.sortBy { it.nombreAula }
-                        dataManager.removeAulasLocal()
-                        dataManager.addAulasLocal(aulas)
-                        viewState.showList(aulas)
-                        viewState.hideSwipeToRefresh()
-                        viewState.showFAB()
-                    },
-                    { error ->
-                        viewState.hideSwipeToRefresh()
-                        viewState.onError(error.localizedMessage)
-                        Timber.e(error)
-                    }
-                )
+        compositeDisposable.add(dataManager.allAulas
+            .subscribe(
+                { aulas ->
+                    aulas.sortBy { it.nombreAula }
+                    viewState.showList(aulas)
+                    viewState.hideSwipeToRefresh()
+                    viewState.showFAB()
+                },
+                { error -> onError(error) }
+            )
         )
     }
 
-    override fun onItemClicked(itemID: Long, itemPosition: Int) {
-        viewState.startDetailsActivity(itemID, itemPosition)
-    }
-
-    override fun onItemLongClicked(itemPosition: Int) {
-        viewState.toggleItemSelection(itemPosition)
+    override fun onItemClicked(itemID: Long, itemPosition: Int, item: AulaDetailsDTO) {
+        viewState.startDetailsActivity(1,itemID, itemPosition, item)
     }
 
     override fun onFABAddClicked() {
-        viewState.startDetailsActivity()
-    }
-
-    override fun onFABDeleteClicked(itemsSelected: Int) {
-        if (itemsSelected == 0)
-            viewState.showNoItemsSelected()
-        else
-            viewState.showConfirmDelete()
-    }
-
-
-    override fun onActionMode() {
-        viewState.startActionMode()
-    }
-
-    override fun onToggleItemSelection(itemsToSelect: Int) {
-        if (itemsToSelect == 0)
-            viewState.stopActionMode()
-        else
-            viewState.setActionModeTitle(itemsToSelect.toString())
+        viewState.startDetailsActivity(1)
     }
 
     override fun deleteItems(aulas: MutableList<AulaDetailsDTO>) {
@@ -92,23 +57,24 @@ class AulasPresenter @Inject constructor(
             transform = { return@joinToString it.idAula.toString() }
         )
         viewState.showSwipeToRefresh()
-        compositeDisposable.add(
-            dataManager.removeAulas(idAulas)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(
-                    {
-                        viewState.hideSwipeToRefresh()
-                        viewState.removeSelectedListItems()
-                        viewState.stopActionMode()
-                    },
-                    { error ->
-                        viewState.hideSwipeToRefresh()
-                        viewState.onError(error.localizedMessage)
-                        Timber.e(error)
-                    }
-                )
+        compositeDisposable.add(dataManager.removeAulas(idAulas)
+            .subscribe(
+                {
+                    viewState.hideSwipeToRefresh()
+                    viewState.removeSelectedListItems()
+                    viewState.stopActionMode()
+                },
+                { error -> onError(error) }
+            )
         )
-
     }
+
+    override fun onItemAdded(itemID: Long) {
+        subscribe()
+    }
+
+    override fun onItemUpdated(item: AulaDetailsDTO, itemPosition: Int) {
+        viewState.updateItem(itemPosition, item)
+    }
+
 }

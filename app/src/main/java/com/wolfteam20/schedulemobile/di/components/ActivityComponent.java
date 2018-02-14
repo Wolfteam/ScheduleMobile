@@ -6,7 +6,7 @@ import com.wolfteam20.schedulemobile.ui.disponibilidad.details.DispDetailsFragme
 import com.wolfteam20.schedulemobile.ui.disponibilidad.DispFragment;
 import com.wolfteam20.schedulemobile.ui.editardb.EditarDBFragment;
 import com.wolfteam20.schedulemobile.ui.editardb.aula.AulasFragment;
-import com.wolfteam20.schedulemobile.ui.editardb.details.aulas.AulasDetailsFragment;
+import com.wolfteam20.schedulemobile.ui.editardb.aula.details.AulasDetailsFragment;
 import com.wolfteam20.schedulemobile.ui.editardb.materia.MateriasFragment;
 import com.wolfteam20.schedulemobile.ui.editardb.periodos.PeriodosFragment;
 import com.wolfteam20.schedulemobile.ui.editardb.profesores.ProfesoresFragment;

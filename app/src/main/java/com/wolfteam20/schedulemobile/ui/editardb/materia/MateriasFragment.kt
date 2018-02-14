@@ -6,16 +6,13 @@ import android.os.Bundle
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
-import com.wolfteam20.schedulemobile.R
 import com.wolfteam20.schedulemobile.data.network.models.MateriaDetailsDTO
 import com.wolfteam20.schedulemobile.ui.adapters.MateriasListAdapter
-import com.wolfteam20.schedulemobile.ui.base.BaseFragment
-import com.wolfteam20.schedulemobile.ui.editardb.EditarDBClickListenerContract
+import com.wolfteam20.schedulemobile.ui.editardb.base.ItemBaseFragment
+import com.wolfteam20.schedulemobile.ui.editardb.base.ItemClickListenerContract
 import es.dmoral.toasty.Toasty
 import kotlinx.android.synthetic.main.editardb_fragment_common.*
 import javax.inject.Inject
@@ -23,7 +20,8 @@ import javax.inject.Inject
 /**
  * Created by Efrain Bastidas on 2/2/2018.
  */
-class MateriasFragment : BaseFragment(), MateriasViewContract, EditarDBClickListenerContract {
+class MateriasFragment : ItemBaseFragment(), MateriasViewContract,
+    ItemClickListenerContract {
 
     @Inject
     @InjectPresenter
@@ -36,14 +34,6 @@ class MateriasFragment : BaseFragment(), MateriasViewContract, EditarDBClickList
         activityComponent.inject(this)
         mPresenter.subscribe()
         return mPresenter
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.editardb_fragment_common, container, false)
     }
 
     override fun initLayout(view: View?, savedInstanceState: Bundle?) {
@@ -67,33 +57,29 @@ class MateriasFragment : BaseFragment(), MateriasViewContract, EditarDBClickList
         return true
     }
 
-    override fun showFAB() {
-        editardb_fragment_common_fab.visibility = View.VISIBLE
-    }
-
-    override fun hideFAB() {
-        editardb_fragment_common_fab.visibility = View.GONE
-    }
-
-    override fun showSwipeToRefresh() {
-        if (!editardb_fragment_common_swipe_to_refresh.isRefreshing)
-            editardb_fragment_common_swipe_to_refresh.isRefreshing = true
-    }
-
-    override fun hideSwipeToRefresh() {
-        editardb_fragment_common_swipe_to_refresh.isRefreshing = false
-    }
-
     override fun showList(materias: MutableList<MateriaDetailsDTO>) {
         mAdapter.setItems(materias)
     }
 
-    override fun startDetailsActivity(itemID: Long, itemPosition: Int) {
-        Toasty.warning(context!!, "Not implemented").show()
-    }
-
     override fun toggleItemSelection(itemPosition: Int) {
         mAdapter.toggleSelection(itemPosition)
+    }
+
+    override fun removeSelectedListItems() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun startActionMode() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+
+    override fun stopActionMode() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun showConfirmDelete() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     companion object {
