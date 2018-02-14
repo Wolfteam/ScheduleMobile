@@ -6,14 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import com.wolfteam20.schedulemobile.R
 import com.wolfteam20.schedulemobile.data.network.models.AulaDetailsDTO
-import com.wolfteam20.schedulemobile.data.network.models.DisponibilidadDTO
-import com.wolfteam20.schedulemobile.ui.editardb.EditarDBClickListenerContract
+import com.wolfteam20.schedulemobile.ui.editardb.base.ItemClickListenerContract
 import kotlinx.android.synthetic.main.aulas_fragment_list_item.view.*
 
 /**
  * Created by Efrain Bastidas on 2/3/2018.
  */
-class AulasListAdapter(clickListener: EditarDBClickListenerContract) :
+class AulasListAdapter(clickListener: ItemClickListenerContract) :
     SelectableAdapter<AulasListAdapter.AulasListViewHolder>() {
 
     private var mAulasList: MutableList<AulaDetailsDTO> = mutableListOf()
@@ -44,6 +43,15 @@ class AulasListAdapter(clickListener: EditarDBClickListenerContract) :
         }
     }
 
+    fun addItem(aula: AulaDetailsDTO) {
+        mAulasList.add(aula)
+        notifyItemInserted(mAulasList.size - 1)
+    }
+
+    fun getItem(itemPosition: Int): AulaDetailsDTO {
+        return mAulasList[itemPosition]
+    }
+
     /**
      * Obtiene una lista de disponibilidades en las posiciones indicadas
      * por [itemsPosition]
@@ -55,6 +63,11 @@ class AulasListAdapter(clickListener: EditarDBClickListenerContract) :
     fun setItems(aulas: MutableList<AulaDetailsDTO>) {
         mAulasList = aulas
         notifyDataSetChanged()
+    }
+
+    fun updateItem(position: Int, aula: AulaDetailsDTO) {
+        mAulasList[position] = aula
+        notifyItemChanged(position)
     }
 
     /**
@@ -107,7 +120,7 @@ class AulasListAdapter(clickListener: EditarDBClickListenerContract) :
         notifyItemRangeRemoved(positionStart, itemCount)
     }
 
-    inner class AulasListViewHolder(root: View, clickListener: EditarDBClickListenerContract) :
+    inner class AulasListViewHolder(root: View, clickListener: ItemClickListenerContract) :
         RecyclerView.ViewHolder(root) {
 
         private val mClickListener = clickListener

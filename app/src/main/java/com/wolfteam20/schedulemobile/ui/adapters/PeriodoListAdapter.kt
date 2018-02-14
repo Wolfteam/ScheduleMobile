@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.wolfteam20.schedulemobile.R
 import com.wolfteam20.schedulemobile.data.network.models.PeriodoAcademicoDTO
-import com.wolfteam20.schedulemobile.ui.editardb.EditarDBClickListenerContract
+import com.wolfteam20.schedulemobile.ui.editardb.base.ItemClickListenerContract
 import kotlinx.android.synthetic.main.periodo_fragment_list_item.view.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -14,7 +14,7 @@ import java.util.*
 /**
  * Created by Efrain Bastidas on 2/4/2018.
  */
-class PeriodoListAdapter(clickListener: EditarDBClickListenerContract) :
+class PeriodoListAdapter(clickListener: ItemClickListenerContract) :
     SelectableAdapter<PeriodoListAdapter.PeriodosListViewHolder>() {
 
     private var mPeriodoList: MutableList<PeriodoAcademicoDTO> = mutableListOf()
@@ -51,7 +51,7 @@ class PeriodoListAdapter(clickListener: EditarDBClickListenerContract) :
     }
 
 
-    inner class PeriodosListViewHolder(root: View, clickListener: EditarDBClickListenerContract) :
+    inner class PeriodosListViewHolder(root: View, clickListener: ItemClickListenerContract) :
         RecyclerView.ViewHolder(root) {
 
         private val mClickListener = clickListener

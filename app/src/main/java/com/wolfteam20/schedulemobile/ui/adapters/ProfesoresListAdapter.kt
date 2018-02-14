@@ -6,13 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import com.wolfteam20.schedulemobile.R
 import com.wolfteam20.schedulemobile.data.network.models.ProfesorDetailsDTO
-import com.wolfteam20.schedulemobile.ui.editardb.EditarDBClickListenerContract
+import com.wolfteam20.schedulemobile.ui.editardb.base.ItemClickListenerContract
 import kotlinx.android.synthetic.main.profesores_fragment_list_item.view.*
 
 /**
  * Created by Efrain Bastidas on 2/4/2018.
  */
-class ProfesoresListAdapter(clickListener: EditarDBClickListenerContract) :
+class ProfesoresListAdapter(clickListener: ItemClickListenerContract) :
     SelectableAdapter<ProfesoresListAdapter.ProfesoresListViewHolder>() {
 
     private var mProfesorList: MutableList<ProfesorDetailsDTO> = mutableListOf()
@@ -49,7 +49,7 @@ class ProfesoresListAdapter(clickListener: EditarDBClickListenerContract) :
     }
 
 
-    inner class ProfesoresListViewHolder(root: View, clickListener: EditarDBClickListenerContract) :
+    inner class ProfesoresListViewHolder(root: View, clickListener: ItemClickListenerContract) :
         RecyclerView.ViewHolder(root) {
 
         private val mClickListener = clickListener

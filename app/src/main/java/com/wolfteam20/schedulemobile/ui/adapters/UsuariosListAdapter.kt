@@ -6,13 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import com.wolfteam20.schedulemobile.R
 import com.wolfteam20.schedulemobile.data.network.models.UsuarioDetailsDTO
-import com.wolfteam20.schedulemobile.ui.editardb.EditarDBClickListenerContract
+import com.wolfteam20.schedulemobile.ui.editardb.base.ItemClickListenerContract
 import kotlinx.android.synthetic.main.usuarios_fragment_list_item.view.*
 
 /**
  * Created by Efrain Bastidas on 2/5/2018.
  */
-class UsuariosListAdapter(clickListener: EditarDBClickListenerContract) :
+class UsuariosListAdapter(clickListener: ItemClickListenerContract) :
     SelectableAdapter<UsuariosListAdapter.UsuariosListViewHolder>() {
 
     private var mUsuariosList: MutableList<UsuarioDetailsDTO> = mutableListOf()
@@ -55,7 +55,7 @@ class UsuariosListAdapter(clickListener: EditarDBClickListenerContract) :
     }
 
 
-    inner class UsuariosListViewHolder(root: View, clickListener: EditarDBClickListenerContract) :
+    inner class UsuariosListViewHolder(root: View, clickListener: ItemClickListenerContract) :
         RecyclerView.ViewHolder(root) {
 
         private val mClickListener = clickListener

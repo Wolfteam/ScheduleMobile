@@ -5,17 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.wolfteam20.schedulemobile.R
-import com.wolfteam20.schedulemobile.data.network.models.SeccionesDetailsDTO
-import com.wolfteam20.schedulemobile.ui.editardb.EditarDBClickListenerContract
+import com.wolfteam20.schedulemobile.data.network.models.SeccionDetailsDTO
+import com.wolfteam20.schedulemobile.ui.editardb.base.ItemClickListenerContract
 import kotlinx.android.synthetic.main.secciones_fragment_list_item.view.*
 
 /**
  * Created by Efrain Bastidas on 2/5/2018.
  */
-class SeccionesListAdapter(clickListener: EditarDBClickListenerContract) :
+class SeccionesListAdapter(clickListener: ItemClickListenerContract) :
     SelectableAdapter<SeccionesListAdapter.SeccionesListViewHolder>() {
 
-    private var mSeccionesList: MutableList<SeccionesDetailsDTO> = mutableListOf()
+    private var mSeccionList: MutableList<SeccionDetailsDTO> = mutableListOf()
     private val mClickListener = clickListener
 
     override fun onCreateViewHolder(
@@ -31,11 +31,11 @@ class SeccionesListAdapter(clickListener: EditarDBClickListenerContract) :
     }
 
     override fun getItemCount(): Int {
-        return mSeccionesList.size
+        return mSeccionList.size
     }
 
     override fun getItemId(position: Int): Long {
-        return mSeccionesList[position].materia.codigo
+        return mSeccionList[position].materia.codigo
     }
 
     override fun onBindViewHolder(
@@ -43,19 +43,19 @@ class SeccionesListAdapter(clickListener: EditarDBClickListenerContract) :
         position: Int
     ) {
         if (holder is SeccionesListAdapter.SeccionesListViewHolder) {
-            val seccion = mSeccionesList[position]
+            val seccion = mSeccionList[position]
             //val isItemSelected = isSelected(position)
             holder.bind(seccion)
         }
     }
 
-    fun setItems(secciones: MutableList<SeccionesDetailsDTO>) {
-        mSeccionesList = secciones
+    fun setItems(secciones: MutableList<SeccionDetailsDTO>) {
+        mSeccionList = secciones
         notifyDataSetChanged()
     }
 
 
-    inner class SeccionesListViewHolder(root: View, clickListener: EditarDBClickListenerContract) :
+    inner class SeccionesListViewHolder(root: View, clickListener: ItemClickListenerContract) :
         RecyclerView.ViewHolder(root) {
 
         private val mClickListener = clickListener
@@ -69,7 +69,7 @@ class SeccionesListAdapter(clickListener: EditarDBClickListenerContract) :
             }
         }
 
-        fun bind(seccion: SeccionesDetailsDTO) = with(itemView) {
+        fun bind(seccion: SeccionDetailsDTO) = with(itemView) {
             secciones_list_item_alumnos.text =
                     String.format("%s alumno(s) c/u", seccion.cantidadAlumnos)
             secciones_list_item_codigo.text = String.format("Codigo: %s", seccion.materia.codigo)

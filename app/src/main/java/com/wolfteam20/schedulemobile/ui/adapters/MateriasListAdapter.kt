@@ -6,13 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import com.wolfteam20.schedulemobile.R
 import com.wolfteam20.schedulemobile.data.network.models.MateriaDetailsDTO
-import com.wolfteam20.schedulemobile.ui.editardb.EditarDBClickListenerContract
+import com.wolfteam20.schedulemobile.ui.editardb.base.ItemClickListenerContract
 import kotlinx.android.synthetic.main.materias_fragment_list_item.view.*
 
 /**
  * Created by Efrain Bastidas on 2/3/2018.
  */
-class MateriasListAdapter(clickListener: EditarDBClickListenerContract) :
+class MateriasListAdapter(clickListener: ItemClickListenerContract) :
     SelectableAdapter<MateriasListAdapter.MateriasListViewHolder>() {
 
     private var mMateriasList: MutableList<MateriaDetailsDTO> = mutableListOf()
@@ -49,7 +49,7 @@ class MateriasListAdapter(clickListener: EditarDBClickListenerContract) :
     }
 
 
-    inner class MateriasListViewHolder(root: View, clickListener: EditarDBClickListenerContract) :
+    inner class MateriasListViewHolder(root: View, clickListener: ItemClickListenerContract) :
         RecyclerView.ViewHolder(root) {
 
         private val mClickListener = clickListener
