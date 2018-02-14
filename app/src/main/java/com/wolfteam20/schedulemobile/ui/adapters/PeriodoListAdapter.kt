@@ -1,6 +1,5 @@
 package com.wolfteam20.schedulemobile.ui.adapters
 
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,9 +14,8 @@ import java.util.*
  * Created by Efrain Bastidas on 2/4/2018.
  */
 class PeriodoListAdapter(clickListener: ItemClickListenerContract) :
-    SelectableAdapter<PeriodoListAdapter.PeriodosListViewHolder>() {
+    BaseItemListAdapter<PeriodoAcademicoDTO>() {
 
-    private var mPeriodoList: MutableList<PeriodoAcademicoDTO> = mutableListOf()
     private val mClickListener = clickListener
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PeriodosListViewHolder {
@@ -29,50 +27,21 @@ class PeriodoListAdapter(clickListener: ItemClickListenerContract) :
         return PeriodosListViewHolder(periodoView, mClickListener)
     }
 
-    override fun getItemCount(): Int {
-        return mPeriodoList.size
-    }
-
     override fun getItemId(position: Int): Long {
-        return mPeriodoList[position].idPeriodo
+        return mItemList[position].idPeriodo
     }
-
-    override fun onBindViewHolder(holder: PeriodosListViewHolder?, position: Int) {
-        if (holder is PeriodoListAdapter.PeriodosListViewHolder) {
-            val periodo = mPeriodoList[position]
-            //val isItemSelected = isSelected(position)
-            holder.bind(periodo)
-        }
-    }
-
-    fun setItems(periodos: MutableList<PeriodoAcademicoDTO>) {
-        mPeriodoList = periodos
-        notifyDataSetChanged()
-    }
-
 
     inner class PeriodosListViewHolder(root: View, clickListener: ItemClickListenerContract) :
-        RecyclerView.ViewHolder(root) {
+        ItemViewHolder(root, clickListener) {
 
-        private val mClickListener = clickListener
-
-        init {
-            root.setOnClickListener {
-                mClickListener.onItemClicked(getItemId(layoutPosition), layoutPosition)
+        override fun bind(item: PeriodoAcademicoDTO, itemPosition: Int, isItemSelected: Boolean) =
+            with(itemView) {
+                val sdf = SimpleDateFormat("yyyy/MM/dd", Locale.getDefault())
+                periodo_list_item_fecha_creacion.text =
+                        String.format("Creado: %s", sdf.format(item.fechaCreacion))
+                periodo_list_item_nombre.text = item.nombrePeriodo
+                periodo_list_item_status.text =
+                        if (item.status) "Status: Activo" else "Status: Inactivo"
             }
-            root.setOnLongClickListener {
-                return@setOnLongClickListener mClickListener.onItemLongClicked(layoutPosition)
-            }
-        }
-
-        fun bind(periodo: PeriodoAcademicoDTO) = with(itemView) {
-            val sdf = SimpleDateFormat("yyyy/MM/dd", Locale.getDefault())
-            periodo_list_item_fecha_creacion.text =
-                    String.format("Creado: %s", sdf.format(periodo.fechaCreacion))
-            periodo_list_item_nombre.text = periodo.nombrePeriodo
-            periodo_list_item_status.text =
-                    if (periodo.status) "Status: Activo" else "Status: Inactivo"
-        }
     }
-
 }

@@ -1,6 +1,5 @@
 package com.wolfteam20.schedulemobile.ui.adapters
 
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,9 +12,8 @@ import kotlinx.android.synthetic.main.materias_fragment_list_item.view.*
  * Created by Efrain Bastidas on 2/3/2018.
  */
 class MateriasListAdapter(clickListener: ItemClickListenerContract) :
-    SelectableAdapter<MateriasListAdapter.MateriasListViewHolder>() {
+    BaseItemListAdapter<MateriaDetailsDTO>() {
 
-    private var mMateriasList: MutableList<MateriaDetailsDTO> = mutableListOf()
     private val mClickListener = clickListener
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MateriasListViewHolder {
@@ -27,58 +25,30 @@ class MateriasListAdapter(clickListener: ItemClickListenerContract) :
         return MateriasListViewHolder(materiaView, mClickListener)
     }
 
-    override fun getItemCount(): Int {
-        return mMateriasList.size
-    }
-
     override fun getItemId(position: Int): Long {
-        return mMateriasList[position].codigo
+        return mItemList[position].codigo
     }
-
-    override fun onBindViewHolder(holder: MateriasListViewHolder?, position: Int) {
-        if (holder is MateriasListAdapter.MateriasListViewHolder) {
-            val materia = mMateriasList[position]
-            //val isItemSelected = isSelected(position)
-            holder.bind(materia)
-        }
-    }
-
-    fun setItems(materias: MutableList<MateriaDetailsDTO>) {
-        mMateriasList = materias
-        notifyDataSetChanged()
-    }
-
 
     inner class MateriasListViewHolder(root: View, clickListener: ItemClickListenerContract) :
-        RecyclerView.ViewHolder(root) {
+        ItemViewHolder(root, clickListener) {
 
-        private val mClickListener = clickListener
+        override fun bind(item: MateriaDetailsDTO, itemPosition: Int, isItemSelected: Boolean) =
+            with(itemView) {
+                val nombreSemestre =
+                    if (item.semestre.nombreSemestre.length > 1)
+                        item.semestre.nombreSemestre
+                    else
+                        "Semestre: ${item.semestre.nombreSemestre}"
+                val tipo =
+                    if (item.tipoMateria.nombreTipo.length > 7)
+                        "Laboratorio"
+                    else
+                        item.tipoMateria.nombreTipo
 
-        init {
-            root.setOnClickListener {
-                mClickListener.onItemClicked(getItemId(layoutPosition), layoutPosition)
+                materia_list_item_codigo.text = String.format("Codigo: %s", item.codigo)
+                materia_list_item_nombre.text = item.asignatura
+                materia_list_item_semestre.text = nombreSemestre
+                materia_list_item_tipo.text = tipo
             }
-            root.setOnLongClickListener {
-                return@setOnLongClickListener mClickListener.onItemLongClicked(layoutPosition)
-            }
-        }
-
-        fun bind(materia: MateriaDetailsDTO) = with(itemView) {
-            val nombreSemestre =
-                if (materia.semestre.nombreSemestre.length > 1)
-                    materia.semestre.nombreSemestre
-                else
-                    "Semestre: ${materia.semestre.nombreSemestre}"
-            val tipo =
-                if (materia.tipoMateria.nombreTipo.length > 7)
-                    "Laboratorio"
-                else
-                    materia.tipoMateria.nombreTipo
-
-            materia_list_item_codigo.text = String.format("Codigo: %s", materia.codigo)
-            materia_list_item_nombre.text = materia.asignatura
-            materia_list_item_semestre.text = nombreSemestre
-            materia_list_item_tipo.text = tipo
-        }
     }
 }

@@ -1,6 +1,5 @@
 package com.wolfteam20.schedulemobile.ui.adapters
 
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,9 +12,8 @@ import kotlinx.android.synthetic.main.profesores_fragment_list_item.view.*
  * Created by Efrain Bastidas on 2/4/2018.
  */
 class ProfesoresListAdapter(clickListener: ItemClickListenerContract) :
-    SelectableAdapter<ProfesoresListAdapter.ProfesoresListViewHolder>() {
+    BaseItemListAdapter<ProfesorDetailsDTO>() {
 
-    private var mProfesorList: MutableList<ProfesorDetailsDTO> = mutableListOf()
     private val mClickListener = clickListener
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProfesoresListViewHolder {
@@ -27,50 +25,22 @@ class ProfesoresListAdapter(clickListener: ItemClickListenerContract) :
         return ProfesoresListViewHolder(profesorView, mClickListener)
     }
 
-    override fun getItemCount(): Int {
-        return mProfesorList.size
-    }
-
     override fun getItemId(position: Int): Long {
-        return mProfesorList[position].cedula
+        return mItemList[position].cedula
     }
-
-    override fun onBindViewHolder(holder: ProfesoresListViewHolder?, position: Int) {
-        if (holder is ProfesoresListAdapter.ProfesoresListViewHolder) {
-            val periodo = mProfesorList[position]
-            //val isItemSelected = isSelected(position)
-            holder.bind(periodo)
-        }
-    }
-
-    fun setItems(profesores: MutableList<ProfesorDetailsDTO>) {
-        mProfesorList = profesores
-        notifyDataSetChanged()
-    }
-
 
     inner class ProfesoresListViewHolder(root: View, clickListener: ItemClickListenerContract) :
-        RecyclerView.ViewHolder(root) {
+        ItemViewHolder(root, clickListener) {
 
-        private val mClickListener = clickListener
-
-        init {
-            root.setOnClickListener {
-                mClickListener.onItemClicked(getItemId(layoutPosition), layoutPosition)
+        override fun bind(item: ProfesorDetailsDTO, itemPosition: Int, isItemSelected: Boolean) =
+            with(itemView) {
+                profesor_list_item_cedula.text = String.format("Cedula: %s", item.cedula)
+                profesor_list_item_fullname.text =
+                        String.format("%s %s", item.nombre, item.apellido)
+                profesor_list_item_horas_a_cumplir.text =
+                        String.format("Horas a cumplir: %s", item.prioridad?.horasACumplir)
+                profesor_list_item_prioridad.text =
+                        String.format("Prioridad: %s", item.prioridad?.codigoPrioridad)
             }
-            root.setOnLongClickListener {
-                return@setOnLongClickListener mClickListener.onItemLongClicked(layoutPosition)
-            }
-        }
-
-        fun bind(profesor: ProfesorDetailsDTO) = with(itemView) {
-            profesor_list_item_cedula.text = String.format("Cedula: %s", profesor.cedula)
-            profesor_list_item_fullname.text =
-                    String.format("%s %s", profesor.nombre, profesor.apellido)
-            profesor_list_item_horas_a_cumplir.text =
-                    String.format("Horas a cumplir: %s", profesor.prioridad?.horasACumplir)
-            profesor_list_item_prioridad.text =
-                    String.format("Prioridad: %s", profesor.prioridad?.codigoPrioridad)
-        }
     }
 }
