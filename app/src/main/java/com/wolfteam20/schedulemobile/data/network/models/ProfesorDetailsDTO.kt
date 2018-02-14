@@ -1,20 +1,17 @@
 package com.wolfteam20.schedulemobile.data.network.models
 
-import io.objectbox.annotation.Entity
-import io.objectbox.annotation.Id
-import io.objectbox.annotation.Transient
-import io.objectbox.relation.ToOne
+import android.annotation.SuppressLint
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
 
 /**
  * Created by Efrain.Bastidas on 1/12/2018.
  */
-@Entity
-class ProfesorDetailsDTO {
-    @Id(assignable = true)
-    var cedula: Long = 0
-    var nombre: String = "Efrain"
-    var apellido: String = "Bastidas"
-    @Transient
+@SuppressLint("ParcelCreator")
+@Parcelize
+class ProfesorDetailsDTO(
+    var cedula: Long = 0,
+    var nombre: String = "Efrain",
+    var apellido: String = "Bastidas",
     var prioridad: PrioridadProfesorDTO? = null
-    lateinit var prioridadDetails: ToOne<PrioridadProfesorDTO>
-}
+) : Parcelable

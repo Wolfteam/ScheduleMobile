@@ -10,10 +10,10 @@ import kotlinx.android.parcel.Parcelize
 
 @SuppressLint("ParcelCreator")
 @Parcelize
-class UsuarioDetailsDTO(
-    var cedula: Long = 0,
-    var username: String = "",
-    var password: String = "",
-    var profesor: ProfesorDTO,
-    var privilegios: PrivilegioDTO
+class SeccionDetailsDTO(
+    var codigo: Long = 0,
+    var numeroSecciones: Int = 0,
+    var cantidadAlumnos: Int = 0,
+    var materia: MateriaDetailsDTO,
+    var periodoAcademico: PeriodoAcademicoDTO
 ) : Parcelable

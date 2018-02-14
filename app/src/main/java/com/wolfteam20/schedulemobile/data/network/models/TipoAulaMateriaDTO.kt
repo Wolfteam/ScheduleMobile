@@ -1,14 +1,16 @@
 package com.wolfteam20.schedulemobile.data.network.models
 
-import io.objectbox.annotation.Entity
-import io.objectbox.annotation.Id
+import android.annotation.SuppressLint
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
 
 /**
  * Created by Efrain Bastidas on 2/3/2018.
  */
 
-@Entity
+@SuppressLint("ParcelCreator")
+@Parcelize
 data class TipoAulaMateriaDTO(
-    @Id(assignable = true) var idTipo: Long,
+    var idTipo: Long,
     var nombreTipo: String
-)
+) : Parcelable

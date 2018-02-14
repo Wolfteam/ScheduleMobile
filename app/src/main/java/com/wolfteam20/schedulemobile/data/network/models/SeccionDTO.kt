@@ -5,9 +5,13 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
 /**
- * Created by Efrain Bastidas on 2/3/2018.
+ * Created by Efrain.Bastidas on 12/2/2018.
  */
-
 @SuppressLint("ParcelCreator")
 @Parcelize
-data class SemestreDTO(var idSemestre: Long, var nombreSemestre: String) : Parcelable
+data class SeccionDTO(
+    val codigo: Long,
+    val numeroSecciones: Int,
+    val cantidadAlumnos: Int,
+    val idPeriodo: Int = 0
+): Parcelable
