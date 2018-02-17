@@ -14,6 +14,9 @@
     <string name="save">Guardar</string>
     <string name="yes">Si</string>
     <string name="no">No</string>
+    <string name="active">Activo</string>
+    <string name="inactive">Inactivo</string>
+    <string name="status">Estatus</string>
     <string name="add">Agregar</string>
     <string name="edit">Editar</string>
     <string name="delete">Borrar</string>
@@ -78,6 +81,19 @@
     <string name="aulas_nombre">Nombre del aula</string>
     <string name="aulas_capacidad">Capacidad del aula</string>
     <string name="aulas_tipo">Tipo de aula</string>
+    <string name="materia_codigo">Codigo</string>
+    <string name="materia_nombre">Nombre asignatura</string>
+    <string name="materia_horas_totales">Horas academicas totales</string>
+    <string name="materia_horas_semanales">Horas academicas semanales</string>
+    <string name="periodo_academico_nombre">Nombre del periodo academico</string>
+    <string name="profesor_nombre">Nombre</string>
+    <string name="profesor_apellido">Apellido</string>
+    <string name="profesor_cedula">Cedula</string>
+    <string name="seccion_numero">Numero de secciones</string>
+    <string name="seccion_alumnos">Cantidad de alumnos</string>
+    <string name="usuario_username">Username</string>
+    <string name="usuario_password">Password</string>
+
 
     <!--Permisos-->
     <string name="permisos_title">Permisos Requeridos</string>

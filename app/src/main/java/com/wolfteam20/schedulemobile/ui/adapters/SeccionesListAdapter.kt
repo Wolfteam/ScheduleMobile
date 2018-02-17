@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import com.wolfteam20.schedulemobile.R
 import com.wolfteam20.schedulemobile.data.network.models.SeccionDetailsDTO
 import com.wolfteam20.schedulemobile.ui.editardb.base.ItemClickListenerContract
-import kotlinx.android.synthetic.main.secciones_fragment_list_item.view.*
+import kotlinx.android.synthetic.main.editardb_fragment_secciones_list_item.view.*
 
 /**
  * Created by Efrain Bastidas on 2/5/2018.
@@ -23,7 +23,7 @@ class SeccionesListAdapter(clickListener: ItemClickListenerContract) :
         val context = parent.context
         val inflater = LayoutInflater.from(context)
         // Inflate the custom layout
-        val seccionView = inflater.inflate(R.layout.secciones_fragment_list_item, parent, false)
+        val seccionView = inflater.inflate(R.layout.editardb_fragment_secciones_list_item, parent, false)
         // Return a new holder instance
         return SeccionesListViewHolder(seccionView, mClickListener)
     }

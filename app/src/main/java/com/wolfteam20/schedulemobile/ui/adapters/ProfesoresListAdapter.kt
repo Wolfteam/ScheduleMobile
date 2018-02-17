@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import com.wolfteam20.schedulemobile.R
 import com.wolfteam20.schedulemobile.data.network.models.ProfesorDetailsDTO
 import com.wolfteam20.schedulemobile.ui.editardb.base.ItemClickListenerContract
-import kotlinx.android.synthetic.main.profesores_fragment_list_item.view.*
+import kotlinx.android.synthetic.main.editardb_fragment_profesores_list_item.view.*
 
 /**
  * Created by Efrain Bastidas on 2/4/2018.
@@ -20,7 +20,7 @@ class ProfesoresListAdapter(clickListener: ItemClickListenerContract) :
         val context = parent.context
         val inflater = LayoutInflater.from(context)
         // Inflate the custom layout
-        val profesorView = inflater.inflate(R.layout.profesores_fragment_list_item, parent, false)
+        val profesorView = inflater.inflate(R.layout.editardb_fragment_profesores_list_item, parent, false)
         // Return a new holder instance
         return ProfesoresListViewHolder(profesorView, mClickListener)
     }

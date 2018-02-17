@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import com.wolfteam20.schedulemobile.R
 import com.wolfteam20.schedulemobile.data.network.models.PeriodoAcademicoDTO
 import com.wolfteam20.schedulemobile.ui.editardb.base.ItemClickListenerContract
-import kotlinx.android.synthetic.main.periodo_fragment_list_item.view.*
+import kotlinx.android.synthetic.main.editardb_fragment_periodos_list_item.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -22,7 +22,7 @@ class PeriodoListAdapter(clickListener: ItemClickListenerContract) :
         val context = parent.context
         val inflater = LayoutInflater.from(context)
         // Inflate the custom layout
-        val periodoView = inflater.inflate(R.layout.periodo_fragment_list_item, parent, false)
+        val periodoView = inflater.inflate(R.layout.editardb_fragment_periodos_list_item, parent, false)
         // Return a new holder instance
         return PeriodosListViewHolder(periodoView, mClickListener)
     }

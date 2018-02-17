@@ -1,9 +1,11 @@
 package com.wolfteam20.schedulemobile.ui.adapters
 
+import android.os.Parcelable
+
 /**
  * Created by Efrain.Bastidas on 14/2/2018.
  */
-interface BaseItemListAdapterContract<TItem> {
+interface BaseItemListAdapterContract<TItem> : SelectableAdapterContract {
     /**
      * Agrega un [item] y notifica al adapter
      */

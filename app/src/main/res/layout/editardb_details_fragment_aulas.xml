@@ -13,15 +13,9 @@
             android:background="@color/md_grey_800"
             android:orientation="vertical">
 
-            <include layout="@layout/editardb_details_toolbar" />
+            <include layout="@layout/editardb_details_common_toolbar" />
 
-            <ProgressBar
-                android:id="@+id/aulas_details_progress_bar"
-                style="?android:attr/progressBarStyleHorizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:indeterminate="true"
-                android:visibility="gone" />
+            <include layout="@layout/editardb_details_common_progress_bar"/>
 
             <LinearLayout
                 android:layout_width="match_parent"

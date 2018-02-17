@@ -96,7 +96,7 @@ class DispDetailsFragment : BaseFragment(), DispDetailsViewContract,
     }
 
     private fun showAddDisponibilidadDialog() {
-        val view = layoutInflater.inflate(R.layout.disp_details_add_dialog, null)
+        val view = layoutInflater.inflate(R.layout.disponibilidad_details_add_dialog, null)
         val horaInicio = view.findViewById<NumberPicker>(R.id.disp_details_hora_inicio)
         val horaFin = view.findViewById<NumberPicker>(R.id.disp_details_hora_fin)
 
