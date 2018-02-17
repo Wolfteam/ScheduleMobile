@@ -7,10 +7,10 @@ import io.reactivex.disposables.CompositeDisposable
 /**
  * Created by Efrain.Bastidas on 13/2/2018.
  */
-abstract class ItemBasePresenter<T : ItemBaseViewContract>(
+abstract class ItemBasePresenter<TView : ItemBaseViewContract>(
     mCompositeDisposable: CompositeDisposable,
     mDataManager: DataManagerContract
-) : BasePresenter<T>(mCompositeDisposable, mDataManager),
+) : BasePresenter<TView>(mCompositeDisposable, mDataManager),
     ItemBasePresenterContract {
 
     override fun onItemLongClicked(itemPosition: Int) {
