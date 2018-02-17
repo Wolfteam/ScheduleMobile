@@ -12,6 +12,7 @@ import com.wolfteam20.schedulemobile.data.network.models.DisponibilidadDetailsDT
 import com.wolfteam20.schedulemobile.data.network.models.MateriaDTO;
 import com.wolfteam20.schedulemobile.data.network.models.MateriaDetailsDTO;
 import com.wolfteam20.schedulemobile.data.network.models.PeriodoAcademicoDTO;
+import com.wolfteam20.schedulemobile.data.network.models.PrioridadProfesorDTO;
 import com.wolfteam20.schedulemobile.data.network.models.PrivilegioDTO;
 import com.wolfteam20.schedulemobile.data.network.models.ProfesorDTO;
 import com.wolfteam20.schedulemobile.data.network.models.ProfesorDetailsDTO;
@@ -114,6 +115,11 @@ public class DataManager implements DataManagerContract {
     @Override
     public Completable updatePeriodoAcademico(long idPeriodo, @NotNull PeriodoAcademicoDTO periodo) {
         return mApiScheduleContract.updatePeriodoAcademico(idPeriodo, periodo);
+    }
+
+    @Override
+    public Single<List<PrioridadProfesorDTO>> getAllPrioridades() {
+        return mApiScheduleContract.getAllPrioridades();
     }
 
     @Override

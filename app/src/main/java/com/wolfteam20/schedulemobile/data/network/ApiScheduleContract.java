@@ -8,6 +8,7 @@ import com.wolfteam20.schedulemobile.data.network.models.DisponibilidadDetailsDT
 import com.wolfteam20.schedulemobile.data.network.models.MateriaDTO;
 import com.wolfteam20.schedulemobile.data.network.models.MateriaDetailsDTO;
 import com.wolfteam20.schedulemobile.data.network.models.PeriodoAcademicoDTO;
+import com.wolfteam20.schedulemobile.data.network.models.PrioridadProfesorDTO;
 import com.wolfteam20.schedulemobile.data.network.models.PrivilegioDTO;
 import com.wolfteam20.schedulemobile.data.network.models.ProfesorDTO;
 import com.wolfteam20.schedulemobile.data.network.models.ProfesorDetailsDTO;
@@ -131,13 +132,15 @@ public interface ApiScheduleContract {
 
     /**
      * Obtiene todas las carreras que se cursan en la uni existentes
-     * @return  Single de List<CarreraDTO>
+     *
+     * @return Single de List<CarreraDTO>
      */
     @GET("api/Carreras")
     Single<List<CarreraDTO>> getAllCarreras();
 
     /**
      * Obtiene todas las tipos de aula-materia existentes
+     *
      * @return Single de List<TipoAulaMateriaDTO>
      */
     @GET("api/TipoAulaMateria")
@@ -145,13 +148,15 @@ public interface ApiScheduleContract {
 
     /**
      * Obtiene todos los privilegios que puede tener un usuario (1 solo a la vez)
-     * @return  Single de List<PrivilegioDTO>
+     *
+     * @return Single de List<PrivilegioDTO>
      */
     @GET("api/Privilegios")
     Single<List<PrivilegioDTO>> getAllPrivilegios();
 
     /**
      * Obtiene todos los semestres a los que puede pertenecer una materia (1 solo a la vez)
+     *
      * @return Single de List<SemestreDTO>
      */
     @GET("api/Semestres")
@@ -291,6 +296,14 @@ public interface ApiScheduleContract {
      */
     @PUT("api/PeriodoCarrera/{idPeriodo}")
     Completable updatePeriodoAcademico(@Path("idPeriodo") long idPeriodo, @Body @NotNull PeriodoAcademicoDTO periodo);
+
+    /**
+     * Obtiene todas las prioridades que puede tener un profesor
+     *
+     * @return Single con una List de PrioridadProfesorDTO
+     */
+    @GET("api/Prioridades")
+    Single<List<PrioridadProfesorDTO>> getAllPrioridades();
 
     /**
      * Remueve varios profesores

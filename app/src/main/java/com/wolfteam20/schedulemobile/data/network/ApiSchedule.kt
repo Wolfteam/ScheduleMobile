@@ -17,6 +17,7 @@ import javax.inject.Inject
  */
 class ApiSchedule @Inject constructor(@ApplicationContext api: ApiScheduleContract) :
     ApiScheduleContract {
+
     private val mApi = api
 
     override fun getToken(
@@ -221,6 +222,14 @@ class ApiSchedule @Inject constructor(@ApplicationContext api: ApiScheduleContra
             .subscribeOn(Schedulers.io())
             .doOnError(Timber::e)
     }
+
+    override fun getAllPrioridades(): Single<MutableList<PrioridadProfesorDTO>> {
+        return mApi.allPrioridades
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .doOnError(Timber::e)
+    }
+
 
     override fun removeProfesores(cedulas: String): Completable {
         return mApi.removeProfesores(cedulas)
