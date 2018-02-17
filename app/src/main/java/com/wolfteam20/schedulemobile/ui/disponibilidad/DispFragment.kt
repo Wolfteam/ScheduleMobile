@@ -15,7 +15,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wolfteam20.schedulemobile.R
 import com.wolfteam20.schedulemobile.data.network.models.ProfesorDetailsDTO
-import com.wolfteam20.schedulemobile.ui.adapters.ProfesoresListSpinnerAdapter
+import com.wolfteam20.schedulemobile.ui.adapters.ProfesoresSpinnerAdapter
 import com.wolfteam20.schedulemobile.ui.base.BaseFragment
 import com.wolfteam20.schedulemobile.ui.disponibilidad.details.DispDetailsActivity
 import kotlinx.android.synthetic.main.disponibilidad_fragment.*
@@ -31,7 +31,7 @@ class DispFragment : BaseFragment(), DispViewContract, AdapterView.OnItemSelecte
     @InjectPresenter
     lateinit var mPresenter: DispPresenter
 
-    private lateinit var mAdapter: ProfesoresListSpinnerAdapter
+    private lateinit var mAdapter: ProfesoresSpinnerAdapter
     private var isActivityCreated : Boolean = true
 
     @ProvidePresenter
@@ -73,7 +73,7 @@ class DispFragment : BaseFragment(), DispViewContract, AdapterView.OnItemSelecte
             it.setDisplayShowHomeEnabled(true)
             it.title = resources.getString(R.string.disp_activity)
         }
-        mAdapter = ProfesoresListSpinnerAdapter(baseDrawerActivity, R.layout.disponibilidad_spinner_prof_row)
+        mAdapter = ProfesoresSpinnerAdapter(baseDrawerActivity, R.layout.disponibilidad_spinner_prof_row)
         disp_prof_dropdown.adapter = mAdapter
         disp_prof_dropdown.onItemSelectedListener = this
     }
