@@ -5,14 +5,13 @@ import android.view.Menu
 import android.view.MenuItem
 import com.wolfteam20.schedulemobile.R
 import com.wolfteam20.schedulemobile.ui.adapters.SelectableAdapterContract
-import com.wolfteam20.schedulemobile.ui.editardb.base.ItemBasePresenter
-import com.wolfteam20.schedulemobile.ui.editardb.base.ItemBaseViewContract
+import com.wolfteam20.schedulemobile.ui.editardb.base.ItemBasePresenterContract
 
 /**
  * Created by Efrain.Bastidas on 13/2/2018.
  */
-class ActionModeCallback<T : ItemBaseViewContract>(
-    presenter: ItemBasePresenter<T>,
+class ActionModeCallback(
+    presenter: ItemBasePresenterContract,
     adapter: SelectableAdapterContract
 ) :
     ActionMode.Callback {

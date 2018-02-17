@@ -19,6 +19,8 @@ class AulasPresenter @Inject constructor(
 ) : ItemBasePresenter<AulasViewContract>(mCompositeDisposable, mDataManager),
     AulasPresenterContract {
 
+    private val detailsFragment = 1
+
     override fun subscribe() {
         if (!isNetworkAvailable) {
             viewState.onError(R.string.no_network)
@@ -39,11 +41,11 @@ class AulasPresenter @Inject constructor(
     }
 
     override fun onItemClicked(itemID: Long, itemPosition: Int, item: AulaDetailsDTO) {
-        viewState.startDetailsActivity(1,itemID, itemPosition, item)
+        viewState.startDetailsActivity(detailsFragment, itemID, itemPosition, item)
     }
 
     override fun onFABAddClicked() {
-        viewState.startDetailsActivity(1)
+        viewState.startDetailsActivity(detailsFragment)
     }
 
     override fun deleteItems(aulas: MutableList<AulaDetailsDTO>) {

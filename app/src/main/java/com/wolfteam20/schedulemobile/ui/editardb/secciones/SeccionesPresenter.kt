@@ -3,7 +3,9 @@ package com.wolfteam20.schedulemobile.ui.editardb.secciones
 import com.arellomobile.mvp.InjectViewState
 import com.wolfteam20.schedulemobile.R
 import com.wolfteam20.schedulemobile.data.DataManagerContract
+import com.wolfteam20.schedulemobile.data.network.models.SeccionDetailsDTO
 import com.wolfteam20.schedulemobile.ui.base.BasePresenter
+import com.wolfteam20.schedulemobile.ui.editardb.base.ItemBasePresenter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -18,8 +20,10 @@ import javax.inject.Inject
 class SeccionesPresenter @Inject constructor(
     mCompositeDisposable: CompositeDisposable,
     mDataManager: DataManagerContract
-) : BasePresenter<SeccionesViewContract>(mCompositeDisposable, mDataManager),
+) : ItemBasePresenter<SeccionesViewContract>(mCompositeDisposable, mDataManager),
     SeccionesPresenterContract {
+
+    private val detailsFragment = 6
 
     override fun subscribe() {
         if (!isNetworkAvailable) {
@@ -27,21 +31,55 @@ class SeccionesPresenter @Inject constructor(
             return
         }
         viewState.showSwipeToRefresh()
-        compositeDisposable.add(
-            dataManager.allSecciones
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(
-                    { secciones ->
-                        viewState.showList(secciones)
-                        viewState.hideSwipeToRefresh()
-                        viewState.showFAB()
-                    },
-                    { error ->
-                        viewState.hideSwipeToRefresh()
-                        viewState.onError(error.localizedMessage)
-                        Timber.e(error)
-                    })
+        compositeDisposable.add(dataManager.allSecciones
+            .subscribe(
+                { secciones ->
+                    secciones.sortBy { it.materia.codigo }
+                    viewState.showList(secciones)
+                    viewState.hideSwipeToRefresh()
+                    viewState.showFAB()
+                },
+                { error -> onError(error) }
+            )
         )
+    }
+
+    override fun onFABAddClicked() {
+        viewState.startDetailsActivity(detailsFragment)
+    }
+
+    override fun onItemClicked(itemID: Long, itemPosition: Int, item: SeccionDetailsDTO) {
+        viewState.startDetailsActivity(detailsFragment, itemID, itemPosition, item)
+    }
+
+    override fun deleteItems(items: MutableList<SeccionDetailsDTO>) {
+        if (!isNetworkAvailable) {
+            viewState.onError(R.string.no_network)
+            return
+        }
+
+        val codigos = items.joinToString(
+            ",",
+            transform = { return@joinToString it.codigo.toString() }
+        )
+        viewState.showSwipeToRefresh()
+        compositeDisposable.add(dataManager.removeSecciones(codigos)
+            .subscribe(
+                {
+                    viewState.hideSwipeToRefresh()
+                    viewState.removeSelectedListItems()
+                    viewState.stopActionMode()
+                },
+                { error -> onError(error) }
+            )
+        )
+    }
+
+    override fun onItemAdded(item: SeccionDetailsDTO) {
+        viewState.addItem(item)
+    }
+
+    override fun onItemUpdated(item: SeccionDetailsDTO, itemPosition: Int) {
+        viewState.updateItem(itemPosition, item)
     }
 }

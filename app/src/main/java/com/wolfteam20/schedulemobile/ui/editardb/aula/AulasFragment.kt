@@ -1,14 +1,10 @@
 package com.wolfteam20.schedulemobile.ui.editardb.aula
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
-import android.support.v7.widget.DefaultItemAnimator
-import android.support.v7.widget.DividerItemDecoration
-import android.support.v7.widget.LinearLayoutManager
-import android.view.*
+import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wolfteam20.schedulemobile.R
@@ -23,20 +19,11 @@ import javax.inject.Inject
 /**
  * Created by Efrain Bastidas on 2/2/2018.
  */
-private const val EDITARDB_DETAILS_REQUEST_CODE = 100
-private const val DELETE_OPERATION = 0
-private const val CANCEL_OPERATION = 1
-private const val ADD_OPERATION = 2
-private const val UPDATE_OPERATION = 3
 
-class AulasFragment : ItemBaseFragment(), AulasViewContract,
-    ItemClickListenerContract {
+class AulasFragment : ItemBaseFragment<AulaDetailsDTO>(), AulasViewContract, ItemClickListenerContract {
     @Inject
     @InjectPresenter
     lateinit var mPresenter: AulasPresenter
-
-    private val mAdapter = AulasListAdapter(this)
-    private lateinit var mActionModeCallback: ActionModeCallback<AulasViewContract>
 
     @ProvidePresenter
     fun provideHomePresenter(): AulasPresenter {
@@ -46,22 +33,17 @@ class AulasFragment : ItemBaseFragment(), AulasViewContract,
     }
 
     override fun initLayout(view: View?, savedInstanceState: Bundle?) {
+        super.initLayout(view, savedInstanceState)
         editardb_fragment_common_fab.addOnMenuItemClickListener { _, _, itemId ->
             when (itemId) {
                 R.id.editardb_fab_add -> mPresenter.onFABAddClicked()
                 else -> mPresenter.onFABDeleteClicked(mAdapter.getSelectedItemCount())
             }
         }
-        val llm = LinearLayoutManager(context)
-        editardb_fragment_common_recycler_view.layoutManager = llm
-        editardb_fragment_common_recycler_view.addItemDecoration(
-            DividerItemDecoration(
-                editardb_fragment_common_recycler_view.context,
-                llm.orientation
-            )
-        )
-        editardb_fragment_common_recycler_view.itemAnimator = DefaultItemAnimator()
-        editardb_fragment_common_recycler_view.adapter = mAdapter
+
+        mAdapter = AulasListAdapter(this)
+        editardb_fragment_common_recycler_view.adapter = mAdapter as AulasListAdapter
+
         editardb_fragment_common_swipe_to_refresh.setOnRefreshListener { mPresenter.subscribe() }
 
         mActionModeCallback = ActionModeCallback(mPresenter, mAdapter)
@@ -86,35 +68,9 @@ class AulasFragment : ItemBaseFragment(), AulasViewContract,
         }
     }
 
-    override fun showList(aulas: MutableList<AulaDetailsDTO>) {
-        mAdapter.setItems(aulas)
-    }
-
-    override fun addItem(aula: AulaDetailsDTO) {
-        mAdapter.addItem(aula)
-    }
-
-    override fun updateItem(position: Int, aula: AulaDetailsDTO) {
-        mAdapter.updateItem(position, aula)
-    }
-
-    override fun removeSelectedListItems() {
-        mAdapter.removeItems(mAdapter.getSelectedItems())
-    }
-
     override fun toggleItemSelection(itemPosition: Int) {
         mAdapter.toggleSelection(itemPosition)
         mPresenter.onToggleItemSelection(mAdapter.getSelectedItemCount())
-    }
-
-    override fun startActionMode() {
-        mActionMode = baseDrawerActivity.startSupportActionMode(mActionModeCallback)
-    }
-
-    override fun stopActionMode() {
-        mAdapter.clearSelection()
-        mActionMode?.finish()
-        mActionMode = null
     }
 
     override fun showConfirmDelete() {
@@ -141,11 +97,5 @@ class AulasFragment : ItemBaseFragment(), AulasViewContract,
         }
         mPresenter.onItemLongClicked(itemPosition)
         return true
-    }
-
-    companion object {
-        fun getIntent(context: Context): Intent {
-            return Intent(context, AulasFragment::class.java)
-        }
     }
 }

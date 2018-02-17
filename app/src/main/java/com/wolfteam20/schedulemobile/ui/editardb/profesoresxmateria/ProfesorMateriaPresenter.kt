@@ -3,7 +3,9 @@ package com.wolfteam20.schedulemobile.ui.editardb.profesoresxmateria
 import com.arellomobile.mvp.InjectViewState
 import com.wolfteam20.schedulemobile.R
 import com.wolfteam20.schedulemobile.data.DataManagerContract
+import com.wolfteam20.schedulemobile.data.network.models.ProfesorMateriaDetailsDTO
 import com.wolfteam20.schedulemobile.ui.base.BasePresenter
+import com.wolfteam20.schedulemobile.ui.editardb.base.ItemBasePresenter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -18,9 +20,10 @@ import javax.inject.Inject
 class ProfesorMateriaPresenter @Inject constructor(
     mCompositeDisposable: CompositeDisposable,
     mDataManager: DataManagerContract
-) : BasePresenter<ProfesorMateriaViewContract>(mCompositeDisposable, mDataManager),
+) : ItemBasePresenter<ProfesorMateriaViewContract>(mCompositeDisposable, mDataManager),
     ProfesorMateriaPresenterContract {
 
+    private val detailsFragment = 5
 
     override fun subscribe() {
         if (!isNetworkAvailable) {
@@ -28,21 +31,56 @@ class ProfesorMateriaPresenter @Inject constructor(
             return
         }
         viewState.showSwipeToRefresh()
-        compositeDisposable.add(
-            dataManager.allProfesorMateria
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(
-                    { pm ->
-                        viewState.showList(pm)
-                        viewState.hideSwipeToRefresh()
-                        viewState.showFAB()
-                    },
-                    { error ->
-                        viewState.hideSwipeToRefresh()
-                        viewState.onError(error.localizedMessage)
-                        Timber.e(error)
-                    })
+        compositeDisposable.add(dataManager.allProfesorMateria
+            .subscribe(
+                { pm ->
+                    pm.sortBy { it.profesor.nombre }
+                    viewState.showList(pm)
+                    viewState.hideSwipeToRefresh()
+                    viewState.showFAB()
+                },
+                { error -> onError(error) }
+            )
         )
     }
+
+    override fun onFABAddClicked() {
+        viewState.startDetailsActivity(detailsFragment)
+    }
+
+    override fun onItemClicked(itemID: Long, itemPosition: Int, item: ProfesorMateriaDetailsDTO) {
+        viewState.startDetailsActivity(detailsFragment, itemID, itemPosition, item)
+    }
+
+    override fun deleteItems(items: MutableList<ProfesorMateriaDetailsDTO>) {
+        if (!isNetworkAvailable) {
+            viewState.onError(R.string.no_network)
+            return
+        }
+
+        val ids = items.joinToString(
+            ",",
+            transform = { return@joinToString it.id.toString() }
+        )
+        viewState.showSwipeToRefresh()
+        compositeDisposable.add(dataManager.removeProfesorMateria(ids)
+            .subscribe(
+                {
+                    viewState.hideSwipeToRefresh()
+                    viewState.removeSelectedListItems()
+                    viewState.stopActionMode()
+                },
+                { error -> onError(error) }
+            )
+        )
+    }
+
+    override fun onItemAdded() {
+        subscribe()
+    }
+
+    override fun onItemUpdated(item: ProfesorMateriaDetailsDTO, itemPosition: Int) {
+       viewState.updateItem(itemPosition, item)
+    }
+
 }
