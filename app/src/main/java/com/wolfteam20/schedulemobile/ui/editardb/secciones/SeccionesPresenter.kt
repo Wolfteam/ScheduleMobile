@@ -77,9 +77,16 @@ class SeccionesPresenter @Inject constructor(
 
     override fun onItemAdded(item: SeccionDetailsDTO) {
         viewState.addItem(item)
+        viewState.showSuccessMessage(R.string.seccion_created)
     }
 
     override fun onItemUpdated(item: SeccionDetailsDTO, itemPosition: Int) {
         viewState.updateItem(itemPosition, item)
+        viewState.showSuccessMessage(R.string.seccion_updated)
+    }
+
+    override fun onItemRemoved(position: Int) {
+        viewState.removeItem(position)
+        viewState.showSuccessMessage(R.string.seccion_deleted)
     }
 }

@@ -19,6 +19,8 @@ class MateriasPresenter @Inject constructor(
 ) : ItemBasePresenter<MateriasViewContract>(mCompositeDisposable, mDataManager),
     MateriasPresenterContract {
 
+    private val detailsFragment = 2
+
     override fun subscribe() {
         if (!isNetworkAvailable) {
             viewState.onError(R.string.no_network)
@@ -40,11 +42,11 @@ class MateriasPresenter @Inject constructor(
     }
 
     override fun onFABAddClicked() {
-        viewState.startDetailsActivity(2)
+        viewState.startDetailsActivity(detailsFragment)
     }
 
     override fun onItemClicked(itemID: Long, itemPosition: Int, item: MateriaDetailsDTO) {
-        viewState.startDetailsActivity(2, itemID, itemPosition, item)
+        viewState.startDetailsActivity(detailsFragment, itemID, itemPosition, item)
     }
 
     override fun deleteItems(materias: MutableList<MateriaDetailsDTO>) {
@@ -72,9 +74,17 @@ class MateriasPresenter @Inject constructor(
 
     override fun onItemAdded(item: MateriaDetailsDTO) {
         viewState.addItem(item)
+        viewState.showSuccessMessage(R.string.materia_created)
     }
 
     override fun onItemUpdated(item: MateriaDetailsDTO, itemPosition: Int) {
         viewState.updateItem(itemPosition, item)
+        viewState.showSuccessMessage(R.string.materia_updated)
     }
+
+    override fun onItemRemoved(position: Int) {
+        viewState.removeItem(position)
+        viewState.showSuccessMessage(R.string.materia_deleted)
+    }
+
 }

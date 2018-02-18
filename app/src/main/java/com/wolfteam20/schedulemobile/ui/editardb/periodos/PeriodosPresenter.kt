@@ -77,9 +77,16 @@ class PeriodosPresenter @Inject constructor(
 
     override fun onItemAdded() {
         subscribe()
+        viewState.showSuccessMessage(R.string.periodo_academico_created)
     }
 
     override fun onItemUpdated(item: PeriodoAcademicoDTO, itemPosition: Int) {
         viewState.updateItem(itemPosition, item)
+        viewState.showSuccessMessage(R.string.periodo_academico_updated)
+    }
+
+    override fun onItemRemoved(position: Int) {
+        viewState.removeItem(position)
+        viewState.showSuccessMessage(R.string.periodo_academico_deleted)
     }
 }

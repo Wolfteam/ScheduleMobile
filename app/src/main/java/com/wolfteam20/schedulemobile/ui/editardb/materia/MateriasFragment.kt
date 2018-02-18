@@ -9,7 +9,6 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wolfteam20.schedulemobile.R
 import com.wolfteam20.schedulemobile.data.network.models.MateriaDetailsDTO
-import com.wolfteam20.schedulemobile.ui.adapters.AulasListAdapter
 import com.wolfteam20.schedulemobile.ui.adapters.MateriasListAdapter
 import com.wolfteam20.schedulemobile.ui.editardb.ActionModeCallback
 import com.wolfteam20.schedulemobile.ui.editardb.base.ItemBaseFragment
@@ -20,7 +19,8 @@ import javax.inject.Inject
 /**
  * Created by Efrain Bastidas on 2/2/2018.
  */
-class MateriasFragment : ItemBaseFragment<MateriaDetailsDTO>(), MateriasViewContract, ItemClickListenerContract {
+class MateriasFragment : ItemBaseFragment<MateriaDetailsDTO>(), MateriasViewContract,
+    ItemClickListenerContract {
 
     @Inject
     @InjectPresenter
@@ -57,9 +57,7 @@ class MateriasFragment : ItemBaseFragment<MateriaDetailsDTO>(), MateriasViewCont
                 val position = data?.getIntExtra("POSITION", 0)
                 val item = data?.getParcelableExtra<MateriaDetailsDTO>("ITEM")
                 when (operation) {
-                    DELETE_OPERATION -> {
-                        mAdapter.removeItem(position!!)
-                    }
+                    DELETE_OPERATION -> mPresenter.onItemRemoved(position!!)
                     CANCEL_OPERATION -> {
                     }
                     UPDATE_OPERATION -> mPresenter.onItemUpdated(item!!, position!!)

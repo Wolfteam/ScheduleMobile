@@ -77,9 +77,16 @@ class ProfesoresPresenter @Inject constructor(
 
     override fun onItemAdded(item: ProfesorDetailsDTO) {
         viewState.addItem(item)
+        viewState.showSuccessMessage(R.string.profesor_created)
     }
 
     override fun onItemUpdated(item: ProfesorDetailsDTO, itemPosition: Int) {
         viewState.updateItem(itemPosition, item)
+        viewState.showSuccessMessage(R.string.profesor_updated)
+    }
+
+    override fun onItemRemoved(position: Int) {
+        viewState.removeItem(position)
+        viewState.showSuccessMessage(R.string.profesor_deleted)
     }
 }

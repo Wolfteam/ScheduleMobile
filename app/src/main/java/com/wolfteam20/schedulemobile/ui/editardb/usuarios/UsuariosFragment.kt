@@ -63,9 +63,7 @@ class UsuariosFragment : ItemBaseFragment<UsuarioDetailsDTO>(), UsuariosViewCont
                 val position = data?.getIntExtra("POSITION", 0)
                 val item = data?.getParcelableExtra<UsuarioDetailsDTO>("ITEM")
                 when (operation) {
-                    DELETE_OPERATION -> {
-                        mAdapter.removeItem(position!!)
-                    }
+                    DELETE_OPERATION -> mPresenter.onItemRemoved(position!!)
                     CANCEL_OPERATION -> {
                     }
                     UPDATE_OPERATION -> mPresenter.onItemUpdated(item!!, position!!)

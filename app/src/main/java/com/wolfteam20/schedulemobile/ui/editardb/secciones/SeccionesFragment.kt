@@ -4,21 +4,15 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
-import android.support.v7.widget.DefaultItemAnimator
-import android.support.v7.widget.DividerItemDecoration
-import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wolfteam20.schedulemobile.R
-import com.wolfteam20.schedulemobile.data.network.models.ProfesorDetailsDTO
 import com.wolfteam20.schedulemobile.data.network.models.SeccionDetailsDTO
-import com.wolfteam20.schedulemobile.ui.adapters.ProfesoresMateriasListAdapter
 import com.wolfteam20.schedulemobile.ui.adapters.SeccionesListAdapter
 import com.wolfteam20.schedulemobile.ui.editardb.ActionModeCallback
 import com.wolfteam20.schedulemobile.ui.editardb.base.ItemBaseFragment
 import com.wolfteam20.schedulemobile.ui.editardb.base.ItemClickListenerContract
-import es.dmoral.toasty.Toasty
 import kotlinx.android.synthetic.main.editardb_fragment_common.*
 import javax.inject.Inject
 
@@ -63,9 +57,7 @@ class SeccionesFragment : ItemBaseFragment<SeccionDetailsDTO>(), SeccionesViewCo
                 val position = data?.getIntExtra("POSITION", 0)
                 val item = data?.getParcelableExtra<SeccionDetailsDTO>("ITEM")
                 when (operation) {
-                    DELETE_OPERATION -> {
-                        mAdapter.removeItem(position!!)
-                    }
+                    DELETE_OPERATION -> mPresenter.onItemRemoved(position!!)
                     CANCEL_OPERATION -> {
                     }
                     UPDATE_OPERATION -> mPresenter.onItemUpdated(item!!, position!!)
