@@ -35,6 +35,34 @@
     <string name="disp_details_no_records_found">No se encontraron registros</string>
     <string name="disp_details_add_msg">Las horas seleccionadas ya existen o no son validas. Debe haber minimo 2 horas seguidas</string>
     <string name="disp_details_delete">Debe seleccionar al menos una disponibilidad para borrar</string>
+    <string name="aula_created">Aula creada correctamente</string>
+    <string name="aula_deleted">Aula borrada correctamente</string>
+    <string name="aula_updated">Aula actualizada correctamente</string>
+
+    <string name="materia_created">Materia creada correctamente</string>
+    <string name="materia_deleted">Materia borrada correctamente</string>
+    <string name="materia_updated">Materia actualizada correctamente</string>
+
+    <string name="periodo_academico_created">Periodo creado correctamente</string>
+    <string name="periodo_academico_deleted">Periodo borrado correctamente</string>
+    <string name="periodo_academico_updated">Periodo actualizado correctamente</string>
+
+    <string name="profesor_created">Profesor creado correctamente</string>
+    <string name="profesor_deleted">Profesor borrado correctamente</string>
+    <string name="profesor_updated">Profesor actualizado correctamente</string>
+
+    <string name="relacion_created">Relacion creada correctamente</string>
+    <string name="relacion_deleted">Relacion borrada correctamente</string>
+    <string name="relacion_updated">Relacion actualizada correctamente</string>
+
+    <string name="seccion_created">Seccion creada correctamente</string>
+    <string name="seccion_deleted">Seccion borrada correctamente</string>
+    <string name="seccion_updated">Seccion actualizada correctamente</string>
+
+    <string name="usuario_created">Usuario creado correctamente</string>
+    <string name="usuario_deleted">Usuario borrado correctamente</string>
+    <string name="usuario_updated">Usuario actualizado correctamente</string>
+
 
     <!--Main Drawer Options-->
     <string name="drawer_menu_home">Home</string>
