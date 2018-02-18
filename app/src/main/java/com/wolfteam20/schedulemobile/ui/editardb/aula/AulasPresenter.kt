@@ -73,10 +73,16 @@ class AulasPresenter @Inject constructor(
 
     override fun onItemAdded(itemID: Long) {
         subscribe()
+        viewState.showSuccessMessage(R.string.aula_created)
     }
 
     override fun onItemUpdated(item: AulaDetailsDTO, itemPosition: Int) {
         viewState.updateItem(itemPosition, item)
+        viewState.showSuccessMessage(R.string.aula_updated)
     }
 
+    override fun onItemRemoved(position: Int) {
+        viewState.removeItem(position)
+        viewState.showSuccessMessage(R.string.aula_deleted)
+    }
 }

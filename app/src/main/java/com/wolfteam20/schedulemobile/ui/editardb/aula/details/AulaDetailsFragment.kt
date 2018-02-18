@@ -3,37 +3,37 @@ package com.wolfteam20.schedulemobile.ui.editardb.aula.details
 import android.databinding.DataBindingUtil
 import android.databinding.ViewDataBinding
 import android.os.Bundle
-import android.os.Parcelable
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
-import android.view.*
+import android.view.LayoutInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import br.com.ilhasoft.support.validation.Validator
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wolfteam20.schedulemobile.R
 import com.wolfteam20.schedulemobile.data.network.models.AulaDetailsDTO
 import com.wolfteam20.schedulemobile.data.network.models.TipoAulaMateriaDTO
-import com.wolfteam20.schedulemobile.ui.adapters.TipoAulaMateriaListSpinnerAdapter
-import com.wolfteam20.schedulemobile.ui.base.BaseActivity
-import com.wolfteam20.schedulemobile.ui.base.BaseFragment
-import kotlinx.android.synthetic.main.aulas_details_fragment.*
-import kotlinx.android.synthetic.main.editardb_details_toolbar.*
+import com.wolfteam20.schedulemobile.ui.adapters.TipoAulaMateriaSpinnerAdapter
+import com.wolfteam20.schedulemobile.ui.editardb.base.ItemDetailsBaseFragment
+import kotlinx.android.synthetic.main.editardb_details_common_toolbar.*
+import kotlinx.android.synthetic.main.editardb_details_fragment_aulas.*
 import javax.inject.Inject
 
 
 /**
  * Created by Efrain.Bastidas on 10/2/2018.
  */
-class AulasDetailsFragment : BaseFragment(),
-    AulasDetailsViewContract {
+class AulaDetailsFragment : ItemDetailsBaseFragment(), AulaDetailsViewContract {
     @Inject
     @InjectPresenter
-    lateinit var mPresenter: AulasDetailsPresenter
+    lateinit var mPresenter: AulaDetailsPresenter
     private lateinit var mValidator: Validator
-    private lateinit var mAdapter: TipoAulaMateriaListSpinnerAdapter
+    private lateinit var mAdapter: TipoAulaMateriaSpinnerAdapter
 
     @ProvidePresenter
-    fun provideHomePresenter(): AulasDetailsPresenter {
+    fun provideAulaDetailsPresenter(): AulaDetailsPresenter {
         activityComponent.inject(this)
         return mPresenter
     }
@@ -43,7 +43,7 @@ class AulasDetailsFragment : BaseFragment(),
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.aulas_details_fragment, container, false)
+        val view = inflater.inflate(R.layout.editardb_details_fragment_aulas, container, false)
         val binding = DataBindingUtil.bind<ViewDataBinding>(view)
         mValidator = Validator(binding)
         binding.root.setOnClickListener {
@@ -73,9 +73,9 @@ class AulasDetailsFragment : BaseFragment(),
         appCompatActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         appCompatActivity.supportActionBar?.setDisplayShowHomeEnabled(true)
 
-        mAdapter = TipoAulaMateriaListSpinnerAdapter(
+        mAdapter = TipoAulaMateriaSpinnerAdapter(
             baseActivity,
-            R.layout.editardb_details_spinner_common
+            R.layout.editardb_details_common_spinner_layout
         )
         aula_details_tipo_dropdown.adapter = mAdapter
 
@@ -89,16 +89,6 @@ class AulasDetailsFragment : BaseFragment(),
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        val id = baseActivity.intent.extras.getLong("ID", 0)
-        //Add mode
-        if (id == 0L)
-            inflater?.inflate(R.menu.editardb_details_add_menu, menu)
-        //Edit mode
-        else
-            inflater?.inflate(R.menu.editardb_details_edit_menu, menu)
-    }
-
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.editardb_details_edit_delete -> mPresenter.onDeleteClicked()
@@ -109,14 +99,6 @@ class AulasDetailsFragment : BaseFragment(),
             else -> mPresenter.onCancelClicked()
         }
         return true
-    }
-
-    override fun showLoading() {
-        aulas_details_progress_bar.visibility = View.VISIBLE
-    }
-
-    override fun hideLoading() {
-        aulas_details_progress_bar.visibility = View.GONE
     }
 
     override fun enableAllViews(enabled: Boolean) {
@@ -140,19 +122,11 @@ class AulasDetailsFragment : BaseFragment(),
         val dialog: AlertDialog = AlertDialog.Builder(baseActivity)
             .setTitle(resources.getString(R.string.are_you_sure))
             .setPositiveButton(getString(R.string.yes), { _, _ ->
-                mPresenter.deleteAula()
+                mPresenter.delete()
             })
             .setNegativeButton(getString(R.string.cancelar), null)
             .create()
         dialog.show()
-    }
-
-    override fun finishActivity(operation: Int, position: Int, item: Parcelable?) {
-        baseActivity.intent.putExtra("OPERATION", operation)
-        baseActivity.intent.putExtra("POSITION", position)
-        baseActivity.intent.putExtra("ITEM", item)
-        baseActivity.setResult(BaseActivity.RESULT_OK, baseActivity.intent)
-        baseActivity.onBackPressed()
     }
 
     override fun prepareData(isInEditMode: Boolean) {
@@ -163,8 +137,8 @@ class AulasDetailsFragment : BaseFragment(),
             mAdapter.getItem(aula_details_tipo_dropdown.selectedItemId)
         )
         if (isInEditMode)
-            mPresenter.updateAula(aula)
+            mPresenter.update(aula)
         else
-            mPresenter.addAula(aula)
+            mPresenter.add(aula)
     }
 }

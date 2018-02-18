@@ -5,30 +5,27 @@ import com.wolfteam20.schedulemobile.R
 import com.wolfteam20.schedulemobile.data.DataManagerContract
 import com.wolfteam20.schedulemobile.data.network.models.AulaDTO
 import com.wolfteam20.schedulemobile.data.network.models.AulaDetailsDTO
-import com.wolfteam20.schedulemobile.ui.base.BasePresenter
+import com.wolfteam20.schedulemobile.ui.editardb.base.ItemDetailsBasePresenter
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
 /**
  * Created by Efrain.Bastidas on 10/2/2018.
  */
-private const val DELETE_OPERATION = 0
-private const val CANCEL_OPERATION = 1
-private const val ADD_OPERATION = 2
-private const val UPDATE_OPERATION = 3
 
 @InjectViewState
-class AulasDetailsPresenter @Inject constructor(
+class AulaDetailsPresenter @Inject constructor(
     mCompositeDisposable: CompositeDisposable,
     mDataManager: DataManagerContract
-) : BasePresenter<AulasDetailsViewContract>(mCompositeDisposable, mDataManager),
-    AulasDetailsPresenterContract {
-
-    private var mIDAula: Long = 0
-    private var mAulaPosition: Int = 0
-    private var isInEditMode = true
+) : ItemDetailsBasePresenter<AulaDetailsViewContract>(mCompositeDisposable, mDataManager),
+    AulaDetailsPresenterContract {
 
     override fun subscribe(idAula: Long, position: Int, model: AulaDetailsDTO?) {
+        if (!isNetworkAvailable) {
+            viewState.onError(R.string.no_network)
+            return
+        }
+
         viewState.enableAllViews(false)
         viewState.showLoading()
 
@@ -47,37 +44,22 @@ class AulasDetailsPresenter @Inject constructor(
             return
         }
 
-        mIDAula = model?.idAula!!
-        mAulaPosition = position
-
+        mItemID = model?.idAula!!
+        mItemPosition = position
         compositeDisposable.add(dataManager.allTipoAulaMateria
             .subscribe(
                 { tipos ->
                     viewState.enableAllViews(true)
                     viewState.setTipoAulaSpinnerItems(tipos)
                     viewState.hideLoading()
-                    model.let {
-                        viewState.showItem(it)
-                    }
+                    viewState.showItem(model)
                 },
                 { error -> onError(error) }
             )
         )
     }
 
-    override fun onCancelClicked() {
-        viewState.finishActivity(CANCEL_OPERATION)
-    }
-
-    override fun onDeleteClicked() {
-        viewState.showConfirmDeleteDialog()
-    }
-
-    override fun onSaveClicked() {
-        viewState.prepareData(isInEditMode)
-    }
-
-    override fun deleteAula() {
+    override fun delete() {
         viewState.hideKeyboard()
         if (!isNetworkAvailable) {
             viewState.onError(R.string.no_network)
@@ -85,15 +67,15 @@ class AulasDetailsPresenter @Inject constructor(
         }
 
         viewState.showLoading()
-        compositeDisposable.add(dataManager.removeAula(mIDAula)
+        compositeDisposable.add(dataManager.removeAula(mItemID)
             .subscribe(
-                { viewState.finishActivity(DELETE_OPERATION, mAulaPosition) },
+                { viewState.finishActivity(DELETE_OPERATION, mItemPosition) },
                 { error -> onError(error) }
             )
         )
     }
 
-    override fun addAula(aula: AulaDetailsDTO) {
+    override fun add(aula: AulaDetailsDTO) {
         viewState.hideKeyboard()
         if (!isNetworkAvailable) {
             viewState.onError(R.string.no_network)
@@ -111,27 +93,22 @@ class AulasDetailsPresenter @Inject constructor(
         )
     }
 
-    override fun updateAula(aula: AulaDetailsDTO) {
+    override fun update(aula: AulaDetailsDTO) {
         viewState.hideKeyboard()
         if (!isNetworkAvailable) {
             viewState.onError(R.string.no_network)
             return
         }
 
-        aula.idAula = mIDAula
-        val dto = AulaDTO(mIDAula, aula.nombreAula, aula.capacidad, aula.tipoAula.idTipo)
+        aula.idAula = mItemID
+        val dto = AulaDTO(mItemID, aula.nombreAula, aula.capacidad, aula.tipoAula.idTipo)
 
         viewState.showLoading()
-        compositeDisposable.add(dataManager.updateAula(mIDAula, dto)
+        compositeDisposable.add(dataManager.updateAula(mItemID, dto)
             .subscribe(
-                { viewState.finishActivity(UPDATE_OPERATION, mAulaPosition, aula) },
+                { viewState.finishActivity(UPDATE_OPERATION, mItemPosition, aula) },
                 { error -> onError(error) }
             )
         )
-    }
-
-    private fun onError(error: Throwable) {
-        viewState.hideLoading()
-        viewState.onError(error.localizedMessage)
     }
 }

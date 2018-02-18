@@ -10,8 +10,7 @@ import com.wolfteam20.schedulemobile.ui.editardb.base.ItemDetailsBaseViewContrac
  * Created by Efrain.Bastidas on 10/2/2018.
  */
 @StateStrategyType(AddToEndSingleStrategy::class)
-interface AulasDetailsViewContract :
-    ItemDetailsBaseViewContract {
+interface AulaDetailsViewContract : ItemDetailsBaseViewContract {
     fun showItem(aula: AulaDetailsDTO)
     fun setTipoAulaSpinnerItems(tipos: MutableList<TipoAulaMateriaDTO>)
 }
