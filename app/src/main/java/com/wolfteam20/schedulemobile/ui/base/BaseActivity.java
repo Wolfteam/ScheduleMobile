@@ -19,7 +19,10 @@ import com.wolfteam20.schedulemobile.di.components.DaggerActivityComponent;
 import com.wolfteam20.schedulemobile.di.modules.ActivityModule;
 import com.wolfteam20.schedulemobile.ui.login.LoginActivity;
 
+import org.jetbrains.annotations.NotNull;
+
 import butterknife.Unbinder;
+import es.dmoral.toasty.Toasty;
 
 //import com.wolfteam20.schedulemobile.di.components.DaggerActivityComponent;
 
@@ -96,6 +99,46 @@ public class BaseActivity extends MvpAppCompatActivity implements BaseViewContra
     @Override
     public void showMessage(@StringRes int resId) {
         showMessage(getString(resId));
+    }
+
+    @Override
+    public void showSuccessMessage(@NotNull String message) {
+        Toasty.success(this, message).show();
+    }
+
+    @Override
+    public void showSuccessMessage(int resId) {
+        showSuccessMessage(getResources().getString(resId));
+    }
+
+    @Override
+    public void showInfoMessage(@NotNull String message) {
+        Toasty.info(this, message).show();
+    }
+
+    @Override
+    public void showInfoMessage(int resId) {
+        showInfoMessage(getResources().getString(resId));
+    }
+
+    @Override
+    public void showWarningMessage(@NotNull String message) {
+        Toasty.warning(this, message).show();
+    }
+
+    @Override
+    public void showWarningMessage(int resId) {
+        showWarningMessage(getResources().getString(resId));
+    }
+
+    @Override
+    public void showErrorMessage(@NotNull String message) {
+        Toasty.error(this, message).show();
+    }
+
+    @Override
+    public void showErrorMessage(int resId) {
+        showMessage(getResources().getString(resId));
     }
 
     private void showSnakBar(String message) {

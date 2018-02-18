@@ -40,12 +40,15 @@ import com.wolfteam20.schedulemobile.ui.home.HomeActivity;
 import com.wolfteam20.schedulemobile.ui.login.LoginActivity;
 import com.wolfteam20.schedulemobile.utils.Constants;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import es.dmoral.toasty.Toasty;
 
 /**
  * Created by Efrain.Bastidas on 1/5/2018.
@@ -308,6 +311,46 @@ public abstract class BaseDrawerActivity extends MvpAppCompatActivity
     @Override
     public void showMessage(@StringRes int resId) {
         showMessage(getString(resId));
+    }
+
+    @Override
+    public void showSuccessMessage(@NotNull String message) {
+        Toasty.success(this, message).show();
+    }
+
+    @Override
+    public void showSuccessMessage(int resId) {
+        showSuccessMessage(getResources().getString(resId));
+    }
+
+    @Override
+    public void showInfoMessage(@NotNull String message) {
+        Toasty.info(this, message).show();
+    }
+
+    @Override
+    public void showInfoMessage(int resId) {
+        showInfoMessage(getResources().getString(resId));
+    }
+
+    @Override
+    public void showWarningMessage(@NotNull String message) {
+        Toasty.warning(this, message).show();
+    }
+
+    @Override
+    public void showWarningMessage(int resId) {
+        showWarningMessage(getResources().getString(resId));
+    }
+
+    @Override
+    public void showErrorMessage(@NotNull String message) {
+        Toasty.error(this, message).show();
+    }
+
+    @Override
+    public void showErrorMessage(int resId) {
+        showMessage(getResources().getString(resId));
     }
 
     private void showSnakBar(String message) {

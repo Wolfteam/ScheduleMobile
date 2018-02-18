@@ -6,6 +6,8 @@ import com.arellomobile.mvp.MvpView;
 import com.arellomobile.mvp.viewstate.strategy.SkipStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Created by Efrain.Bastidas on 1/3/2018.
  */
@@ -31,4 +33,28 @@ public interface BaseViewContract extends MvpView {
 
     @StateStrategyType(SkipStrategy.class)
     void showMessage(@StringRes int resId);
+
+    @StateStrategyType(SkipStrategy.class)
+    void showSuccessMessage(@NotNull String message);
+
+    @StateStrategyType(SkipStrategy.class)
+    void showSuccessMessage(@StringRes int resId);
+
+    @StateStrategyType(SkipStrategy.class)
+    void showInfoMessage(@NotNull  String message);
+
+    @StateStrategyType(SkipStrategy.class)
+    void showInfoMessage(@StringRes int resId);
+
+    @StateStrategyType(SkipStrategy.class)
+    void showWarningMessage(@NotNull String message);
+
+    @StateStrategyType(SkipStrategy.class)
+    void showWarningMessage(@StringRes int resId);
+
+    @StateStrategyType(SkipStrategy.class)
+    void showErrorMessage(@NotNull String message);
+
+    @StateStrategyType(SkipStrategy.class)
+    void showErrorMessage(@StringRes int resId);
 }
