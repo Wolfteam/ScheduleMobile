@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import com.wolfteam20.schedulemobile.R
 import com.wolfteam20.schedulemobile.data.network.models.UsuarioDetailsDTO
 import com.wolfteam20.schedulemobile.ui.editardb.base.ItemClickListenerContract
+import kotlinx.android.synthetic.main.editardb_common_item_selected_overlay.view.*
 import kotlinx.android.synthetic.main.editardb_fragment_usuarios_list_item.view.*
 
 /**
@@ -40,6 +41,8 @@ class UsuariosListAdapter(clickListener: ItemClickListenerContract) :
                 usuarios_list_item_cedula.text = String.format("Cedula: %s", item.cedula)
                 usuarios_list_item_privilegio.text = item.privilegios.nombrePrivilegio
                 usuarios_list_item_username.text = item.username
+                editardb_common_item_selected_overlay.visibility =
+                        if (isItemSelected) View.VISIBLE else View.INVISIBLE
             }
     }
 

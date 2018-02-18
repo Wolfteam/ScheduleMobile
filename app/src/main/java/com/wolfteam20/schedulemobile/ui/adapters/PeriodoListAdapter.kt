@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import com.wolfteam20.schedulemobile.R
 import com.wolfteam20.schedulemobile.data.network.models.PeriodoAcademicoDTO
 import com.wolfteam20.schedulemobile.ui.editardb.base.ItemClickListenerContract
+import kotlinx.android.synthetic.main.editardb_common_item_selected_overlay.view.*
 import kotlinx.android.synthetic.main.editardb_fragment_periodos_list_item.view.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -42,6 +43,8 @@ class PeriodoListAdapter(clickListener: ItemClickListenerContract) :
                 periodo_list_item_nombre.text = item.nombrePeriodo
                 periodo_list_item_status.text =
                         if (item.status) "Status: Activo" else "Status: Inactivo"
+                editardb_common_item_selected_overlay.visibility =
+                        if (isItemSelected) View.VISIBLE else View.INVISIBLE
             }
     }
 }

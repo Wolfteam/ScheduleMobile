@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import com.wolfteam20.schedulemobile.R
 import com.wolfteam20.schedulemobile.data.network.models.AulaDetailsDTO
 import com.wolfteam20.schedulemobile.ui.editardb.base.ItemClickListenerContract
+import kotlinx.android.synthetic.main.editardb_common_item_selected_overlay.view.*
 import kotlinx.android.synthetic.main.editardb_fragment_aulas_list_item.view.*
 
 /**
@@ -42,7 +43,7 @@ class AulasListAdapter(clickListener: ItemClickListenerContract) :
                 aula_list_item_nombre.text = nombreAula
                 aula_list_item_capacidad.text = String.format("Capacidad: %d", item.capacidad)
                 aula_list_item_tipo.text = tipo
-                aulas_list_item_selected_overlay.visibility =
+                editardb_common_item_selected_overlay.visibility =
                         if (isItemSelected) View.VISIBLE else View.INVISIBLE
             }
     }

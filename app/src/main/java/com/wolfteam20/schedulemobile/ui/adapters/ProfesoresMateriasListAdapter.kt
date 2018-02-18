@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import com.wolfteam20.schedulemobile.R
 import com.wolfteam20.schedulemobile.data.network.models.ProfesorMateriaDetailsDTO
 import com.wolfteam20.schedulemobile.ui.editardb.base.ItemClickListenerContract
+import kotlinx.android.synthetic.main.editardb_common_item_selected_overlay.view.*
 import kotlinx.android.synthetic.main.editardb_fragment_prof_mat_list_item.view.*
 
 /**
@@ -48,6 +49,8 @@ class ProfesoresMateriasListAdapter(clickListener: ItemClickListenerContract) :
             pm_list_item_fullname.text =
                     String.format("%s %s", item.profesor.nombre, item.profesor.apellido)
             pm_list_item_materia.text = item.materia.asignatura
+            editardb_common_item_selected_overlay.visibility =
+                    if (isItemSelected) View.VISIBLE else View.INVISIBLE
         }
     }
 }

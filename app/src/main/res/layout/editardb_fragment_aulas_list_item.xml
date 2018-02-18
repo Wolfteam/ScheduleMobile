@@ -125,12 +125,5 @@
         </LinearLayout>
     </LinearLayout>
 
-    <!--Esta view cubre el cardview cuando se cambia su propiedad visibility-->
-
-    <View
-        android:id="@+id/aulas_list_item_selected_overlay"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/greyDarken4"
-        android:visibility="invisible" />
+    <include layout="@layout/editardb_common_item_selected_overlay" />
 </android.support.v7.widget.CardView>

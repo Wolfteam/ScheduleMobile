@@ -76,4 +76,6 @@
                 android:textSize="17sp" />
         </LinearLayout>
     </LinearLayout>
+
+    <include layout="@layout/editardb_common_item_selected_overlay" />
 </android.support.v7.widget.CardView>

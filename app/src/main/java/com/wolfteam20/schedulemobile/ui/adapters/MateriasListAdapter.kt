@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import com.wolfteam20.schedulemobile.R
 import com.wolfteam20.schedulemobile.data.network.models.MateriaDetailsDTO
 import com.wolfteam20.schedulemobile.ui.editardb.base.ItemClickListenerContract
+import kotlinx.android.synthetic.main.editardb_common_item_selected_overlay.view.*
 import kotlinx.android.synthetic.main.editardb_fragment_materias_list_item.view.*
 
 /**
@@ -20,7 +21,8 @@ class MateriasListAdapter(clickListener: ItemClickListenerContract) :
         val context = parent.context
         val inflater = LayoutInflater.from(context)
         // Inflate the custom layout
-        val materiaView = inflater.inflate(R.layout.editardb_fragment_materias_list_item, parent, false)
+        val materiaView =
+            inflater.inflate(R.layout.editardb_fragment_materias_list_item, parent, false)
         // Return a new holder instance
         return MateriasListViewHolder(materiaView, mClickListener)
     }
@@ -49,6 +51,8 @@ class MateriasListAdapter(clickListener: ItemClickListenerContract) :
                 materia_list_item_nombre.text = item.asignatura
                 materia_list_item_semestre.text = nombreSemestre
                 materia_list_item_tipo.text = tipo
+                editardb_common_item_selected_overlay.visibility =
+                        if (isItemSelected) View.VISIBLE else View.INVISIBLE
             }
     }
 }

@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import com.wolfteam20.schedulemobile.R
 import com.wolfteam20.schedulemobile.data.network.models.ProfesorDetailsDTO
 import com.wolfteam20.schedulemobile.ui.editardb.base.ItemClickListenerContract
+import kotlinx.android.synthetic.main.editardb_common_item_selected_overlay.view.*
 import kotlinx.android.synthetic.main.editardb_fragment_profesores_list_item.view.*
 
 /**
@@ -41,6 +42,8 @@ class ProfesoresListAdapter(clickListener: ItemClickListenerContract) :
                         String.format("Horas a cumplir: %s", item.prioridad?.horasACumplir)
                 profesor_list_item_prioridad.text =
                         String.format("Prioridad: %s", item.prioridad?.codigoPrioridad)
+                editardb_common_item_selected_overlay.visibility =
+                        if (isItemSelected) View.VISIBLE else View.INVISIBLE
             }
     }
 }

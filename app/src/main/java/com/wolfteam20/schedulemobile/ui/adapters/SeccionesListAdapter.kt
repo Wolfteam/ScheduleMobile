@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import com.wolfteam20.schedulemobile.R
 import com.wolfteam20.schedulemobile.data.network.models.SeccionDetailsDTO
 import com.wolfteam20.schedulemobile.ui.editardb.base.ItemClickListenerContract
+import kotlinx.android.synthetic.main.editardb_common_item_selected_overlay.view.*
 import kotlinx.android.synthetic.main.editardb_fragment_secciones_list_item.view.*
 
 /**
@@ -44,6 +45,8 @@ class SeccionesListAdapter(clickListener: ItemClickListenerContract) :
                 secciones_list_item_count.text =
                         String.format("%s item(es)", item.numeroSecciones)
                 secciones_list_item_materia.text = item.materia.asignatura
+                editardb_common_item_selected_overlay.visibility =
+                        if (isItemSelected) View.VISIBLE else View.INVISIBLE
             }
     }
 }
