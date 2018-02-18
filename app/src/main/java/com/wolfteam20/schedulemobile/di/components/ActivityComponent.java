@@ -2,12 +2,13 @@ package com.wolfteam20.schedulemobile.di.components;
 
 import com.wolfteam20.schedulemobile.di.modules.ActivityModule;
 import com.wolfteam20.schedulemobile.di.scopes.ActivityScope;
-import com.wolfteam20.schedulemobile.ui.disponibilidad.details.DispDetailsFragment;
 import com.wolfteam20.schedulemobile.ui.disponibilidad.DispFragment;
+import com.wolfteam20.schedulemobile.ui.disponibilidad.details.DispDetailsFragment;
 import com.wolfteam20.schedulemobile.ui.editardb.EditarDBFragment;
 import com.wolfteam20.schedulemobile.ui.editardb.aula.AulasFragment;
-import com.wolfteam20.schedulemobile.ui.editardb.aula.details.AulasDetailsFragment;
+import com.wolfteam20.schedulemobile.ui.editardb.aula.details.AulaDetailsFragment;
 import com.wolfteam20.schedulemobile.ui.editardb.materia.MateriasFragment;
+import com.wolfteam20.schedulemobile.ui.editardb.materia.details.MateriaDetailsFragment;
 import com.wolfteam20.schedulemobile.ui.editardb.periodos.PeriodosFragment;
 import com.wolfteam20.schedulemobile.ui.editardb.profesores.ProfesoresFragment;
 import com.wolfteam20.schedulemobile.ui.editardb.profesoresxmateria.ProfesorMateriaFragment;
@@ -49,5 +50,7 @@ public interface ActivityComponent {
 
     void inject(UsuariosFragment usuariosFragment);
 
-    void inject(AulasDetailsFragment aulasDetailsFragment);
+    void inject(AulaDetailsFragment aulasDetailsFragment);
+
+    void inject(MateriaDetailsFragment materiaDetailsFragment);
 }

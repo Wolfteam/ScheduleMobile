@@ -6,7 +6,8 @@ import android.os.Bundle
 import com.wolfteam20.schedulemobile.R
 import com.wolfteam20.schedulemobile.ui.base.BaseActivity
 import com.wolfteam20.schedulemobile.ui.base.BaseFragment
-import com.wolfteam20.schedulemobile.ui.editardb.aula.details.AulasDetailsFragment
+import com.wolfteam20.schedulemobile.ui.editardb.aula.details.AulaDetailsFragment
+import com.wolfteam20.schedulemobile.ui.editardb.materia.details.MateriaDetailsFragment
 
 /**
  * Created by Efrain.Bastidas on 10/2/2018.
@@ -20,9 +21,10 @@ class EditarDBDetailsActivity : BaseActivity() {
         setContentView(R.layout.editardb_details_activity)
         val fragmentToLoad = intent.extras.getInt("Fragment_TO_LOAD",1)
 
-        when (fragmentToLoad) {
-            1 -> mFragmentToLoad =
-                    AulasDetailsFragment()
+        mFragmentToLoad = when (fragmentToLoad) {
+            1 -> AulaDetailsFragment()
+            2 -> MateriaDetailsFragment()
+            else -> throw Exception("Estas tratando de instanciar un fragment que no ha sido agregado")
         }
 
         supportFragmentManager

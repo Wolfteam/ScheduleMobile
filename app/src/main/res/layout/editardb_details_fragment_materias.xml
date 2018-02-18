@@ -72,15 +72,16 @@
                             app:validateMinLengthAutoDismiss="@{true}" />
                     </android.support.design.widget.TextInputLayout>
 
+                    <android.support.v4.widget.Space
+                        android:layout_width="match_parent"
+                        android:layout_height="20dp" />
+
                     <Spinner
                         android:id="@+id/materia_details_carreras_dropdown"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:animateLayoutChanges="true"
-                        android:checkedButton="@android:id/button2"
                         android:dropDownWidth="match_parent"
-                        android:popupBackground="@color/md_grey_850"
-                        android:scrollbars="vertical"
+                        android:popupBackground="@color/md_grey_800"
                         android:spinnerMode="dropdown" />
 
                     <android.support.v4.widget.Space
@@ -92,8 +93,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:dropDownWidth="match_parent"
-                        android:popupBackground="@color/md_grey_850"
+                        android:popupBackground="@color/md_grey_800"
                         android:spinnerMode="dropdown" />
+
+                    <android.support.v4.widget.Space
+                        android:layout_width="match_parent"
+                        android:layout_height="20dp" />
 
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
@@ -123,7 +128,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/materia_horas_semanales"
-                            android:inputType="text"
+                            android:inputType="numberSigned"
                             android:maxLength="2"
                             app:validateEmpty="@{true}"
                             app:validateEmptyAutoDismiss="@{true}"
@@ -142,7 +147,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:dropDownWidth="match_parent"
-                        android:popupBackground="@color/md_grey_850"
+                        android:popupBackground="@color/md_grey_800"
                         android:spinnerMode="dropdown" />
                 </LinearLayout>
 
