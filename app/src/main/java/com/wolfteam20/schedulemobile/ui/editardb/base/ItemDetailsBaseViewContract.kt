@@ -15,10 +15,10 @@ interface ItemDetailsBaseViewContract : BaseViewContract {
 
     fun hideLoading()
 
+    fun enableAllViews(enabled: Boolean)
+
     @StateStrategyType(SkipStrategy::class)
     fun showConfirmDeleteDialog()
-
-    fun enableAllViews(enabled: Boolean)
 
     @StateStrategyType(SkipStrategy::class)
     fun finishActivity(operation: Int, position: Int = 0, item: Parcelable? = null)

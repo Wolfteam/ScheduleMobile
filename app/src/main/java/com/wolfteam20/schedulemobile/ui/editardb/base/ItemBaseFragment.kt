@@ -2,6 +2,7 @@ package com.wolfteam20.schedulemobile.ui.editardb.base
 
 import android.os.Bundle
 import android.os.Parcelable
+import android.support.design.widget.TabLayout
 import android.support.v7.view.ActionMode
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.DividerItemDecoration
@@ -15,6 +16,7 @@ import com.wolfteam20.schedulemobile.ui.base.BaseFragment
 import com.wolfteam20.schedulemobile.ui.editardb.ActionModeCallback
 import com.wolfteam20.schedulemobile.ui.editardb.EditarDBDetailsActivity
 import es.dmoral.toasty.Toasty
+import kotlinx.android.synthetic.main.editardb_fragment.*
 import kotlinx.android.synthetic.main.editardb_fragment_common.*
 
 /**
@@ -22,7 +24,7 @@ import kotlinx.android.synthetic.main.editardb_fragment_common.*
  */
 
 
-abstract class ItemBaseFragment<TItem>: BaseFragment(), ItemSpecficViewContract<TItem> {
+abstract class ItemBaseFragment<TItem> : BaseFragment(), ItemSpecficViewContract<TItem> , TabLayout.OnTabSelectedListener {
     protected val EDITARDB_DETAILS_REQUEST_CODE = 100
     protected val DELETE_OPERATION = 0
     protected val CANCEL_OPERATION = 1
@@ -51,7 +53,22 @@ abstract class ItemBaseFragment<TItem>: BaseFragment(), ItemSpecficViewContract<
             )
         )
         editardb_fragment_common_recycler_view.itemAnimator = DefaultItemAnimator()
+        //TODO: Esto no jala debido a que  la rv no se encuentra en este contexto
+        //editardb_fragment_tab_layout.addOnTabSelectedListener(this)
     }
+
+
+    override fun onTabReselected(tab: TabLayout.Tab?) {
+        val adapter = editardb_fragment_common_recycler_view.adapter
+        if (adapter != null && adapter.itemCount > 0) {
+            editardb_fragment_common_recycler_view.smoothScrollToPosition(0)
+        }
+
+    }
+
+    override fun onTabUnselected(tab: TabLayout.Tab?) {}
+
+    override fun onTabSelected(tab: TabLayout.Tab?) {}
 
     override fun showSwipeToRefresh() {
         if (!editardb_fragment_common_swipe_to_refresh.isRefreshing)
@@ -94,6 +111,10 @@ abstract class ItemBaseFragment<TItem>: BaseFragment(), ItemSpecficViewContract<
 
     override fun updateItem(position: Int, item: TItem) {
         mAdapter.updateItem(position, item)
+    }
+
+    override fun removeItem(position: Int) {
+        mAdapter.removeItem(position)
     }
 
     override fun removeSelectedListItems() {

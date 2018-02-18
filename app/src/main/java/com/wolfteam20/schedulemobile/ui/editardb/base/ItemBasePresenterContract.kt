@@ -11,4 +11,5 @@ interface ItemBasePresenterContract : BasePresenterContract {
     fun onFABDeleteClicked(itemsSelected: Int)
     fun onActionMode()
     fun onToggleItemSelection(itemsToSelect: Int)
+    fun onItemRemoved(position: Int)
 }

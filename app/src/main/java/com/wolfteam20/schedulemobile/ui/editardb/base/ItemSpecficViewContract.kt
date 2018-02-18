@@ -12,4 +12,5 @@ interface ItemSpecficViewContract<TItem> : ItemBaseViewContract {
 
     fun updateItem(position: Int, item: TItem)
 
+    fun removeItem(position: Int)
 }

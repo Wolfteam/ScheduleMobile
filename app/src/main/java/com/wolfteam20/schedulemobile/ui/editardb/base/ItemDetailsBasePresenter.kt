@@ -8,7 +8,6 @@ import io.reactivex.disposables.CompositeDisposable
  * Created by Efrain.Bastidas on 15/2/2018.
  */
 
-private const val CANCEL_OPERATION = 1
 
 abstract class ItemDetailsBasePresenter<TView : ItemDetailsBaseViewContract>(
     mCompositeDisposable: CompositeDisposable,
@@ -16,7 +15,14 @@ abstract class ItemDetailsBasePresenter<TView : ItemDetailsBaseViewContract>(
 ) : BasePresenter<TView>(mCompositeDisposable, mDataManager),
     ItemDetailsBasePresenterContract {
 
-    protected var isInEditMode = false
+    protected val DELETE_OPERATION = 0
+    private val CANCEL_OPERATION = 1
+    protected val ADD_OPERATION = 2
+    protected val UPDATE_OPERATION = 3
+
+    protected var isInEditMode = true
+    protected var mItemID: Long = 0
+    protected var mItemPosition: Int = 0
 
     override fun onCancelClicked() {
         viewState.finishActivity(CANCEL_OPERATION)
