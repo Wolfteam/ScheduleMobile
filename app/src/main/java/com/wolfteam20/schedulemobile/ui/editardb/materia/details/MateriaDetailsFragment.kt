@@ -91,7 +91,6 @@ class MateriaDetailsFragment : ItemDetailsBaseFragment(), MateriaDetailsViewCont
         mPresenter.subscribe(id, position, model)
     }
 
-
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.editardb_details_edit_delete -> mPresenter.onDeleteClicked()

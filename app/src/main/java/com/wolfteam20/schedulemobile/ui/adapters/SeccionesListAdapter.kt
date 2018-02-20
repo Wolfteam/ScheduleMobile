@@ -43,7 +43,7 @@ class SeccionesListAdapter(clickListener: ItemClickListenerContract) :
                 secciones_list_item_codigo.text =
                         String.format("Codigo: %s", item.materia.codigo)
                 secciones_list_item_count.text =
-                        String.format("%s item(es)", item.numeroSecciones)
+                        String.format("%s seccion(es)", item.numeroSecciones)
                 secciones_list_item_materia.text = item.materia.asignatura
                 editardb_common_item_selected_overlay.visibility =
                         if (isItemSelected) View.VISIBLE else View.INVISIBLE
