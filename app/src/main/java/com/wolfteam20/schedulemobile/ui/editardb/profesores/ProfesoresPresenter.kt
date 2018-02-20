@@ -10,6 +10,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
+import java.text.Collator
+import java.util.*
 import javax.inject.Inject
 
 /**
@@ -34,7 +36,10 @@ class ProfesoresPresenter @Inject constructor(
         compositeDisposable.add(dataManager.allProfesores
             .subscribe(
                 { profesores ->
-                    profesores.sortBy { it.nombre }
+                    val collator = Collator.getInstance(Locale.US)
+                    profesores.sortWith(Comparator { c1, c2 ->
+                        collator.compare(c1.nombre, c2.nombre)
+                    })
                     viewState.showList(profesores)
                     viewState.hideSwipeToRefresh()
                     viewState.showFAB()
