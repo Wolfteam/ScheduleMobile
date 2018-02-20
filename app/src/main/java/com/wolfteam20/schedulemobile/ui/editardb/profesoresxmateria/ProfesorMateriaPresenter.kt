@@ -10,6 +10,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
+import java.text.Collator
+import java.util.*
 import javax.inject.Inject
 
 /**
@@ -34,7 +36,10 @@ class ProfesorMateriaPresenter @Inject constructor(
         compositeDisposable.add(dataManager.allProfesorMateria
             .subscribe(
                 { pm ->
-                    pm.sortBy { it.profesor.nombre }
+                    val collator = Collator.getInstance(Locale.US)
+                    pm.sortWith(Comparator { c1, c2 ->
+                        collator.compare(c1.profesor.nombre, c2.profesor.nombre)
+                    })
                     viewState.showList(pm)
                     viewState.hideSwipeToRefresh()
                     viewState.showFAB()
@@ -81,7 +86,7 @@ class ProfesorMateriaPresenter @Inject constructor(
     }
 
     override fun onItemUpdated(item: ProfesorMateriaDetailsDTO, itemPosition: Int) {
-       viewState.updateItem(itemPosition, item)
+        viewState.updateItem(itemPosition, item)
         viewState.showSuccessMessage(R.string.relacion_updated)
     }
 
