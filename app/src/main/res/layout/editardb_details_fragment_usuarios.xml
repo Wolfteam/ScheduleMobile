@@ -44,12 +44,12 @@
                             android:layout_height="wrap_content"
                             android:hint="@string/usuario_username"
                             android:inputType="text"
-                            android:maxLength="2"
+                            android:maxLength="10"
                             app:validateEmpty="@{true}"
                             app:validateEmptyAutoDismiss="@{true}"
-                            app:validateMaxLength="@{2}"
+                            app:validateMaxLength="@{10}"
                             app:validateMaxLengthAutoDismiss="@{true}"
-                            app:validateMinLength="@{1}"
+                            app:validateMinLength="@{4}"
                             app:validateMinLengthAutoDismiss="@{true}" />
                     </android.support.design.widget.TextInputLayout>
 
@@ -62,7 +62,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/usuario_password"
-                            android:inputType="text"
+                            android:inputType="textPassword"
                             android:maxLength="15"
                             app:validateEmpty="@{true}"
                             app:validateEmptyAutoDismiss="@{true}"
@@ -82,7 +82,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:dropDownWidth="match_parent"
-                        android:popupBackground="@color/md_grey_850"
+                        android:popupBackground="@color/md_grey_800"
                         android:spinnerMode="dropdown" />
 
                     <android.support.v4.widget.Space
@@ -90,11 +90,11 @@
                         android:layout_height="@dimen/activity_vertical_margin" />
 
                     <Spinner
-                        android:id="@+id/usuario_details_prioridad_dropdown"
+                        android:id="@+id/usuario_details_privilegios_dropdown"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:dropDownWidth="match_parent"
-                        android:popupBackground="@color/md_grey_850"
+                        android:popupBackground="@color/md_grey_800"
                         android:spinnerMode="dropdown" />
                 </LinearLayout>
 
