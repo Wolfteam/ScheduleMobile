@@ -60,7 +60,7 @@ class SeccionesPresenter @Inject constructor(
 
         val codigos = items.joinToString(
             ",",
-            transform = { return@joinToString it.codigo.toString() }
+            transform = { return@joinToString it.materia.codigo.toString() }
         )
         viewState.showSwipeToRefresh()
         compositeDisposable.add(dataManager.removeSecciones(codigos)
