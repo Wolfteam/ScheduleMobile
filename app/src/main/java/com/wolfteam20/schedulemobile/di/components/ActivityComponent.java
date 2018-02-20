@@ -10,10 +10,15 @@ import com.wolfteam20.schedulemobile.ui.editardb.aula.details.AulaDetailsFragmen
 import com.wolfteam20.schedulemobile.ui.editardb.materia.MateriasFragment;
 import com.wolfteam20.schedulemobile.ui.editardb.materia.details.MateriaDetailsFragment;
 import com.wolfteam20.schedulemobile.ui.editardb.periodos.PeriodosFragment;
+import com.wolfteam20.schedulemobile.ui.editardb.periodos.details.PeriodoDetailsFragment;
 import com.wolfteam20.schedulemobile.ui.editardb.profesores.ProfesoresFragment;
+import com.wolfteam20.schedulemobile.ui.editardb.profesores.details.ProfesorDetailsFragment;
 import com.wolfteam20.schedulemobile.ui.editardb.profesoresxmateria.ProfesorMateriaFragment;
+import com.wolfteam20.schedulemobile.ui.editardb.profesoresxmateria.details.ProfesorMateriaDetailsFragmnet;
 import com.wolfteam20.schedulemobile.ui.editardb.secciones.SeccionesFragment;
+import com.wolfteam20.schedulemobile.ui.editardb.secciones.details.SeccionDetailsFragment;
 import com.wolfteam20.schedulemobile.ui.editardb.usuarios.UsuariosFragment;
+import com.wolfteam20.schedulemobile.ui.editardb.usuarios.details.UsuarioDetailsFragment;
 import com.wolfteam20.schedulemobile.ui.home.HomeFragment;
 import com.wolfteam20.schedulemobile.ui.login.LoginActivity;
 
@@ -53,4 +58,14 @@ public interface ActivityComponent {
     void inject(AulaDetailsFragment aulasDetailsFragment);
 
     void inject(MateriaDetailsFragment materiaDetailsFragment);
+
+    void inject(PeriodoDetailsFragment periodoDetailsFragment);
+
+    void inject(ProfesorDetailsFragment profesorDetailsFragment);
+
+    void inject(ProfesorMateriaDetailsFragmnet profesorMateriaDetailsFragmnet);
+
+    void inject(SeccionDetailsFragment seccionDetailsFragment);
+
+    void inject(UsuarioDetailsFragment usuarioDetailsFragment);
 }

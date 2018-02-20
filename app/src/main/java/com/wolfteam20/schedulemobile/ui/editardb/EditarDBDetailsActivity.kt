@@ -8,6 +8,11 @@ import com.wolfteam20.schedulemobile.ui.base.BaseActivity
 import com.wolfteam20.schedulemobile.ui.base.BaseFragment
 import com.wolfteam20.schedulemobile.ui.editardb.aula.details.AulaDetailsFragment
 import com.wolfteam20.schedulemobile.ui.editardb.materia.details.MateriaDetailsFragment
+import com.wolfteam20.schedulemobile.ui.editardb.periodos.details.PeriodoDetailsFragment
+import com.wolfteam20.schedulemobile.ui.editardb.profesores.details.ProfesorDetailsFragment
+import com.wolfteam20.schedulemobile.ui.editardb.profesoresxmateria.details.ProfesorMateriaDetailsFragmnet
+import com.wolfteam20.schedulemobile.ui.editardb.secciones.details.SeccionDetailsFragment
+import com.wolfteam20.schedulemobile.ui.editardb.usuarios.details.UsuarioDetailsFragment
 
 /**
  * Created by Efrain.Bastidas on 10/2/2018.
@@ -19,11 +24,16 @@ class EditarDBDetailsActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.editardb_details_activity)
-        val fragmentToLoad = intent.extras.getInt("Fragment_TO_LOAD",1)
+        val fragmentToLoad = intent.extras.getInt("Fragment_TO_LOAD", 1)
 
         mFragmentToLoad = when (fragmentToLoad) {
             1 -> AulaDetailsFragment()
             2 -> MateriaDetailsFragment()
+            3 -> PeriodoDetailsFragment()
+            4 -> ProfesorDetailsFragment()
+            5 -> ProfesorMateriaDetailsFragmnet()
+            6 -> SeccionDetailsFragment()
+            7 -> UsuarioDetailsFragment()
             else -> throw Exception("Estas tratando de instanciar un fragment que no ha sido agregado")
         }
 
