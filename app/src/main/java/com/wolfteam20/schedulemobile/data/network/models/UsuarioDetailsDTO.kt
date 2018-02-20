@@ -14,6 +14,6 @@ class UsuarioDetailsDTO(
     var cedula: Long = 0,
     var username: String = "",
     var password: String = "",
-    var profesor: ProfesorDTO,
+    var profesor: ProfesorDTO?,
     var privilegios: PrivilegioDTO
 ) : Parcelable

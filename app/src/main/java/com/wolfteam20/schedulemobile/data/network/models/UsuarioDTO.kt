@@ -7,5 +7,5 @@ data class UsuarioDTO(
     val cedula: Long,
     val username: String,
     val password: String,
-    val idPrivilegio: Int = 1
+    val idPrivilegio: Long = 1
 )

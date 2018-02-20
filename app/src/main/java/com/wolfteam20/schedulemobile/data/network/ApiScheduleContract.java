@@ -448,7 +448,7 @@ public interface ApiScheduleContract {
      * @return Completable
      */
     @DELETE("api/Account")
-    Completable removeUsuarios(@Query("codigos") @NotNull String cedulas);
+    Completable removeUsuarios(@Query("cedulas") @NotNull String cedulas);
 
     /**
      * Remueve un usuario en particular

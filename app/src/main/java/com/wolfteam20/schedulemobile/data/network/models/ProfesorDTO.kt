@@ -13,5 +13,5 @@ data class ProfesorDTO(
     var cedula: Long,
     var nombre: String,
     var apellido: String,
-    var idPrioridad: Int
+    var idPrioridad: Long
 ):Parcelable
