@@ -4,10 +4,8 @@ import com.wolfteam20.schedulemobile.data.db.DbHelper;
 import com.wolfteam20.schedulemobile.data.db.DbHelperContract;
 import com.wolfteam20.schedulemobile.data.db.Repository.DisponibilidadDetailsRepository;
 import com.wolfteam20.schedulemobile.data.db.Repository.DisponibilidadRepository;
-import com.wolfteam20.schedulemobile.data.db.Repository.ProfesorRepository;
 import com.wolfteam20.schedulemobile.data.network.models.DisponibilidadDTO;
 import com.wolfteam20.schedulemobile.data.network.models.DisponibilidadDetailsDTO;
-import com.wolfteam20.schedulemobile.data.network.models.ProfesorDetailsDTO;
 
 import dagger.Module;
 import dagger.Provides;
@@ -32,10 +30,5 @@ public class DbHelperModule {
     @Provides
     DisponibilidadRepository provideDispRepository(Box<DisponibilidadDTO> box) {
         return new DisponibilidadRepository(box);
-    }
-
-    @Provides
-    ProfesorRepository provideProfesorRepository(Box<ProfesorDetailsDTO> box) {
-        return new ProfesorRepository(box);
     }
 }
