@@ -94,6 +94,8 @@ class SeccionDetailsFragment : ItemDetailsBaseFragment(), SeccionDetailsViewCont
         seccion_details_alumnos.isEnabled = enabled
         seccion_details_numero.isEnabled = enabled
         seccion_details_materias_dropdown.isEnabled = enabled
+        mMenuItemsEnabled = enabled
+        baseActivity.invalidateOptionsMenu()
     }
 
     override fun showItem(seccion: SeccionDetailsDTO) {

@@ -17,6 +17,8 @@ import kotlinx.android.synthetic.main.editardb_details_common_toolbar.*
  */
 abstract class ItemDetailsBaseFragment : BaseFragment(), ItemDetailsBaseViewContract {
 
+    protected var mMenuItemsEnabled: Boolean = false
+
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         val id = baseActivity.intent.extras.getLong("ID", 0)
         //Add mode
@@ -25,6 +27,22 @@ abstract class ItemDetailsBaseFragment : BaseFragment(), ItemDetailsBaseViewCont
         //Edit mode
         else
             inflater?.inflate(R.menu.editardb_details_edit_menu, menu)
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu?) {
+        val menuSize = menu?.size()!!
+        for (i in 0..menuSize) {
+            when (menuSize) {
+                2 -> {
+                    if (i != 0 && i < menuSize)
+                        menu.getItem(i)?.isEnabled = mMenuItemsEnabled
+                }
+                3 -> {
+                    if (i != 1 && i < menuSize)
+                        menu.getItem(i)?.isEnabled = mMenuItemsEnabled
+                }
+            }
+        }
     }
 
     override fun showLoading() {

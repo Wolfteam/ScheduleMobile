@@ -102,7 +102,8 @@ class ProfesorDetailsFragment : ItemDetailsBaseFragment(), ProfesorDetailsViewCo
         profesor_details_apellido.isEnabled = enabled
         profesor_details_cedula.isEnabled = enabled
         profesor_details_prioridad_dropdown.isEnabled = enabled
-
+        mMenuItemsEnabled = enabled
+        baseActivity.invalidateOptionsMenu()
     }
 
     override fun setPrioridadSpinnerItems(prioridades: MutableList<PrioridadProfesorDTO>) {

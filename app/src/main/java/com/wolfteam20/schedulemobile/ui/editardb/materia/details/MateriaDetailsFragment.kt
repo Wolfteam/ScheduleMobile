@@ -111,6 +111,8 @@ class MateriaDetailsFragment : ItemDetailsBaseFragment(), MateriaDetailsViewCont
         materia_details_nombre.isEnabled = enabled
         materia_details_semestres_dropdown.isEnabled = enabled
         materia_details_tipo_dropdown.isEnabled = enabled
+        mMenuItemsEnabled = enabled
+        baseActivity.invalidateOptionsMenu()
     }
 
     override fun showConfirmDeleteDialog() {

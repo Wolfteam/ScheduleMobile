@@ -108,6 +108,8 @@ class ProfesorMateriaDetailsFragmnet : ItemDetailsBaseFragment(),
     override fun enableAllViews(enabled: Boolean) {
         prof_mat_details_profesores_dropdown.isEnabled = enabled
         prof_mat_details_materias_dropdown.isEnabled = enabled
+        mMenuItemsEnabled = enabled
+        baseActivity.invalidateOptionsMenu()
     }
 
     override fun setProfesoresSpinnerItems(profesores: MutableList<ProfesorDetailsDTO>) {

@@ -55,6 +55,7 @@ class AulaDetailsFragment : ItemDetailsBaseFragment(), AulaDetailsViewContract {
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putString("aula_nombre", aula_details_nombre.text.toString())
         outState.putString("aula_capacidad", aula_details_capacidad.text.toString())
+        outState.putInt("aula_tipo", aula_details_tipo_dropdown.selectedItemPosition)
         super.onSaveInstanceState(outState)
     }
 
@@ -74,8 +75,8 @@ class AulaDetailsFragment : ItemDetailsBaseFragment(), AulaDetailsViewContract {
         appCompatActivity.supportActionBar?.setDisplayShowHomeEnabled(true)
 
         mAdapter = TipoAulaMateriaSpinnerAdapter(
-            baseActivity,
-            R.layout.editardb_details_common_spinner_layout
+                baseActivity,
+                R.layout.editardb_details_common_spinner_layout
         )
         aula_details_tipo_dropdown.adapter = mAdapter
 
@@ -86,6 +87,8 @@ class AulaDetailsFragment : ItemDetailsBaseFragment(), AulaDetailsViewContract {
         savedInstanceState?.let {
             aula_details_nombre.setText(it.getString("aula_nombre"))
             aula_details_capacidad.setText(it.getString("aula_capacidad"))
+//            val itemPosition = it.getInt("aula_tipo", 0)
+//            aula_details_tipo_dropdown.setSelection(itemPosition)
         }
     }
 
@@ -105,9 +108,13 @@ class AulaDetailsFragment : ItemDetailsBaseFragment(), AulaDetailsViewContract {
         aula_details_nombre.isEnabled = enabled
         aula_details_capacidad.isEnabled = enabled
         aula_details_tipo_dropdown.isEnabled = enabled
+        mMenuItemsEnabled = enabled
+        baseActivity.invalidateOptionsMenu()
     }
 
     override fun showItem(aula: AulaDetailsDTO) {
+        if (!aula_details_nombre.text.isEmpty())
+            return
         aula_details_nombre.setText(aula.nombreAula)
         aula_details_capacidad.setText(aula.capacidad.toString())
         val itemPosition = mAdapter.getPosition(aula.tipoAula.idTipo)
@@ -121,7 +128,8 @@ class AulaDetailsFragment : ItemDetailsBaseFragment(), AulaDetailsViewContract {
     override fun showConfirmDeleteDialog() {
         val dialog: AlertDialog = AlertDialog.Builder(baseActivity)
             .setTitle(resources.getString(R.string.are_you_sure))
-            .setPositiveButton(getString(R.string.yes), { _, _ ->
+            .setPositiveButton(
+                    getString(R.string.yes), { _, _ ->
                 mPresenter.delete()
             })
             .setNegativeButton(getString(R.string.cancelar), null)
@@ -131,10 +139,10 @@ class AulaDetailsFragment : ItemDetailsBaseFragment(), AulaDetailsViewContract {
 
     override fun prepareData(isInEditMode: Boolean) {
         val aula = AulaDetailsDTO(
-            0,
-            aula_details_nombre.text.toString(),
-            aula_details_capacidad.text.toString().toInt(),
-            mAdapter.getItem(aula_details_tipo_dropdown.selectedItemId)
+                0,
+                aula_details_nombre.text.toString(),
+                aula_details_capacidad.text.toString().toInt(),
+                mAdapter.getItem(aula_details_tipo_dropdown.selectedItemId)
         )
         if (isInEditMode)
             mPresenter.update(aula)

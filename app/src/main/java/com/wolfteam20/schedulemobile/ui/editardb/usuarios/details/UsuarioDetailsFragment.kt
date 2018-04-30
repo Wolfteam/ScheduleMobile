@@ -104,6 +104,8 @@ class UsuarioDetailsFragment : ItemDetailsBaseFragment(), UsuarioDetailsViewCont
         usuario_details_password.isEnabled = enabled
         usuario_details_privilegios_dropdown.isEnabled = enabled
         usuario_details_profesores_dropdown.isEnabled = enabled
+        mMenuItemsEnabled = enabled
+        baseActivity.invalidateOptionsMenu()
     }
 
     override fun showConfirmDeleteDialog() {

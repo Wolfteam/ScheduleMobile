@@ -91,6 +91,8 @@ class PeriodoDetailsFragment : ItemDetailsBaseFragment(), PeriodoDetailsViewCont
     override fun enableAllViews(enabled: Boolean) {
         periodo_academico_details_nombre.isEnabled = enabled
         periodo_academico_details_status.isEnabled = enabled
+        mMenuItemsEnabled = enabled
+        baseActivity.invalidateOptionsMenu()
     }
 
     override fun showConfirmDeleteDialog() {
