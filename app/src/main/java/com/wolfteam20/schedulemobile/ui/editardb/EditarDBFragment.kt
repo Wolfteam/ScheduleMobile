@@ -8,10 +8,12 @@ import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
+import android.support.v4.view.ViewPager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.wolfteam20.schedulemobile.R
+import com.wolfteam20.schedulemobile.ui.base.BaseDrawerActivity
 import com.wolfteam20.schedulemobile.ui.base.BaseFragment
 import com.wolfteam20.schedulemobile.ui.editardb.aula.AulasFragment
 import com.wolfteam20.schedulemobile.ui.editardb.materia.MateriasFragment
@@ -49,6 +51,17 @@ class EditarDBFragment : BaseFragment() {
         //editardb_fragment_view_pager.offscreenPageLimit = 2
         editardb_fragment_view_pager.adapter = PageAdapter(context!!, fragmentManager!!)
         editardb_fragment_view_pager.currentItem = startPosition!!
+        editardb_fragment_view_pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+            override fun onPageScrollStateChanged(state: Int) {
+            }
+
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+            }
+
+            override fun onPageSelected(position: Int) {
+                baseDrawerActivity.setSelectionAtPosition(position + 4, false)
+            }
+        })
     }
 
     fun setCurrentItem(position: Int) {
@@ -78,7 +91,6 @@ class EditarDBFragment : BaseFragment() {
         override fun getCount(): Int {
             return FRAGMENT_PAGES
         }
-
 
         override fun getPageTitle(position: Int): CharSequence {
             return when (position) {

@@ -7,6 +7,7 @@ import com.wolfteam20.schedulemobile.R
 import com.wolfteam20.schedulemobile.ui.base.BaseActivity
 import com.wolfteam20.schedulemobile.ui.base.BaseFragment
 import com.wolfteam20.schedulemobile.ui.editardb.aula.details.AulaDetailsFragment
+import com.wolfteam20.schedulemobile.ui.editardb.base.ItemDetailsBaseFragment
 import com.wolfteam20.schedulemobile.ui.editardb.materia.details.MateriaDetailsFragment
 import com.wolfteam20.schedulemobile.ui.editardb.periodos.details.PeriodoDetailsFragment
 import com.wolfteam20.schedulemobile.ui.editardb.profesores.details.ProfesorDetailsFragment
@@ -18,29 +19,33 @@ import com.wolfteam20.schedulemobile.ui.editardb.usuarios.details.UsuarioDetails
  * Created by Efrain.Bastidas on 10/2/2018.
  */
 class EditarDBDetailsActivity : BaseActivity() {
+    private val EDITARDB_DETAILS_FRAGMENT_TAG = "EDITARDB_DETAILS_FRAGMENT_TAG"
     private lateinit var mFragmentToLoad: BaseFragment
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.editardb_details_activity)
+
         val fragmentToLoad = intent.extras.getInt("Fragment_TO_LOAD", 1)
+        val fragment: ItemDetailsBaseFragment? =
+                supportFragmentManager.findFragmentByTag(EDITARDB_DETAILS_FRAGMENT_TAG) as ItemDetailsBaseFragment?
 
-        mFragmentToLoad = when (fragmentToLoad) {
-            1 -> AulaDetailsFragment()
-            2 -> MateriaDetailsFragment()
-            3 -> PeriodoDetailsFragment()
-            4 -> ProfesorDetailsFragment()
-            5 -> ProfesorMateriaDetailsFragmnet()
-            6 -> SeccionDetailsFragment()
-            7 -> UsuarioDetailsFragment()
-            else -> throw Exception("Estas tratando de instanciar un fragment que no ha sido agregado")
+        if (fragment == null && savedInstanceState == null){
+            mFragmentToLoad = when (fragmentToLoad) {
+                1 -> AulaDetailsFragment()
+                2 -> MateriaDetailsFragment()
+                3 -> PeriodoDetailsFragment()
+                4 -> ProfesorDetailsFragment()
+                5 -> ProfesorMateriaDetailsFragmnet()
+                6 -> SeccionDetailsFragment()
+                7 -> UsuarioDetailsFragment()
+                else -> throw Exception("Estas tratando de instanciar un fragment que no ha sido agregado")
+            }
+            supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.editardb_details_activity_frame, mFragmentToLoad)
+                .commit()
         }
-
-        supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.editardb_details_activity_frame, mFragmentToLoad)
-            .commit()
     }
 
     override fun onBackPressed() {

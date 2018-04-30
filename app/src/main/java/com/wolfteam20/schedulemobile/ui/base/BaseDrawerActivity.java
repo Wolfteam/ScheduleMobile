@@ -277,6 +277,10 @@ public abstract class BaseDrawerActivity extends MvpAppCompatActivity
         });
     }
 
+    public void setSelectionAtPosition(int position, boolean fireOnClick) {
+        mDrawer.setSelectionAtPosition(position, fireOnClick);
+    }
+
     @Override
     public void onError(String message) {
         if (message != null)
