@@ -4,21 +4,16 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
-import android.support.v7.widget.DefaultItemAnimator
-import android.support.v7.widget.DividerItemDecoration
-import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wolfteam20.schedulemobile.R
-import com.wolfteam20.schedulemobile.data.network.models.SeccionDetailsDTO
 import com.wolfteam20.schedulemobile.data.network.models.UsuarioDetailsDTO
-import com.wolfteam20.schedulemobile.ui.adapters.SeccionesListAdapter
 import com.wolfteam20.schedulemobile.ui.adapters.UsuariosListAdapter
 import com.wolfteam20.schedulemobile.ui.editardb.ActionModeCallback
 import com.wolfteam20.schedulemobile.ui.editardb.base.ItemBaseFragment
 import com.wolfteam20.schedulemobile.ui.editardb.base.ItemClickListenerContract
-import es.dmoral.toasty.Toasty
+import com.wolfteam20.schedulemobile.utils.Constants
 import kotlinx.android.synthetic.main.editardb_fragment_common.*
 import javax.inject.Inject
 
@@ -59,9 +54,9 @@ class UsuariosFragment : ItemBaseFragment<UsuarioDetailsDTO>(), UsuariosViewCont
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == EDITARDB_DETAILS_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
-                val operation = data?.getIntExtra("OPERATION", 0)
-                val position = data?.getIntExtra("POSITION", 0)
-                val item = data?.getParcelableExtra<UsuarioDetailsDTO>("ITEM")
+                val operation = data?.getIntExtra(Constants.ITEM_OPERATION_TAG, 0)
+                val position = data?.getIntExtra(Constants.ITEM_POSITION_TAG, 0)
+                val item = data?.getParcelableExtra<UsuarioDetailsDTO>(Constants.ITEM_TAG)
                 when (operation) {
                     DELETE_OPERATION -> mPresenter.onItemRemoved(position!!)
                     CANCEL_OPERATION -> {

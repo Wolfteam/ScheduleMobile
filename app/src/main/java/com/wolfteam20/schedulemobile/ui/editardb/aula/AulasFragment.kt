@@ -13,7 +13,7 @@ import com.wolfteam20.schedulemobile.ui.adapters.AulasListAdapter
 import com.wolfteam20.schedulemobile.ui.editardb.ActionModeCallback
 import com.wolfteam20.schedulemobile.ui.editardb.base.ItemBaseFragment
 import com.wolfteam20.schedulemobile.ui.editardb.base.ItemClickListenerContract
-import kotlinx.android.synthetic.main.editardb_fragment.*
+import com.wolfteam20.schedulemobile.utils.Constants
 import kotlinx.android.synthetic.main.editardb_fragment_common.*
 import javax.inject.Inject
 
@@ -53,9 +53,9 @@ class AulasFragment : ItemBaseFragment<AulaDetailsDTO>(), AulasViewContract, Ite
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == EDITARDB_DETAILS_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
-                val operation = data?.getIntExtra("OPERATION", 0)
-                val position = data?.getIntExtra("POSITION", 0)
-                val item = data?.getParcelableExtra<AulaDetailsDTO>("ITEM")
+                val operation = data?.getIntExtra(Constants.ITEM_OPERATION_TAG, 0)
+                val position = data?.getIntExtra(Constants.ITEM_POSITION_TAG, 0)
+                val item = data?.getParcelableExtra<AulaDetailsDTO>(Constants.ITEM_TAG)
                 when (operation) {
                     DELETE_OPERATION -> mPresenter.onItemRemoved(position!!)
                     CANCEL_OPERATION -> {
