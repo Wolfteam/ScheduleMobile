@@ -3,6 +3,7 @@ package com.wolfteam20.schedulemobile.ui.editardb.materia.details
 import android.databinding.DataBindingUtil
 import android.databinding.ViewDataBinding
 import android.os.Bundle
+import android.os.Parcelable
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
@@ -13,11 +14,15 @@ import br.com.ilhasoft.support.validation.Validator
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wolfteam20.schedulemobile.R
-import com.wolfteam20.schedulemobile.data.network.models.*
+import com.wolfteam20.schedulemobile.data.network.models.CarreraDTO
+import com.wolfteam20.schedulemobile.data.network.models.MateriaDetailsDTO
+import com.wolfteam20.schedulemobile.data.network.models.SemestreDTO
+import com.wolfteam20.schedulemobile.data.network.models.TipoAulaMateriaDTO
 import com.wolfteam20.schedulemobile.ui.adapters.CarrerasSpinnerAdapter
 import com.wolfteam20.schedulemobile.ui.adapters.SemestresSpinnerAdapter
 import com.wolfteam20.schedulemobile.ui.adapters.TipoAulaMateriaSpinnerAdapter
 import com.wolfteam20.schedulemobile.ui.editardb.base.ItemDetailsBaseFragment
+import com.wolfteam20.schedulemobile.utils.Constants
 import kotlinx.android.synthetic.main.editardb_details_common_toolbar.*
 import kotlinx.android.synthetic.main.editardb_details_fragment_materias.*
 import javax.inject.Inject
@@ -38,6 +43,12 @@ class MateriaDetailsFragment : ItemDetailsBaseFragment(), MateriaDetailsViewCont
     @ProvidePresenter
     fun provideMateriaDetailsPresenter(): MateriaDetailsPresenter {
         activityComponent.inject(this)
+
+        val id = baseActivity.intent.extras.getLong("ID", 0)
+        val position = baseActivity.intent.extras.getInt("POSITION", 0)
+        val model = baseActivity.intent.extras.getParcelable<MateriaDetailsDTO>("ITEM")
+        mPresenter.subscribe(id, position, model)
+
         return mPresenter
     }
 
@@ -58,12 +69,10 @@ class MateriaDetailsFragment : ItemDetailsBaseFragment(), MateriaDetailsViewCont
     override fun initLayout(view: View?, savedInstanceState: Bundle?) {
         setHasOptionsMenu(true)
 
-        val id = baseActivity.intent.extras.getLong("ID", 0)
-        val position = baseActivity.intent.extras.getInt("POSITION", 0)
-        val model = baseActivity.intent.extras.getParcelable<MateriaDetailsDTO>("ITEM")
-
         val appCompatActivity = baseActivity as AppCompatActivity
         appCompatActivity.setSupportActionBar(editardb_details_fragment_toolbar)
+
+        val id = baseActivity.intent.extras.getLong("ID", 0)
         if (id != 0L)
             appCompatActivity.supportActionBar?.title = resources.getString(R.string.edit)
         else
@@ -88,7 +97,9 @@ class MateriaDetailsFragment : ItemDetailsBaseFragment(), MateriaDetailsViewCont
         materia_details_semestres_dropdown.adapter = mSemestreAdapter
         materia_details_tipo_dropdown.adapter = mTipoMateriaAdapter
 
-        mPresenter.subscribe(id, position, model)
+        savedInstanceState?.let {
+            mCurrentItem = it.getParcelable(Constants.CURRENT_ITEM_TAG)
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -126,35 +137,12 @@ class MateriaDetailsFragment : ItemDetailsBaseFragment(), MateriaDetailsViewCont
         dialog.show()
     }
 
-    override fun showItem(materia: MateriaDetailsDTO) {
-        val carreraPosition = mCarreraAdapter.getPosition(materia.carrera.idCarrera)
-        val semestrePosition = mSemestreAdapter.getPosition(materia.semestre.idSemestre)
-        val tipoPosition = mTipoMateriaAdapter.getPosition(materia.tipoMateria.idTipo)
-
-        materia_details_semestres_dropdown.setSelection(semestrePosition)
-        materia_details_carreras_dropdown.setSelection(carreraPosition)
-        materia_details_tipo_dropdown.setSelection(tipoPosition)
-
-        materia_details_codigo.setText(materia.codigo.toString())
-        materia_details_nombre.setText(materia.asignatura)
-        materia_details_horas_semanales.setText(materia.horasAcademicasSemanales.toString())
-        materia_details_horas_totales.setText(materia.horasAcademicasTotales.toString())
-    }
-
     override fun setCarreraSpinnerItems(carreras: MutableList<CarreraDTO>) {
         mCarreraAdapter.setItems(carreras)
     }
 
     override fun prepareData(isInEditMode: Boolean) {
-        val materia = MateriaDetailsDTO(
-            materia_details_codigo.text.toString().toLong(),
-            materia_details_nombre.text.toString(),
-            materia_details_horas_totales.text.toString().toInt(),
-            materia_details_horas_semanales.text.toString().toInt(),
-            mCarreraAdapter.getItem(materia_details_carreras_dropdown.selectedItemId),
-            mSemestreAdapter.getItem(materia_details_semestres_dropdown.selectedItemId),
-            mTipoMateriaAdapter.getItem(materia_details_tipo_dropdown.selectedItemId)
-        )
+        val materia = getItemData() as MateriaDetailsDTO
         if (isInEditMode)
             mPresenter.update(materia)
         else
@@ -167,5 +155,33 @@ class MateriaDetailsFragment : ItemDetailsBaseFragment(), MateriaDetailsViewCont
 
     override fun setSemestresSpinnerItems(semestres: MutableList<SemestreDTO>) {
         mSemestreAdapter.setItems(semestres)
+    }
+
+    override fun getItemData(): Parcelable {
+        return MateriaDetailsDTO(
+                materia_details_codigo.text.toString().toLongOrNull() ?: 0,
+                materia_details_nombre.text.toString(),
+                materia_details_horas_totales.text.toString().toIntOrNull() ?: 0,
+                materia_details_horas_semanales.text.toString().toIntOrNull() ?: 0,
+                mCarreraAdapter.getItem(materia_details_carreras_dropdown.selectedItemId),
+                mSemestreAdapter.getItem(materia_details_semestres_dropdown.selectedItemId),
+                mTipoMateriaAdapter.getItem(materia_details_tipo_dropdown.selectedItemId)
+        )
+    }
+
+    override fun setItemData(item: Parcelable) {
+        val materia = item as MateriaDetailsDTO
+        val carreraPosition = mCarreraAdapter.getPosition(materia.carrera.idCarrera)
+        val semestrePosition = mSemestreAdapter.getPosition(materia.semestre.idSemestre)
+        val tipoPosition = mTipoMateriaAdapter.getPosition(materia.tipoMateria.idTipo)
+
+        materia_details_semestres_dropdown.setSelection(semestrePosition)
+        materia_details_carreras_dropdown.setSelection(carreraPosition)
+        materia_details_tipo_dropdown.setSelection(tipoPosition)
+
+        materia_details_codigo.setText(materia.codigo.toString())
+        materia_details_nombre.setText(materia.asignatura)
+        materia_details_horas_semanales.setText(materia.horasAcademicasSemanales.toString())
+        materia_details_horas_totales.setText(materia.horasAcademicasTotales.toString())
     }
 }

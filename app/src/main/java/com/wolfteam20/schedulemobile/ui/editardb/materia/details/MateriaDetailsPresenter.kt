@@ -46,11 +46,7 @@ class MateriaDetailsPresenter @Inject constructor(
                     .subscribeOn(Schedulers.io())
                     .subscribe(
                         { triple: Triple<MutableList<CarreraDTO>, MutableList<TipoAulaMateriaDTO>, MutableList<SemestreDTO>> ->
-                            viewState.setCarreraSpinnerItems(triple.first)
-                            viewState.setSemestresSpinnerItems(triple.third)
-                            viewState.setTipoMateriaSpinnerItems(triple.second)
-                            viewState.enableAllViews(true)
-                            viewState.hideLoading()
+                            initView(model, triple.first, triple.second, triple.third)
                         },
                         { error -> onError(error) }
                     )
@@ -72,12 +68,7 @@ class MateriaDetailsPresenter @Inject constructor(
                 .subscribeOn(Schedulers.io())
                 .subscribe(
                     { triple: Triple<MutableList<CarreraDTO>, MutableList<TipoAulaMateriaDTO>, MutableList<SemestreDTO>> ->
-                        viewState.setCarreraSpinnerItems(triple.first)
-                        viewState.setSemestresSpinnerItems(triple.third)
-                        viewState.setTipoMateriaSpinnerItems(triple.second)
-                        viewState.enableAllViews(true)
-                        viewState.hideLoading()
-                        viewState.showItem(model!!)
+                        initView(model, triple.first, triple.second, triple.third)
                     },
                     { error -> onError(error) }
                 )
@@ -151,5 +142,19 @@ class MateriaDetailsPresenter @Inject constructor(
                 { error -> onError(error) }
             )
         )
+    }
+
+    private fun initView(
+        materia: MateriaDetailsDTO?,
+        carreras: MutableList<CarreraDTO>,
+        tipoAulaMateria : MutableList<TipoAulaMateriaDTO>,
+        semestres: MutableList<SemestreDTO>
+    ) {
+        viewState.setCarreraSpinnerItems(carreras)
+        viewState.setSemestresSpinnerItems(semestres)
+        viewState.setTipoMateriaSpinnerItems(tipoAulaMateria)
+        viewState.enableAllViews(true)
+        viewState.hideLoading()
+        viewState.showItem(materia)
     }
 }
