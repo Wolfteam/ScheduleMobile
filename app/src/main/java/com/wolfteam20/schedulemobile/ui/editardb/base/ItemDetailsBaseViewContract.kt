@@ -17,6 +17,9 @@ interface ItemDetailsBaseViewContract : BaseViewContract {
 
     fun enableAllViews(enabled: Boolean)
 
+    @StateStrategyType(AddToEndSingleStrategy::class)
+    fun showItem(item: Parcelable?)
+
     @StateStrategyType(SkipStrategy::class)
     fun showConfirmDeleteDialog()
 

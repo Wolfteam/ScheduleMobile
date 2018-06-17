@@ -5,7 +5,6 @@ import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy
 import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy
 import com.arellomobile.mvp.viewstate.strategy.SkipStrategy
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
-import com.wolfteam20.schedulemobile.data.network.models.AulaDetailsDTO
 import com.wolfteam20.schedulemobile.ui.base.BaseViewContract
 
 /**
