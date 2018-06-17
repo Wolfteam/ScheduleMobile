@@ -29,7 +29,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
-            buildConfigField "String", "URLBaseAPI", "\"http://192.168.1.103/ScheduleAPI/\""
+            buildConfigField "String", "URLBaseAPI", "\"http://192.168.10.111:8090/\""
         }
     }
     compileOptions {
@@ -41,11 +41,9 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    //Necesario
-    kapt "com.android.databinding:compiler:$gradle_version"
 
     //ButterKnife
     implementation "com.jakewharton:butterknife:$butterknife_version"
@@ -62,7 +60,7 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt:0.9.0'
 
     //MaterialDrawer
-    implementation('com.mikepenz:materialdrawer:6.0.2@aar') {
+    implementation("com.mikepenz:materialdrawer:6.0.7@aar"){
         transitive = true
     }
     implementation 'com.mikepenz:octicons-typeface:3.2.0.4@aar'
