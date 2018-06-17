@@ -1,9 +1,7 @@
 package com.wolfteam20.schedulemobile.ui.editardb.aula.details
 
 import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy
-import com.arellomobile.mvp.viewstate.strategy.SkipStrategy
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
-import com.wolfteam20.schedulemobile.data.network.models.AulaDetailsDTO
 import com.wolfteam20.schedulemobile.data.network.models.TipoAulaMateriaDTO
 import com.wolfteam20.schedulemobile.ui.editardb.base.ItemDetailsBaseViewContract
 
@@ -12,8 +10,5 @@ import com.wolfteam20.schedulemobile.ui.editardb.base.ItemDetailsBaseViewContrac
  */
 @StateStrategyType(AddToEndSingleStrategy::class)
 interface AulaDetailsViewContract : ItemDetailsBaseViewContract {
-    @StateStrategyType(SkipStrategy::class)
-    fun showItem(aula: AulaDetailsDTO)
-
     fun setTipoAulaSpinnerItems(tipos: MutableList<TipoAulaMateriaDTO>)
 }

@@ -5,6 +5,7 @@ import com.wolfteam20.schedulemobile.R
 import com.wolfteam20.schedulemobile.data.DataManagerContract
 import com.wolfteam20.schedulemobile.data.network.models.AulaDTO
 import com.wolfteam20.schedulemobile.data.network.models.AulaDetailsDTO
+import com.wolfteam20.schedulemobile.data.network.models.TipoAulaMateriaDTO
 import com.wolfteam20.schedulemobile.ui.editardb.base.ItemDetailsBasePresenter
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
@@ -33,11 +34,7 @@ class AulaDetailsPresenter @Inject constructor(
             isInEditMode = false
             compositeDisposable.add(dataManager.allTipoAulaMateria
                 .subscribe(
-                    { tipos ->
-                        viewState.enableAllViews(true)
-                        viewState.setTipoAulaSpinnerItems(tipos)
-                        viewState.hideLoading()
-                    },
+                    { tipos -> initView(model, tipos) },
                     { error -> onError(error) }
                 )
             )
@@ -48,12 +45,7 @@ class AulaDetailsPresenter @Inject constructor(
         mItemPosition = position
         compositeDisposable.add(dataManager.allTipoAulaMateria
             .subscribe(
-                { tipos ->
-                    viewState.enableAllViews(true)
-                    viewState.setTipoAulaSpinnerItems(tipos)
-                    viewState.hideLoading()
-                    viewState.showItem(model)
-                },
+                { tipos -> initView(model, tipos) },
                 { error -> onError(error) }
             )
         )
@@ -110,5 +102,12 @@ class AulaDetailsPresenter @Inject constructor(
                 { error -> onError(error) }
             )
         )
+    }
+
+    private fun initView(aula: AulaDetailsDTO?, tipoAula: MutableList<TipoAulaMateriaDTO>) {
+        viewState.enableAllViews(true)
+        viewState.setTipoAulaSpinnerItems(tipoAula)
+        viewState.hideLoading()
+        viewState.showItem(aula)
     }
 }
