@@ -34,7 +34,7 @@ class ProfesorDetailsPresenter @Inject constructor(
             isInEditMode = false
             compositeDisposable.add(dataManager.allPrioridades
                 .subscribe(
-                    { prioridades -> initView(prioridades) },
+                    { prioridades -> initView(model, prioridades) },
                     { error -> onError(error) }
                 )
             )
@@ -45,10 +45,7 @@ class ProfesorDetailsPresenter @Inject constructor(
         mItemPosition = position
         compositeDisposable.add(dataManager.allPrioridades
             .subscribe(
-                { prioridades ->
-                    initView(prioridades)
-                    viewState.showItem(model!!)
-                },
+                { prioridades -> initView(model, prioridades) },
                 { error -> onError(error) }
             )
         )
@@ -116,9 +113,13 @@ class ProfesorDetailsPresenter @Inject constructor(
         )
     }
 
-    private fun initView(prioridades: MutableList<PrioridadProfesorDTO>) {
+    private fun initView(
+        profesor: ProfesorDetailsDTO?,
+        prioridades: MutableList<PrioridadProfesorDTO>
+    ) {
         viewState.setPrioridadSpinnerItems(prioridades)
         viewState.enableAllViews(true)
         viewState.hideLoading()
+        viewState.showItem(profesor)
     }
 }
