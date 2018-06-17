@@ -3,6 +3,7 @@ package com.wolfteam20.schedulemobile.ui.editardb.usuarios.details
 import android.databinding.DataBindingUtil
 import android.databinding.ViewDataBinding
 import android.os.Bundle
+import android.os.Parcelable
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
@@ -19,6 +20,7 @@ import com.wolfteam20.schedulemobile.data.network.models.UsuarioDetailsDTO
 import com.wolfteam20.schedulemobile.ui.adapters.PrivilegioSpinnerAdapter
 import com.wolfteam20.schedulemobile.ui.adapters.ProfesoresSpinnerAdapter2
 import com.wolfteam20.schedulemobile.ui.editardb.base.ItemDetailsBaseFragment
+import com.wolfteam20.schedulemobile.utils.Constants
 import kotlinx.android.synthetic.main.editardb_details_common_toolbar.*
 import kotlinx.android.synthetic.main.editardb_details_fragment_usuarios.*
 import javax.inject.Inject
@@ -38,13 +40,19 @@ class UsuarioDetailsFragment : ItemDetailsBaseFragment(), UsuarioDetailsViewCont
     @ProvidePresenter
     fun provideUsuarioDetailsPresenter(): UsuarioDetailsPresenter {
         activityComponent.inject(this)
+
+        val id = baseActivity.intent.extras.getLong(Constants.ITEM_ID_TAG, 0)
+        val position = baseActivity.intent.extras.getInt(Constants.ITEM_POSITION_TAG, 0)
+        val model = baseActivity.intent.extras.getParcelable<UsuarioDetailsDTO>(Constants.ITEM_TAG)
+        mPresenter.subscribe(id, position, model)
+
         return mPresenter
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.editardb_details_fragment_usuarios, container, false)
         val binding = DataBindingUtil.bind<ViewDataBinding>(view)
@@ -58,12 +66,10 @@ class UsuarioDetailsFragment : ItemDetailsBaseFragment(), UsuarioDetailsViewCont
     override fun initLayout(view: View?, savedInstanceState: Bundle?) {
         setHasOptionsMenu(true)
 
-        val id = baseActivity.intent.extras.getLong("ID", 0)
-        val position = baseActivity.intent.extras.getInt("POSITION", 0)
-        val model = baseActivity.intent.extras.getParcelable<UsuarioDetailsDTO>("ITEM")
-
         val appCompatActivity = baseActivity as AppCompatActivity
         appCompatActivity.setSupportActionBar(editardb_details_fragment_toolbar)
+
+        val id = baseActivity.intent.extras.getLong(Constants.ITEM_ID_TAG, 0)
         if (id != 0L)
             appCompatActivity.supportActionBar?.title = resources.getString(R.string.edit)
         else
@@ -72,19 +78,21 @@ class UsuarioDetailsFragment : ItemDetailsBaseFragment(), UsuarioDetailsViewCont
         appCompatActivity.supportActionBar?.setDisplayShowHomeEnabled(true)
 
         mProfesoresAdapter = ProfesoresSpinnerAdapter2(
-            baseActivity,
-            R.layout.editardb_details_common_spinner_layout
+                baseActivity,
+                R.layout.editardb_details_common_spinner_layout
         )
 
         mPrivilegiosAdapter = PrivilegioSpinnerAdapter(
-            baseActivity,
-            R.layout.editardb_details_common_spinner_layout
+                baseActivity,
+                R.layout.editardb_details_common_spinner_layout
         )
 
         usuario_details_profesores_dropdown.adapter = mProfesoresAdapter
         usuario_details_privilegios_dropdown.adapter = mPrivilegiosAdapter
 
-        mPresenter.subscribe(id, position, model)
+        savedInstanceState?.let {
+            mCurrentItem = it.getParcelable(Constants.CURRENT_ITEM_TAG)
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -110,19 +118,13 @@ class UsuarioDetailsFragment : ItemDetailsBaseFragment(), UsuarioDetailsViewCont
 
     override fun showConfirmDeleteDialog() {
         val dialog: AlertDialog = AlertDialog.Builder(baseActivity)
-            .setTitle(resources.getString(R.string.are_you_sure))
-            .setPositiveButton(getString(R.string.yes), { _, _ ->
-                mPresenter.delete()
-            })
-            .setNegativeButton(getString(R.string.cancelar), null)
-            .create()
+                .setTitle(resources.getString(R.string.are_you_sure))
+                .setPositiveButton(getString(R.string.yes), { _, _ ->
+                    mPresenter.delete()
+                })
+                .setNegativeButton(getString(R.string.cancelar), null)
+                .create()
         dialog.show()
-    }
-
-    override fun showItem(usuario: UsuarioDetailsDTO) {
-        usuario_details_username.setText(usuario.username)
-        usuario_details_privilegios_dropdown.setSelection(mPrivilegiosAdapter.getPosition(usuario.privilegios.idPrivilegio))
-        usuario_details_profesores_dropdown.setSelection(mProfesoresAdapter.getPosition(usuario.cedula))
     }
 
     override fun setProfesorSpinnerItems(profesores: MutableList<ProfesorDetailsDTO>) {
@@ -134,18 +136,29 @@ class UsuarioDetailsFragment : ItemDetailsBaseFragment(), UsuarioDetailsViewCont
     }
 
     override fun prepareData(isInEditMode: Boolean) {
-        val cedula = usuario_details_profesores_dropdown.selectedItemId
-        val privilegio = usuario_details_privilegios_dropdown.selectedItemId
-        val usuario = UsuarioDetailsDTO(
-            cedula,
-            usuario_details_username.text.toString(),
-            usuario_details_password.text.toString(),
-            null, mPrivilegiosAdapter.getItem(privilegio)
-        )
-
+        val usuario = getItemData() as UsuarioDetailsDTO
         if (isInEditMode)
             mPresenter.update(usuario)
         else
             mPresenter.add(usuario)
     }
+
+    override fun getItemData(): Parcelable {
+        val cedula = usuario_details_profesores_dropdown.selectedItemId
+        val privilegio = usuario_details_privilegios_dropdown.selectedItemId
+        return UsuarioDetailsDTO(
+                cedula,
+                usuario_details_username.text.toString(),
+                usuario_details_password.text.toString(),
+                null, mPrivilegiosAdapter.getItem(privilegio)
+        )
+    }
+
+    override fun setItemData(item: Parcelable) {
+        val usuario = item as UsuarioDetailsDTO
+        usuario_details_username.setText(usuario.username)
+        usuario_details_privilegios_dropdown.setSelection(mPrivilegiosAdapter.getPosition(usuario.privilegios.idPrivilegio))
+        usuario_details_profesores_dropdown.setSelection(mProfesoresAdapter.getPosition(usuario.cedula))
+    }
+
 }

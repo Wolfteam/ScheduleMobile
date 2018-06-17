@@ -3,7 +3,10 @@ package com.wolfteam20.schedulemobile.ui.editardb.usuarios.details
 import com.arellomobile.mvp.InjectViewState
 import com.wolfteam20.schedulemobile.R
 import com.wolfteam20.schedulemobile.data.DataManagerContract
-import com.wolfteam20.schedulemobile.data.network.models.*
+import com.wolfteam20.schedulemobile.data.network.models.PrivilegioDTO
+import com.wolfteam20.schedulemobile.data.network.models.ProfesorDetailsDTO
+import com.wolfteam20.schedulemobile.data.network.models.UsuarioDTO
+import com.wolfteam20.schedulemobile.data.network.models.UsuarioDetailsDTO
 import com.wolfteam20.schedulemobile.ui.editardb.base.ItemDetailsBasePresenter
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -46,7 +49,7 @@ class UsuarioDetailsPresenter @Inject constructor(
             isInEditMode = false
             compositeDisposable.add(zip
                 .subscribe(
-                    { pair -> initView(pair.first, pair.second) },
+                    { pair -> initView(model, pair.first, pair.second) },
                     { error -> onError(error) }
                 )
             )
@@ -57,10 +60,7 @@ class UsuarioDetailsPresenter @Inject constructor(
         mItemPosition = position
         compositeDisposable.add(zip
             .subscribe(
-                { pair ->
-                    initView(pair.first, pair.second)
-                    viewState.showItem(model!!)
-                },
+                { pair -> initView(model, pair.first, pair.second) },
                 { error -> onError(error) }
             )
         )
@@ -129,6 +129,7 @@ class UsuarioDetailsPresenter @Inject constructor(
     }
 
     private fun initView(
+        usuario: UsuarioDetailsDTO?,
         profesores: MutableList<ProfesorDetailsDTO>,
         privilegios: MutableList<PrivilegioDTO>
     ) {
@@ -138,5 +139,6 @@ class UsuarioDetailsPresenter @Inject constructor(
         viewState.setProfesorSpinnerItems(profesores)
         viewState.setPrivilegioSpinnerItems(privilegios)
         viewState.hideLoading()
+        viewState.showItem(usuario)
     }
 }
