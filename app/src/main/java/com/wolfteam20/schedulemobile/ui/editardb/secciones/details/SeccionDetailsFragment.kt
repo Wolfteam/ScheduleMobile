@@ -3,6 +3,7 @@ package com.wolfteam20.schedulemobile.ui.editardb.secciones.details
 import android.databinding.DataBindingUtil
 import android.databinding.ViewDataBinding
 import android.os.Bundle
+import android.os.Parcelable
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
@@ -17,6 +18,7 @@ import com.wolfteam20.schedulemobile.data.network.models.MateriaDetailsDTO
 import com.wolfteam20.schedulemobile.data.network.models.SeccionDetailsDTO
 import com.wolfteam20.schedulemobile.ui.adapters.MateriasSpinnerAdapter
 import com.wolfteam20.schedulemobile.ui.editardb.base.ItemDetailsBaseFragment
+import com.wolfteam20.schedulemobile.utils.Constants
 import kotlinx.android.synthetic.main.editardb_details_common_toolbar.*
 import kotlinx.android.synthetic.main.editardb_details_fragment_secciones.*
 import javax.inject.Inject
@@ -35,6 +37,12 @@ class SeccionDetailsFragment : ItemDetailsBaseFragment(), SeccionDetailsViewCont
     @ProvidePresenter
     fun provideSeccionDetailsPresenter(): SeccionDetailsPresenter {
         activityComponent.inject(this)
+
+        val id = baseActivity.intent.extras.getLong(Constants.ITEM_ID_TAG, 0)
+        val position = baseActivity.intent.extras.getInt(Constants.ITEM_POSITION_TAG, 0)
+        val model = baseActivity.intent.extras.getParcelable<SeccionDetailsDTO>(Constants.ITEM_TAG)
+        mPresenter.subscribe(id, position, model)
+
         return mPresenter
     }
 
@@ -55,12 +63,10 @@ class SeccionDetailsFragment : ItemDetailsBaseFragment(), SeccionDetailsViewCont
     override fun initLayout(view: View?, savedInstanceState: Bundle?) {
         setHasOptionsMenu(true)
 
-        val id = baseActivity.intent.extras.getLong("ID", 0)
-        val position = baseActivity.intent.extras.getInt("POSITION", 0)
-        val model = baseActivity.intent.extras.getParcelable<SeccionDetailsDTO>("ITEM")
-
         val appCompatActivity = baseActivity as AppCompatActivity
         appCompatActivity.setSupportActionBar(editardb_details_fragment_toolbar)
+
+        val id = baseActivity.intent.extras.getLong(Constants.ITEM_ID_TAG, 0)
         if (id != 0L)
             appCompatActivity.supportActionBar?.title = resources.getString(R.string.edit)
         else
@@ -69,13 +75,15 @@ class SeccionDetailsFragment : ItemDetailsBaseFragment(), SeccionDetailsViewCont
         appCompatActivity.supportActionBar?.setDisplayShowHomeEnabled(true)
 
         mMateriaAdapter = MateriasSpinnerAdapter(
-            baseActivity,
-            R.layout.editardb_details_common_spinner_layout
+                baseActivity,
+                R.layout.editardb_details_common_spinner_layout
         )
 
         seccion_details_materias_dropdown.adapter = mMateriaAdapter
 
-        mPresenter.subscribe(id, position, model)
+        savedInstanceState?.let {
+            mCurrentItem = it.getParcelable(Constants.CURRENT_ITEM_TAG)
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -98,12 +106,6 @@ class SeccionDetailsFragment : ItemDetailsBaseFragment(), SeccionDetailsViewCont
         baseActivity.invalidateOptionsMenu()
     }
 
-    override fun showItem(seccion: SeccionDetailsDTO) {
-        seccion_details_alumnos.setText(seccion.cantidadAlumnos.toString())
-        seccion_details_numero.setText(seccion.numeroSecciones.toString())
-        seccion_details_materias_dropdown.setSelection(mMateriaAdapter.getPosition(seccion.materia.codigo))
-    }
-
     override fun showConfirmDeleteDialog() {
         val dialog: AlertDialog = AlertDialog.Builder(baseActivity)
             .setTitle(resources.getString(R.string.are_you_sure))
@@ -120,16 +122,27 @@ class SeccionDetailsFragment : ItemDetailsBaseFragment(), SeccionDetailsViewCont
     }
 
     override fun prepareData(isInEditMode: Boolean) {
-        val codigo = seccion_details_materias_dropdown.selectedItemId
-        val seccion = SeccionDetailsDTO(
-            seccion_details_numero.text.toString().toInt(),
-            seccion_details_alumnos.text.toString().toInt(),
-            mMateriaAdapter.getItem(codigo), null
-        )
-
+        val seccion = getItemData() as SeccionDetailsDTO
         if (isInEditMode)
             mPresenter.update(seccion)
         else
             mPresenter.add(seccion)
+    }
+
+    override fun getItemData(): Parcelable {
+        val codigo = seccion_details_materias_dropdown.selectedItemId
+        return SeccionDetailsDTO(
+                seccion_details_numero.text.toString().toIntOrNull() ?: 0,
+                seccion_details_alumnos.text.toString().toIntOrNull() ?: 0,
+                mMateriaAdapter.getItem(codigo),
+                null
+        )
+    }
+
+    override fun setItemData(item: Parcelable) {
+        val seccion = item as SeccionDetailsDTO
+        seccion_details_alumnos.setText(seccion.cantidadAlumnos.toString())
+        seccion_details_numero.setText(seccion.numeroSecciones.toString())
+        seccion_details_materias_dropdown.setSelection(mMateriaAdapter.getPosition(seccion.materia.codigo))
     }
 }

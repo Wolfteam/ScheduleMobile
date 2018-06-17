@@ -3,7 +3,6 @@ package com.wolfteam20.schedulemobile.ui.editardb.secciones.details
 import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
 import com.wolfteam20.schedulemobile.data.network.models.MateriaDetailsDTO
-import com.wolfteam20.schedulemobile.data.network.models.SeccionDetailsDTO
 import com.wolfteam20.schedulemobile.ui.editardb.base.ItemDetailsBaseViewContract
 
 /**
@@ -11,6 +10,5 @@ import com.wolfteam20.schedulemobile.ui.editardb.base.ItemDetailsBaseViewContrac
  */
 @StateStrategyType(AddToEndSingleStrategy::class)
 interface SeccionDetailsViewContract : ItemDetailsBaseViewContract {
-    fun showItem(seccion: SeccionDetailsDTO)
     fun setMateriaSpinnerItems(materias: MutableList<MateriaDetailsDTO>)
 }

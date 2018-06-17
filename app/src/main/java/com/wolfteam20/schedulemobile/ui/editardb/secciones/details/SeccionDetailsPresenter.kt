@@ -34,7 +34,7 @@ class SeccionDetailsPresenter @Inject constructor(
             isInEditMode = false
             compositeDisposable.add(dataManager.allMaterias
                 .subscribe(
-                    { materias -> initView(materias) },
+                    { materias -> initView(model, materias) },
                     { error -> onError(error) }
                 )
             )
@@ -45,10 +45,7 @@ class SeccionDetailsPresenter @Inject constructor(
         mItemPosition = position
         compositeDisposable.add(dataManager.allMaterias
             .subscribe(
-                { materias ->
-                    initView(materias)
-                    viewState.showItem(model!!)
-                },
+                { materias -> initView(model, materias) },
                 { error -> onError(error) }
             )
         )
@@ -106,10 +103,11 @@ class SeccionDetailsPresenter @Inject constructor(
         )
     }
 
-    private fun initView(materias: MutableList<MateriaDetailsDTO>) {
+    private fun initView(seccion: SeccionDetailsDTO?, materias: MutableList<MateriaDetailsDTO>) {
         materias.sortBy { it.asignatura }
         viewState.enableAllViews(true)
         viewState.setMateriaSpinnerItems(materias)
         viewState.hideLoading()
+        viewState.showItem(seccion)
     }
 }
