@@ -22,6 +22,7 @@ class PeriodoDetailsPresenter @Inject constructor(
     override fun subscribe(idPeriodo: Long, position: Int, model: PeriodoAcademicoDTO?) {
         if (idPeriodo == 0L){
             isInEditMode = false
+            viewState.showItem(null)
             return
         }
         mItemID = idPeriodo

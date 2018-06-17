@@ -3,6 +3,7 @@ package com.wolfteam20.schedulemobile.ui.editardb.periodos.details
 import android.databinding.DataBindingUtil
 import android.databinding.ViewDataBinding
 import android.os.Bundle
+import android.os.Parcelable
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
@@ -15,6 +16,7 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.wolfteam20.schedulemobile.R
 import com.wolfteam20.schedulemobile.data.network.models.PeriodoAcademicoDTO
 import com.wolfteam20.schedulemobile.ui.editardb.base.ItemDetailsBaseFragment
+import com.wolfteam20.schedulemobile.utils.Constants
 import kotlinx.android.synthetic.main.editardb_details_common_toolbar.*
 import kotlinx.android.synthetic.main.editardb_details_fragment_periodo_acad.*
 import java.util.*
@@ -33,6 +35,12 @@ class PeriodoDetailsFragment : ItemDetailsBaseFragment(), PeriodoDetailsViewCont
     @ProvidePresenter
     fun providePeriodoDetailsPresenter(): PeriodoDetailsPresenter {
         activityComponent.inject(this)
+
+        val id = baseActivity.intent.extras.getLong(Constants.ITEM_ID_TAG, 0)
+        val position = baseActivity.intent.extras.getInt(Constants.ITEM_POSITION_TAG, 0)
+        val model = baseActivity.intent.extras.getParcelable<PeriodoAcademicoDTO>(Constants.ITEM_TAG)
+        mPresenter.subscribe(id, position, model)
+
         return mPresenter
     }
 
@@ -54,12 +62,10 @@ class PeriodoDetailsFragment : ItemDetailsBaseFragment(), PeriodoDetailsViewCont
     override fun initLayout(view: View?, savedInstanceState: Bundle?) {
         setHasOptionsMenu(true)
 
-        val id = baseActivity.intent.extras.getLong("ID", 0)
-        val position = baseActivity.intent.extras.getInt("POSITION", 0)
-        val model = baseActivity.intent.extras.getParcelable<PeriodoAcademicoDTO>("ITEM")
-
         val appCompatActivity = baseActivity as AppCompatActivity
         appCompatActivity.setSupportActionBar(editardb_details_fragment_toolbar)
+
+        val id = baseActivity.intent.extras.getLong("ID", 0)
         if (id != 0L)
             appCompatActivity.supportActionBar?.title = resources.getString(R.string.edit)
         else
@@ -67,7 +73,9 @@ class PeriodoDetailsFragment : ItemDetailsBaseFragment(), PeriodoDetailsViewCont
         appCompatActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         appCompatActivity.supportActionBar?.setDisplayShowHomeEnabled(true)
 
-        mPresenter.subscribe(id, position, model)
+        savedInstanceState?.let {
+            mCurrentItem = it.getParcelable(Constants.CURRENT_ITEM_TAG)
+        }
     }
 
 
@@ -81,11 +89,6 @@ class PeriodoDetailsFragment : ItemDetailsBaseFragment(), PeriodoDetailsViewCont
             else -> mPresenter.onCancelClicked()
         }
         return true
-    }
-
-    override fun showItem(periodo: PeriodoAcademicoDTO) {
-        periodo_academico_details_nombre.setText(periodo.nombrePeriodo)
-        periodo_academico_details_status.isChecked = periodo.status
     }
 
     override fun enableAllViews(enabled: Boolean) {
@@ -107,16 +110,25 @@ class PeriodoDetailsFragment : ItemDetailsBaseFragment(), PeriodoDetailsViewCont
     }
 
     override fun prepareData(isInEditMode: Boolean) {
-        val periodo = PeriodoAcademicoDTO(
-            0,
-            periodo_academico_details_nombre.text.toString(),
-            periodo_academico_details_status.isChecked,
-            Date()
-        )
-
+        val periodo = getItemData() as PeriodoAcademicoDTO
         if (isInEditMode)
             mPresenter.update(periodo)
         else
             mPresenter.add(periodo)
+    }
+
+    override fun getItemData(): Parcelable {
+        return PeriodoAcademicoDTO(
+                0,
+                periodo_academico_details_nombre.text.toString(),
+                periodo_academico_details_status.isChecked,
+                Date()
+        )
+    }
+
+    override fun setItemData(item: Parcelable) {
+        val periodo = item as PeriodoAcademicoDTO
+        periodo_academico_details_nombre.setText(periodo.nombrePeriodo)
+        periodo_academico_details_status.isChecked = periodo.status
     }
 }
