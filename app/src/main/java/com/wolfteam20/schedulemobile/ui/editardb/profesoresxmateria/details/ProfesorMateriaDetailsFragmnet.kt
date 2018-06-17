@@ -3,6 +3,7 @@ package com.wolfteam20.schedulemobile.ui.editardb.profesoresxmateria.details
 import android.databinding.DataBindingUtil
 import android.databinding.ViewDataBinding
 import android.os.Bundle
+import android.os.Parcelable
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
@@ -19,6 +20,7 @@ import com.wolfteam20.schedulemobile.data.network.models.ProfesorMateriaDetailsD
 import com.wolfteam20.schedulemobile.ui.adapters.MateriasSpinnerAdapter
 import com.wolfteam20.schedulemobile.ui.adapters.ProfesoresSpinnerAdapter2
 import com.wolfteam20.schedulemobile.ui.editardb.base.ItemDetailsBaseFragment
+import com.wolfteam20.schedulemobile.utils.Constants
 import kotlinx.android.synthetic.main.editardb_details_common_toolbar.*
 import kotlinx.android.synthetic.main.editardb_details_fragment_prof_mat.*
 import javax.inject.Inject
@@ -26,8 +28,7 @@ import javax.inject.Inject
 /**
  * Created by Efrain.Bastidas on 18/2/2018.
  */
-class ProfesorMateriaDetailsFragmnet : ItemDetailsBaseFragment(),
-    ProfesorMateriaDetailsViewContract {
+class ProfesorMateriaDetailsFragmnet : ItemDetailsBaseFragment(), ProfesorMateriaDetailsViewContract {
 
     @Inject
     @InjectPresenter
@@ -39,13 +40,19 @@ class ProfesorMateriaDetailsFragmnet : ItemDetailsBaseFragment(),
     @ProvidePresenter
     fun provideProfesorMateriaDetailsPresenter(): ProfesorMateriaDetailsPresenter {
         activityComponent.inject(this)
+
+        val id = baseActivity.intent.extras.getLong(Constants.ITEM_ID_TAG, 0)
+        val position = baseActivity.intent.extras.getInt(Constants.ITEM_POSITION_TAG, 0)
+        val model = baseActivity.intent.extras.getParcelable<ProfesorMateriaDetailsDTO>(Constants.ITEM_TAG)
+        mPresenter.subscribe(id, position, model)
+
         return mPresenter
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.editardb_details_fragment_prof_mat, container, false)
         val binding = DataBindingUtil.bind<ViewDataBinding>(view)
@@ -59,12 +66,10 @@ class ProfesorMateriaDetailsFragmnet : ItemDetailsBaseFragment(),
     override fun initLayout(view: View?, savedInstanceState: Bundle?) {
         setHasOptionsMenu(true)
 
-        val id = baseActivity.intent.extras.getLong("ID", 0)
-        val position = baseActivity.intent.extras.getInt("POSITION", 0)
-        val model = baseActivity.intent.extras.getParcelable<ProfesorMateriaDetailsDTO>("ITEM")
-
         val appCompatActivity = baseActivity as AppCompatActivity
         appCompatActivity.setSupportActionBar(editardb_details_fragment_toolbar)
+
+        val id = baseActivity.intent.extras.getLong(Constants.ITEM_ID_TAG, 0)
         if (id != 0L)
             appCompatActivity.supportActionBar?.title = resources.getString(R.string.edit)
         else
@@ -73,19 +78,21 @@ class ProfesorMateriaDetailsFragmnet : ItemDetailsBaseFragment(),
         appCompatActivity.supportActionBar?.setDisplayShowHomeEnabled(true)
 
         mProfesorAdapter = ProfesoresSpinnerAdapter2(
-            baseActivity,
-            R.layout.editardb_details_common_spinner_layout
+                baseActivity,
+                R.layout.editardb_details_common_spinner_layout
         )
 
         mMateriaAdapter = MateriasSpinnerAdapter(
-            baseActivity,
-            R.layout.editardb_details_common_spinner_layout
+                baseActivity,
+                R.layout.editardb_details_common_spinner_layout
         )
 
         prof_mat_details_profesores_dropdown.adapter = mProfesorAdapter
         prof_mat_details_materias_dropdown.adapter = mMateriaAdapter
 
-        mPresenter.subscribe(id, position, model)
+        savedInstanceState?.let {
+            mCurrentItem = it.getParcelable(Constants.CURRENT_ITEM_TAG)
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -98,11 +105,6 @@ class ProfesorMateriaDetailsFragmnet : ItemDetailsBaseFragment(),
             else -> mPresenter.onCancelClicked()
         }
         return true
-    }
-
-    override fun showItem(relacion: ProfesorMateriaDetailsDTO) {
-        prof_mat_details_profesores_dropdown.setSelection(mProfesorAdapter.getPosition(relacion.profesor.cedula))
-        prof_mat_details_materias_dropdown.setSelection(mMateriaAdapter.getPosition(relacion.materia.codigo))
     }
 
     override fun enableAllViews(enabled: Boolean) {
@@ -118,12 +120,13 @@ class ProfesorMateriaDetailsFragmnet : ItemDetailsBaseFragment(),
 
     override fun showConfirmDeleteDialog() {
         val dialog: AlertDialog = AlertDialog.Builder(baseActivity)
-            .setTitle(resources.getString(R.string.are_you_sure))
-            .setPositiveButton(getString(R.string.yes), { _, _ ->
-                mPresenter.delete()
-            })
-            .setNegativeButton(getString(R.string.cancelar), null)
-            .create()
+                .setTitle(resources.getString(R.string.are_you_sure))
+                .setPositiveButton(
+                        getString(R.string.yes), { _, _ ->
+                    mPresenter.delete()
+                })
+                .setNegativeButton(getString(R.string.cancelar), null)
+                .create()
         dialog.show()
     }
 
@@ -132,15 +135,24 @@ class ProfesorMateriaDetailsFragmnet : ItemDetailsBaseFragment(),
     }
 
     override fun prepareData(isInEditMode: Boolean) {
-        val relacion = ProfesorMateriaDetailsDTO(
-            0,
-            mProfesorAdapter.getItem(prof_mat_details_profesores_dropdown.selectedItemId),
-            mMateriaAdapter.getItem(prof_mat_details_materias_dropdown.selectedItemId)
-        )
-
+        val relacion = getItemData() as ProfesorMateriaDetailsDTO
         if (isInEditMode)
             mPresenter.update(relacion)
         else
             mPresenter.add(relacion)
+    }
+
+    override fun getItemData(): Parcelable {
+        return ProfesorMateriaDetailsDTO(
+                0,
+                mProfesorAdapter.getItem(prof_mat_details_profesores_dropdown.selectedItemId),
+                mMateriaAdapter.getItem(prof_mat_details_materias_dropdown.selectedItemId)
+        )
+    }
+
+    override fun setItemData(item: Parcelable) {
+        val relacion = item as ProfesorMateriaDetailsDTO
+        prof_mat_details_profesores_dropdown.setSelection(mProfesorAdapter.getPosition(relacion.profesor.cedula))
+        prof_mat_details_materias_dropdown.setSelection(mMateriaAdapter.getPosition(relacion.materia.codigo))
     }
 }

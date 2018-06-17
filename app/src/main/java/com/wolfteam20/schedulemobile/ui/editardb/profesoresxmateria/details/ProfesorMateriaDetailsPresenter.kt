@@ -53,7 +53,7 @@ class ProfesorMateriaDetailsPresenter @Inject constructor(
             compositeDisposable.add(zip
                 .subscribe(
                     { pair: Pair<MutableList<ProfesorDetailsDTO>, MutableList<MateriaDetailsDTO>> ->
-                        initView(pair.first, pair.second)
+                        initView(model, pair.first, pair.second)
                     },
                     { error -> onError(error) }
                 )
@@ -66,8 +66,7 @@ class ProfesorMateriaDetailsPresenter @Inject constructor(
         compositeDisposable.add(zip
             .subscribe(
                 { pair: Pair<MutableList<ProfesorDetailsDTO>, MutableList<MateriaDetailsDTO>> ->
-                    initView(pair.first, pair.second)
-                    viewState.showItem(model!!)
+                    initView(model, pair.first, pair.second)
                 },
                 { error -> onError(error) }
             )
@@ -127,6 +126,7 @@ class ProfesorMateriaDetailsPresenter @Inject constructor(
     }
 
     private fun initView(
+        relacion: ProfesorMateriaDetailsDTO?,
         profesores: MutableList<ProfesorDetailsDTO>,
         materias: MutableList<MateriaDetailsDTO>
     ) {
@@ -137,5 +137,6 @@ class ProfesorMateriaDetailsPresenter @Inject constructor(
         viewState.setProfesoresSpinnerItems(profesores)
         viewState.enableAllViews(true)
         viewState.hideLoading()
+        viewState.showItem(relacion)
     }
 }
