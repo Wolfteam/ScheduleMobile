@@ -3,6 +3,7 @@ package com.wolfteam20.schedulemobile.ui.editardb.base
 import com.wolfteam20.schedulemobile.data.DataManagerContract
 import com.wolfteam20.schedulemobile.ui.base.BasePresenter
 import io.reactivex.disposables.CompositeDisposable
+import retrofit2.HttpException
 
 /**
  * Created by Efrain.Bastidas on 15/2/2018.
@@ -38,6 +39,11 @@ abstract class ItemDetailsBasePresenter<TView : ItemDetailsBaseViewContract>(
 
     protected fun onError(error: Throwable) {
         viewState.hideLoading()
-        viewState.onError(error.localizedMessage)
+        if (error is HttpException){
+            val errorMessage = error.response().errorBody()?.string()
+            viewState.onError("${error.localizedMessage} . $errorMessage")
+        }else {
+            viewState.onError(error.localizedMessage)
+        }
     }
 }
