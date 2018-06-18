@@ -20,14 +20,14 @@ class PeriodoDetailsPresenter @Inject constructor(
     PeriodoDetailsPresenterContract {
 
     override fun subscribe(idPeriodo: Long, position: Int, model: PeriodoAcademicoDTO?) {
+        viewState.showItem(model)
+        viewState.enableAllViews(true)
         if (idPeriodo == 0L){
             isInEditMode = false
-            viewState.showItem(null)
             return
         }
         mItemID = idPeriodo
         mItemPosition = position
-        viewState.showItem(model!!)
     }
 
     override fun delete() {
