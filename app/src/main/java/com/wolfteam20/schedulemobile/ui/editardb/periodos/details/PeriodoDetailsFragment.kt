@@ -51,7 +51,7 @@ class PeriodoDetailsFragment : ItemDetailsBaseFragment(), PeriodoDetailsViewCont
     ): View? {
         val view =
             inflater.inflate(R.layout.editardb_details_fragment_periodo_acad, container, false)
-        val binding = DataBindingUtil.bind<ViewDataBinding>(view)
+        val binding = DataBindingUtil.bind<ViewDataBinding>(view)!!
         mValidator = Validator(binding)
         binding.root.setOnClickListener {
             mValidator.validate()
@@ -65,7 +65,7 @@ class PeriodoDetailsFragment : ItemDetailsBaseFragment(), PeriodoDetailsViewCont
         val appCompatActivity = baseActivity as AppCompatActivity
         appCompatActivity.setSupportActionBar(editardb_details_fragment_toolbar)
 
-        val id = baseActivity.intent.extras.getLong("ID", 0)
+        val id = baseActivity.intent.extras.getLong(Constants.ITEM_ID_TAG, 0)
         if (id != 0L)
             appCompatActivity.supportActionBar?.title = resources.getString(R.string.edit)
         else

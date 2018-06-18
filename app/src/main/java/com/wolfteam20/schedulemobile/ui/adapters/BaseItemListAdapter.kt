@@ -7,7 +7,8 @@ import com.wolfteam20.schedulemobile.ui.editardb.base.ItemClickListenerContract
 /**
  * Created by Efrain.Bastidas on 14/2/2018.
  */
-abstract class BaseItemListAdapter<TItem> : SelectableAdapter<BaseItemListAdapter<TItem>.ItemViewHolder>(),
+abstract class BaseItemListAdapter<TItem> :
+    SelectableAdapter<BaseItemListAdapter<TItem>.ItemViewHolder>(),
     BaseItemListAdapterContract<TItem> {
 
     /**
@@ -19,12 +20,10 @@ abstract class BaseItemListAdapter<TItem> : SelectableAdapter<BaseItemListAdapte
         return mItemList.size
     }
 
-    override fun onBindViewHolder(holder: ItemViewHolder?, position: Int) {
-        if (holder is ItemViewHolder) {
-            val item = mItemList[position]
-            val isItemSelected = isSelected(position)
-            holder.bind(item, position, isItemSelected)
-        }
+    override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
+        val item = mItemList[position]
+        val isItemSelected = isSelected(position)
+        holder.bind(item, position, isItemSelected)
     }
 
     override fun addItem(item: TItem) {
@@ -46,13 +45,17 @@ abstract class BaseItemListAdapter<TItem> : SelectableAdapter<BaseItemListAdapte
     }
 
     override fun updateItem(itemsPosition: Int, item: TItem) {
-        mItemList[itemsPosition] = item
-        notifyItemChanged(itemsPosition)
+        if (mItemList.size > itemsPosition){
+            mItemList[itemsPosition] = item
+            notifyItemChanged(itemsPosition)
+        }
     }
 
     override fun removeItem(itemsPosition: Int) {
-        mItemList.removeAt(itemsPosition)
-        notifyItemRemoved(itemsPosition)
+        if (mItemList.size > itemsPosition){
+            mItemList.removeAt(itemsPosition)
+            notifyItemRemoved(itemsPosition)
+        }
     }
 
     override fun removeItems(positions: ArrayList<Int>) {

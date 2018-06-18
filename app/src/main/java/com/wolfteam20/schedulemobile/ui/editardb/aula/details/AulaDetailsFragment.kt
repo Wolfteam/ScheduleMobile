@@ -54,7 +54,7 @@ class AulaDetailsFragment : ItemDetailsBaseFragment(), AulaDetailsViewContract {
             savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.editardb_details_fragment_aulas, container, false)
-        val binding = DataBindingUtil.bind<ViewDataBinding>(view)
+        val binding = DataBindingUtil.bind<ViewDataBinding>(view)!!
         mValidator = Validator(binding)
         binding.root.setOnClickListener {
             mValidator.validate()

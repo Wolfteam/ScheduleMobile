@@ -54,15 +54,13 @@ class DispDetailsListAdapter(
         return mDisponibilidadList.size
     }
 
-    override fun onBindViewHolder(holder: DispDetailsListViewHolder?, position: Int) {
-        if (holder is DispDetailsListViewHolder) {
-            val disponibilidad = mDisponibilidadList[position]
-            val isItemSelected = isSelected(position)
-            holder.bind(
-                getTextToShow(disponibilidad.idHoraInicio, disponibilidad.idHoraFin),
-                isItemSelected
-            )
-        }
+    override fun onBindViewHolder(holder: DispDetailsListViewHolder, position: Int) {
+        val disponibilidad = mDisponibilidadList[position]
+        val isItemSelected = isSelected(position)
+        holder.bind(
+            getTextToShow(disponibilidad.idHoraInicio, disponibilidad.idHoraFin),
+            isItemSelected
+        )
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DispDetailsListViewHolder {
