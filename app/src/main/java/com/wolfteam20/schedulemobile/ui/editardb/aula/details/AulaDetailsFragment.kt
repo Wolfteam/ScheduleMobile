@@ -28,7 +28,6 @@ import javax.inject.Inject
  * Created by Efrain.Bastidas on 10/2/2018.
  */
 class AulaDetailsFragment : ItemDetailsBaseFragment(), AulaDetailsViewContract {
-    //TODO: AL ROTAR LLAMAS A getItemData y puede reventar en los puntos donde donde tomas un int/long
 
     @Inject
     @InjectPresenter
