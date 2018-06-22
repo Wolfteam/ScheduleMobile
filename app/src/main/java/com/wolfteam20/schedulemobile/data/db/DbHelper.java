@@ -35,7 +35,7 @@ public class DbHelper implements DbHelperContract {
     @Override
     public void addDisponibilidadLocal(List<DisponibilidadDTO> disponibilidades) {
         Timber.i("Guardando la disponibilidad");
-        if (disponibilidades.size() > 0)
+        if (disponibilidades != null && disponibilidades.size() > 0)
             mDispRepository.addRange(disponibilidades);
     }
 
