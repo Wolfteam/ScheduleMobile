@@ -66,6 +66,7 @@ class MateriasPresenter @Inject constructor(
                     viewState.hideSwipeToRefresh()
                     viewState.removeSelectedListItems()
                     viewState.stopActionMode()
+                    viewState.showSuccessMessage(R.string.items_deleted)
                 },
                 { error -> onError(error) }
             )

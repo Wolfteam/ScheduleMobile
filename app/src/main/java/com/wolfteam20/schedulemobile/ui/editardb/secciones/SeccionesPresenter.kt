@@ -4,12 +4,8 @@ import com.arellomobile.mvp.InjectViewState
 import com.wolfteam20.schedulemobile.R
 import com.wolfteam20.schedulemobile.data.DataManagerContract
 import com.wolfteam20.schedulemobile.data.network.models.SeccionDetailsDTO
-import com.wolfteam20.schedulemobile.ui.base.BasePresenter
 import com.wolfteam20.schedulemobile.ui.editardb.base.ItemBasePresenter
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
-import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -69,6 +65,7 @@ class SeccionesPresenter @Inject constructor(
                     viewState.hideSwipeToRefresh()
                     viewState.removeSelectedListItems()
                     viewState.stopActionMode()
+                    viewState.showSuccessMessage(R.string.items_deleted)
                 },
                 { error -> onError(error) }
             )
