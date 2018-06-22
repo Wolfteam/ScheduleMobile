@@ -3,6 +3,8 @@ package com.wolfteam20.schedulemobile.data.db;
 import com.wolfteam20.schedulemobile.data.network.models.DisponibilidadDTO;
 import com.wolfteam20.schedulemobile.data.network.models.DisponibilidadDetailsDTO;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -13,15 +15,16 @@ import io.reactivex.Observable;
  */
 
 public interface DbHelperContract {
+
+    void addDisponibilidadLocal(List<DisponibilidadDTO> disponibilidades);
+
+    void addDisponibilidadDetailsLocal(@NotNull DisponibilidadDetailsDTO disponibilidadDetailsDTO);
+
     Observable<List<DisponibilidadDTO>> getDisponibilidadLocal(int cedula);
 
     Observable<List<DisponibilidadDTO>> getDisponibilidadLocal(int cedula, int idDia);
 
     Observable<DisponibilidadDetailsDTO> getDisponibilidadDetailsLocal(int cedula);
-
-    void saveDisponibilidadLocal(List<DisponibilidadDTO> disponibilidades);
-
-    void saveDisponibilidadDetailsLocal(DisponibilidadDetailsDTO disponibilidadDetailsDTO);
 
     void removeDisponibilidadLocal(int cedula);
 

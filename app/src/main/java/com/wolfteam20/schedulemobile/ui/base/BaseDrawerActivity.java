@@ -2,6 +2,7 @@ package com.wolfteam20.schedulemobile.ui.base;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -33,9 +34,13 @@ import com.wolfteam20.schedulemobile.di.components.ActivityComponent;
 import com.wolfteam20.schedulemobile.di.components.DaggerActivityComponent;
 import com.wolfteam20.schedulemobile.di.modules.ActivityModule;
 import com.wolfteam20.schedulemobile.ui.disponibilidad.DispActivity;
+import com.wolfteam20.schedulemobile.ui.editardb.EditarDBActivity;
+import com.wolfteam20.schedulemobile.ui.editardb.EditarDBFragment;
 import com.wolfteam20.schedulemobile.ui.home.HomeActivity;
 import com.wolfteam20.schedulemobile.ui.login.LoginActivity;
 import com.wolfteam20.schedulemobile.utils.Constants;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +48,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import es.dmoral.toasty.Toasty;
 
 /**
  * Created by Efrain.Bastidas on 1/5/2018.
@@ -105,7 +111,8 @@ public abstract class BaseDrawerActivity extends MvpAppCompatActivity
     @Override
     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
         boolean closeDrawer = true;
-        switch ((int) drawerItem.getIdentifier()) {
+        int item = (int) drawerItem.getIdentifier();
+        switch (item) {
             case 1://Home
                 new Handler().postDelayed(() -> {
                     startActivity(HomeActivity.getIntent(getApplicationContext()));
@@ -122,31 +129,34 @@ public abstract class BaseDrawerActivity extends MvpAppCompatActivity
                 closeDrawer = false;
                 break;
             case 4://Aulas
-                Toast.makeText(view.getContext(), "Click en Aulas", Toast.LENGTH_SHORT).show();
-                break;
             case 5://Materias
-                Toast.makeText(view.getContext(), "Click en Materias", Toast.LENGTH_SHORT).show();
-                break;
             case 6://Periodos
-                Toast.makeText(view.getContext(), "Click en Periodos", Toast.LENGTH_SHORT).show();
-                break;
             case 7://Profesores
-                Toast.makeText(view.getContext(), "Click en Profesores", Toast.LENGTH_SHORT).show();
-                break;
             case 8://Profesores Materias
-                Toast.makeText(view.getContext(), "Click en Profesores Materias", Toast.LENGTH_SHORT).show();
-                break;
             case 9://Secciones
-                Toast.makeText(view.getContext(), "Click en Secciones", Toast.LENGTH_SHORT).show();
+            case 10://Usuarios
+                int startPosition = item - 4;
+                if (this instanceof EditarDBActivity) {
+                    EditarDBFragment fragment = (EditarDBFragment) getSupportFragmentManager()
+                            .findFragmentByTag("EDITARDB_FRAGMENT_TAG");
+                    fragment.setCurrentItem(startPosition);
+                    break;
+                }
+
+                new Handler().postDelayed(() -> {
+                    Intent intent = EditarDBActivity.Companion.getIntent(getApplicationContext());
+                    intent.putExtra("START_POSITION", startPosition);
+                    startActivity(intent);
+                    finish();
+                }, DRAWER_DELAY);
                 break;
-            case 10://Logout
+            case 12://Logout
                 AlertDialog dialog = new AlertDialog.Builder(this)
                         .setTitle(R.string.cerrar_sesion)
                         .setMessage(R.string.cerrar_sesion_msg)
                         .setPositiveButton("Si", (dialogInterface, i) -> {
-                            getApplicationContext()
-                                    .getSharedPreferences(Constants.PREFERENCE_NAME, Context.MODE_PRIVATE)
-                                    .edit().putString("PREF_KEY_ACCESS_TOKEN", "").apply();
+                            getSharedPreferences(Constants.PREFERENCE_NAME, Context.MODE_PRIVATE)
+                                    .edit().remove(Constants.PREF_KEY_ACCESS_TOKEN).apply();
                             startActivity(LoginActivity.getIntent(getApplicationContext()));
                             finish();
                         })
@@ -215,7 +225,7 @@ public abstract class BaseDrawerActivity extends MvpAppCompatActivity
                                 .withIdentifier(3)
                                 .withName(R.string.drawer_menu_editar_db)
                                 .withIcon(Octicons.Icon.oct_database)
-                                .withDescription("Editar Tablas de la db")
+                                .withDescription(R.string.editardb_description)
                                 .withSelectable(false)
                                 .withSubItems(
                                         new SecondaryDrawerItem().withIdentifier(4)
@@ -229,7 +239,9 @@ public abstract class BaseDrawerActivity extends MvpAppCompatActivity
                                         new SecondaryDrawerItem().withIdentifier(8)
                                                 .withName(R.string.drawer_menu_profesores_materias),
                                         new SecondaryDrawerItem().withIdentifier(9)
-                                                .withName(R.string.drawer_menu_secciones)
+                                                .withName(R.string.drawer_menu_secciones),
+                                        new SecondaryDrawerItem().withIdentifier(10)
+                                                .withName(R.string.drawer_menu_usuarios)
                                 )
                                 .withIconColor(getResources().getColor(R.color.greenDarken4))
                                 .withTextColor(getResources().getColor(R.color.greenDarken4)),
@@ -239,7 +251,7 @@ public abstract class BaseDrawerActivity extends MvpAppCompatActivity
                                 .withSelectable(false)
                                 .withIconColor(getResources().getColor(R.color.greyDarken4))
                                 .withTextColor(getResources().getColor(R.color.greyDarken4)),
-                        new PrimaryDrawerItem().withIdentifier(10)
+                        new PrimaryDrawerItem().withIdentifier(12)
                                 .withName(R.string.drawer_menu_logout)
                                 .withIcon(Octicons.Icon.oct_sign_out)
                                 .withSelectable(false)
@@ -256,16 +268,20 @@ public abstract class BaseDrawerActivity extends MvpAppCompatActivity
                 .withOnDrawerItemClickListener(this)
                 .build();
         mDrawer.getAdapter().withOnPreClickListener((v, adapter, item, position) -> {
-                            if (item.isSelected()){
-                                mDrawer.closeDrawer();
-                                return true;
-                            }
-                            return false;
-                        });
+            if (item.isSelected()) {
+                mDrawer.closeDrawer();
+                return true;
+            }
+            return false;
+        });
+    }
+
+    public void setSelectionAtPosition(int position, boolean fireOnClick) {
+        mDrawer.setSelectionAtPosition(position, fireOnClick);
     }
 
     @Override
-    public void onError(String message){
+    public void onError(String message) {
         if (message != null)
             showSnakBar(message);
         else
@@ -273,7 +289,7 @@ public abstract class BaseDrawerActivity extends MvpAppCompatActivity
     }
 
     @Override
-    public void onError(@StringRes int resId){
+    public void onError(@StringRes int resId) {
         onError(getString(resId));
     }
 
@@ -298,6 +314,46 @@ public abstract class BaseDrawerActivity extends MvpAppCompatActivity
     @Override
     public void showMessage(@StringRes int resId) {
         showMessage(getString(resId));
+    }
+
+    @Override
+    public void showSuccessMessage(@NotNull String message) {
+        Toasty.success(this, message).show();
+    }
+
+    @Override
+    public void showSuccessMessage(int resId) {
+        showSuccessMessage(getResources().getString(resId));
+    }
+
+    @Override
+    public void showInfoMessage(@NotNull String message) {
+        Toasty.info(this, message).show();
+    }
+
+    @Override
+    public void showInfoMessage(int resId) {
+        showInfoMessage(getResources().getString(resId));
+    }
+
+    @Override
+    public void showWarningMessage(@NotNull String message) {
+        Toasty.warning(this, message).show();
+    }
+
+    @Override
+    public void showWarningMessage(int resId) {
+        showWarningMessage(getResources().getString(resId));
+    }
+
+    @Override
+    public void showErrorMessage(@NotNull String message) {
+        Toasty.error(this, message).show();
+    }
+
+    @Override
+    public void showErrorMessage(int resId) {
+        showMessage(getResources().getString(resId));
     }
 
     private void showSnakBar(String message) {

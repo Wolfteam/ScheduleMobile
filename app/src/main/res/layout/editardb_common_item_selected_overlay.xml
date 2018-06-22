@@ -1,0 +1,8 @@
+<!--Esta view cubre el cardview cuando se cambia su propiedad visibility-->
+<View
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/editardb_common_item_selected_overlay"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/greyDarken4"
+    android:visibility="invisible" />

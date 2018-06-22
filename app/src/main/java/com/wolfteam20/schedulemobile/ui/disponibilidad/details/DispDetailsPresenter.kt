@@ -45,8 +45,8 @@ class DispDetailsPresenter @Inject constructor(
     override fun saveDisponibilidadLocal() {
         dataManager.removeDisponibilidadLocal(mCedula, mIdDia)
         dataManager.removeDisponibilidadDetailsLocal(mCedula)
-        dataManager.saveDisponibilidadLocal(mDispList)
-        dataManager.saveDisponibilidadDetailsLocal(
+        dataManager.addDisponibilidadLocal(mDispList)
+        dataManager.addDisponibilidadDetailsLocal(
             DisponibilidadDetailsDTO(
                 0,
                 mCedula,
@@ -65,16 +65,12 @@ class DispDetailsPresenter @Inject constructor(
         mIdDia = idDia
         compositeDisposable.addAll(
             dataManager.getDisponibilidadDetailsLocal(cedula)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     { details ->
                         mHorasACumplir = details.horasACumplir
                         mHorasAsignadas = details.horasAsignadas
                     }),
             dataManager.getDisponibilidadLocal(cedula, idDia)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     { disp ->
                         mDispList = disp

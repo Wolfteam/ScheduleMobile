@@ -4,11 +4,14 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'io.objectbox'
 
-androidExtensions{
+androidExtensions {
     experimental = true
 }
 
 android {
+    dataBinding {
+        enabled = true
+    }
     compileSdkVersion 27
     defaultConfig {
         applicationId "com.wolfteam20.schedulemobile"
@@ -17,6 +20,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -25,7 +29,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
-            buildConfigField "String", "URLBaseAPI", "\"http://192.168.1.102/ScheduleAPI/\""
+            buildConfigField "String", "URLBaseAPI", "\"http://192.168.10.111:8090/\""
         }
     }
     compileOptions {
@@ -37,8 +41,8 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     //ButterKnife
@@ -56,7 +60,7 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt:0.9.0'
 
     //MaterialDrawer
-    implementation('com.mikepenz:materialdrawer:6.0.2@aar') {
+    implementation("com.mikepenz:materialdrawer:6.0.7@aar"){
         transitive = true
     }
     implementation 'com.mikepenz:octicons-typeface:3.2.0.4@aar'
@@ -96,6 +100,11 @@ dependencies {
     //Toasty
     implementation 'com.github.GrenderG:Toasty:1.2.8'
 
+    //MaterialFabSpeedDial
+    implementation 'com.github.kobakei:MaterialFabSpeedDial:1.1.8'
+
+    //Data Binding Validator
+    implementation 'com.github.Ilhasoft:data-binding-validator:1.0.0'
     //JWTDecode.Android
     //compile 'com.auth0.android:jwtdecode:1.1.1'
 

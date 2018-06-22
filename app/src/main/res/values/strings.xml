@@ -14,11 +14,19 @@
     <string name="save">Guardar</string>
     <string name="yes">Si</string>
     <string name="no">No</string>
+    <string name="active">Activo</string>
+    <string name="inactive">Inactivo</string>
+    <string name="status">Estatus</string>
+    <string name="add">Agregar</string>
+    <string name="edit">Editar</string>
     <string name="delete">Borrar</string>
     <string name="cancelar">Cancelar</string>
     <string name="error">Ocurrio un error</string>
     <string name="no_network">No hay conexion disponible</string>
+    <string name="no_items_selected">No hay items seleccionados</string>
+    <string name="items_deleted">Items borrados correctamente</string>
     <string name="cerrar_sesion">Cerrar Sesion</string>
+    <string name="are_you_sure">¿Esta seguro que desea continuar?</string>
     <string name="cerrar_sesion_msg">¿Esta seguro que desea salir?</string>
     <string name="wrong_username_password">Usuario o clave invalidas</string>
     <string name="no_prof_found">No se encontraron profesores</string>
@@ -28,6 +36,34 @@
     <string name="disp_details_no_records_found">No se encontraron registros</string>
     <string name="disp_details_add_msg">Las horas seleccionadas ya existen o no son validas. Debe haber minimo 2 horas seguidas</string>
     <string name="disp_details_delete">Debe seleccionar al menos una disponibilidad para borrar</string>
+    <string name="aula_created">Aula creada correctamente</string>
+    <string name="aula_deleted">Aula borrada correctamente</string>
+    <string name="aula_updated">Aula actualizada correctamente</string>
+
+    <string name="materia_created">Materia creada correctamente</string>
+    <string name="materia_deleted">Materia borrada correctamente</string>
+    <string name="materia_updated">Materia actualizada correctamente</string>
+
+    <string name="periodo_academico_created">Periodo creado correctamente</string>
+    <string name="periodo_academico_deleted">Periodo borrado correctamente</string>
+    <string name="periodo_academico_updated">Periodo actualizado correctamente</string>
+
+    <string name="profesor_created">Profesor creado correctamente</string>
+    <string name="profesor_deleted">Profesor borrado correctamente</string>
+    <string name="profesor_updated">Profesor actualizado correctamente</string>
+
+    <string name="relacion_created">Relacion creada correctamente</string>
+    <string name="relacion_deleted">Relacion borrada correctamente</string>
+    <string name="relacion_updated">Relacion actualizada correctamente</string>
+
+    <string name="seccion_created">Seccion creada correctamente</string>
+    <string name="seccion_deleted">Seccion borrada correctamente</string>
+    <string name="seccion_updated">Seccion actualizada correctamente</string>
+
+    <string name="usuario_created">Usuario creado correctamente</string>
+    <string name="usuario_deleted">Usuario borrado correctamente</string>
+    <string name="usuario_updated">Usuario actualizado correctamente</string>
+
 
     <!--Main Drawer Options-->
     <string name="drawer_menu_home">Home</string>
@@ -39,6 +75,7 @@
     <string name="drawer_menu_profesores">Profesores</string>
     <string name="drawer_menu_profesores_materias">Profesores Materias</string>
     <string name="drawer_menu_secciones">Secciones</string>
+    <string name="drawer_menu_usuarios">Usuarios</string>
     <string name="drawer_menu_logout">Cerrar Sesion</string>
 
     <!--Login Footer-->
@@ -67,6 +104,25 @@
     <string name="disp_details_guardar">Disponibilidad Guardada</string>
     <string name="disp_details_hora_inicio">Seleccione hora inicio</string>
     <string name="disp_details_hora_fin">Seleccione hora fin</string>
+    <string name="editardb_activity">Editar DB</string>
+    <string name="editardb_description">Editar Tablas de la db</string>
+    <string name="editardb_details_activity">Editar</string>
+    <string name="aulas_nombre">Nombre del aula</string>
+    <string name="aulas_capacidad">Capacidad del aula</string>
+    <string name="aulas_tipo">Tipo de aula</string>
+    <string name="materia_codigo">Codigo</string>
+    <string name="materia_nombre">Nombre asignatura</string>
+    <string name="materia_horas_totales">Horas academicas totales</string>
+    <string name="materia_horas_semanales">Horas academicas semanales</string>
+    <string name="periodo_academico_nombre">Nombre del periodo academico</string>
+    <string name="profesor_nombre">Nombre</string>
+    <string name="profesor_apellido">Apellido</string>
+    <string name="profesor_cedula">Cedula</string>
+    <string name="seccion_numero">Numero de secciones</string>
+    <string name="seccion_alumnos">Cantidad de alumnos</string>
+    <string name="usuario_username">Username</string>
+    <string name="usuario_password">Password</string>
+
 
     <!--Permisos-->
     <string name="permisos_title">Permisos Requeridos</string>

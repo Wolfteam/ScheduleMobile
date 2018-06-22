@@ -1,16 +1,19 @@
 package com.wolfteam20.schedulemobile.data.db;
 
+import com.wolfteam20.schedulemobile.data.db.Repository.DisponibilidadDetailsRepository;
+import com.wolfteam20.schedulemobile.data.db.Repository.DisponibilidadRepository;
 import com.wolfteam20.schedulemobile.data.network.models.DisponibilidadDTO;
-import com.wolfteam20.schedulemobile.data.network.models.DisponibilidadDTO_;
 import com.wolfteam20.schedulemobile.data.network.models.DisponibilidadDetailsDTO;
-import com.wolfteam20.schedulemobile.data.network.models.DisponibilidadDetailsDTO_;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
-import io.objectbox.Box;
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
 /**
@@ -18,102 +21,69 @@ import timber.log.Timber;
  */
 
 public class DbHelper implements DbHelperContract {
-    private Box<DisponibilidadDTO> mDispBox;
-    private Box<DisponibilidadDetailsDTO> mDispDetailsBox;
+    private DisponibilidadRepository mDispRepository;
+    private DisponibilidadDetailsRepository mDispDetailsRepository;
 
     @Inject
-    public DbHelper(Box<DisponibilidadDTO> dispBox,
-                    Box<DisponibilidadDetailsDTO> dispDetailsBox) {
-        mDispBox = dispBox;
-        mDispDetailsBox = dispDetailsBox;
+    public DbHelper(
+            DisponibilidadRepository disponibilidadRepository,
+            DisponibilidadDetailsRepository disponibilidadDetailsRepository) {
+        mDispRepository = disponibilidadRepository;
+        mDispDetailsRepository = disponibilidadDetailsRepository;
+    }
+
+    @Override
+    public void addDisponibilidadLocal(List<DisponibilidadDTO> disponibilidades) {
+        Timber.i("Guardando la disponibilidad");
+        if (disponibilidades != null && disponibilidades.size() > 0)
+            mDispRepository.addRange(disponibilidades);
+    }
+
+    @Override
+    public void addDisponibilidadDetailsLocal(@NotNull DisponibilidadDetailsDTO disponibilidadDetailsDTO) {
+        Timber.i("Guardando el detalle de la disponibilidad");
+        mDispDetailsRepository.add(disponibilidadDetailsDTO);
     }
 
     @Override
     public Observable<List<DisponibilidadDTO>> getDisponibilidadLocal(int cedula) {
         Timber.i("Obteniendo disponibilidad de la cedula: %s", cedula);
-        return Observable.create(subscriber -> {
-            try {
-                List<DisponibilidadDTO> disps = mDispBox.query()
-                        .equal(DisponibilidadDTO_.cedula, cedula)
-                        .build().find();
-                subscriber.onNext(disps);
-                subscriber.onComplete();
-            } catch (Exception e) {
-                Timber.e(e);
-                subscriber.onError(e);
-                subscriber.onComplete();
-            }
-        });
+        return mDispRepository.getByCedula(cedula)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io());
     }
 
     @Override
     public Observable<List<DisponibilidadDTO>> getDisponibilidadLocal(int cedula, int idDia) {
-        Timber.i("Obteniendo disponibilidad de la cedula: "+ cedula + " para el dia: " +idDia);
-        return Observable.create(subscriber -> {
-            try {
-                List<DisponibilidadDTO> disps = mDispBox.query()
-                        .equal(DisponibilidadDTO_.cedula, cedula)
-                        .equal(DisponibilidadDTO_.idDia, idDia)
-                        .build().find();
-                subscriber.onNext(disps);
-                subscriber.onComplete();
-            } catch (Exception e) {
-                Timber.e(e);
-                subscriber.onError(e);
-                subscriber.onComplete();
-            }
-        });
+        Timber.i("Obteniendo disponibilidad de la cedula: " + cedula + " para el dia: " + idDia);
+        return mDispRepository.getByCedulaDia(cedula, idDia)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io());
     }
 
     @Override
     public Observable<DisponibilidadDetailsDTO> getDisponibilidadDetailsLocal(int cedula) {
         Timber.i("Obteniendo el detalle de la disponibilidad de la cedula: %s", cedula);
-        return Observable.create(subscriber -> {
-            try{
-                DisponibilidadDetailsDTO disps = mDispDetailsBox.query()
-                        .equal(DisponibilidadDetailsDTO_.cedula, cedula)
-                        .build().findFirst();
-                subscriber.onNext(disps);
-                subscriber.onComplete();
-            } catch (Exception e){
-                Timber.e(e);
-                subscriber.onError(e);
-                subscriber.onComplete();
-            }
-        });
-    }
-
-    @Override
-    public void saveDisponibilidadLocal(List<DisponibilidadDTO> disponibilidades) {
-        Timber.i("Guardando la disponibilidad");
-        if (disponibilidades != null)
-            mDispBox.put(disponibilidades);
-    }
-
-    @Override
-    public void saveDisponibilidadDetailsLocal(DisponibilidadDetailsDTO disponibilidadDetailsDTO) {
-        Timber.i("Guardando el detalle de la disponibilidad");
-        mDispDetailsBox.put(disponibilidadDetailsDTO);
+        return mDispDetailsRepository.getByCedula(cedula)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io());
     }
 
     @Override
     public void removeDisponibilidadLocal(int cedula) {
         Timber.i("Eliminando la disponibilidad para la cedula:%s", cedula);
-        mDispBox.query().equal(DisponibilidadDTO_.cedula, cedula).build().remove();
+        mDispRepository.removeByCedula(cedula);
     }
 
     @Override
     public void removeDisponibilidadLocal(int cedula, int idDia) {
-        Timber.i("Eliminando disponibilidad de la cedula: "+ cedula + " para el dia: " +idDia);
-        mDispBox.query()
-                .equal(DisponibilidadDTO_.cedula, cedula)
-                .equal(DisponibilidadDTO_.idDia, idDia)
-                .build().remove();
+        Timber.i("Eliminando disponibilidad de la cedula: " + cedula + " para el dia: " + idDia);
+        mDispRepository.removeByCedulaDia(cedula, idDia);
     }
 
     @Override
     public void removeDisponibilidadDetailsLocal(int cedula) {
         Timber.i("Eliminando el detalle de la la disponibilidad para la cedula:%s", cedula);
-        mDispDetailsBox.query().equal(DisponibilidadDetailsDTO_.cedula, cedula).build().remove();
+        mDispDetailsRepository.removeByCedula(cedula);
     }
 }

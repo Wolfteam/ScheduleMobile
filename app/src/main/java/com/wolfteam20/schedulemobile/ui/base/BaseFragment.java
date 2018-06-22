@@ -11,6 +11,8 @@ import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.wolfteam20.schedulemobile.R;
 import com.wolfteam20.schedulemobile.di.components.ActivityComponent;
 
+import org.jetbrains.annotations.NotNull;
+
 import butterknife.Unbinder;
 
 /**
@@ -124,5 +126,45 @@ public abstract class BaseFragment extends MvpAppCompatFragment implements BaseV
     @Override
     public void showMessage(@StringRes int resId) {
         showMessage(getString(resId));
+    }
+
+    @Override
+    public void showSuccessMessage(@NotNull String message) {
+        getCurrentActivityContext().showSuccessMessage(message);
+    }
+
+    @Override
+    public void showSuccessMessage(int resId) {
+        showSuccessMessage(getResources().getString(resId));
+    }
+
+    @Override
+    public void showInfoMessage(@NotNull String message) {
+        getCurrentActivityContext().showInfoMessage(message);
+    }
+
+    @Override
+    public void showInfoMessage(int resId) {
+        showInfoMessage(getResources().getString(resId));
+    }
+
+    @Override
+    public void showWarningMessage(@NotNull String message) {
+        getCurrentActivityContext().showWarningMessage(message);
+    }
+
+    @Override
+    public void showWarningMessage(int resId) {
+        showWarningMessage(getResources().getString(resId));
+    }
+
+    @Override
+    public void showErrorMessage(@NotNull String message) {
+        getCurrentActivityContext().showErrorMessage(message);
+    }
+
+    @Override
+    public void showErrorMessage(int resId) {
+        showMessage(getResources().getString(resId));
     }
 }

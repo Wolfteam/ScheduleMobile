@@ -29,4 +29,11 @@ public class Constants {
     public static final String PLANIF_ACADE_FILENAME = "planificacionAcademica.xlsx";
     public static final String PLANIF_AULAS_FILENAME = "planificacionAulas.xlsx";
     public static final String PLANIF_HORAR_FILENAME = "planificacionHorario.xlsx";
+
+    //Tags usados en editar db y editar db details
+    public static final String ITEM_TAG = "ITEM";
+    public static final String ITEM_ID_TAG = "ID";
+    public static final String ITEM_POSITION_TAG = "POSITION";
+    public static final String ITEM_OPERATION_TAG = "OPERATION";
+    public static final String CURRENT_ITEM_TAG = "CURRENT_ITEM";
 }

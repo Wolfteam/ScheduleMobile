@@ -26,4 +26,9 @@
     <color name="orangeAccent4">#ff6d00</color>
 
     <color name="white">#fff</color>
+
+    <array name="fab_mini_colors">
+        <item>@color/fab_mini_add</item>
+        <item>@color/fab_mini_delete</item>
+    </array>
 </resources>
