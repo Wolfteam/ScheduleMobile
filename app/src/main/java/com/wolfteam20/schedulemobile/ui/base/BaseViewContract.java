@@ -3,7 +3,7 @@ package com.wolfteam20.schedulemobile.ui.base;
 import android.support.annotation.StringRes;
 
 import com.arellomobile.mvp.MvpView;
-import com.arellomobile.mvp.viewstate.strategy.SkipStrategy;
+import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
 import org.jetbrains.annotations.NotNull;
@@ -13,13 +13,13 @@ import org.jetbrains.annotations.NotNull;
  */
 
 public interface BaseViewContract extends MvpView {
-    @StateStrategyType(SkipStrategy.class)
+    @StateStrategyType(OneExecutionStateStrategy.class)
     void hideKeyboard();
 
-    @StateStrategyType(SkipStrategy.class)
+    @StateStrategyType(OneExecutionStateStrategy.class)
     void onError(String message);
 
-    @StateStrategyType(SkipStrategy.class)
+    @StateStrategyType(OneExecutionStateStrategy.class)
     void onError(@StringRes int resId);
 
     /**
@@ -28,33 +28,33 @@ public interface BaseViewContract extends MvpView {
      */
     void openActivityOnTokenExpire();
 
-    @StateStrategyType(SkipStrategy.class)
+    @StateStrategyType(OneExecutionStateStrategy.class)
     void showMessage(String message);
 
-    @StateStrategyType(SkipStrategy.class)
+    @StateStrategyType(OneExecutionStateStrategy.class)
     void showMessage(@StringRes int resId);
 
-    @StateStrategyType(SkipStrategy.class)
+    @StateStrategyType(OneExecutionStateStrategy.class)
     void showSuccessMessage(@NotNull String message);
 
-    @StateStrategyType(SkipStrategy.class)
+    @StateStrategyType(OneExecutionStateStrategy.class)
     void showSuccessMessage(@StringRes int resId);
 
-    @StateStrategyType(SkipStrategy.class)
+    @StateStrategyType(OneExecutionStateStrategy.class)
     void showInfoMessage(@NotNull  String message);
 
-    @StateStrategyType(SkipStrategy.class)
+    @StateStrategyType(OneExecutionStateStrategy.class)
     void showInfoMessage(@StringRes int resId);
 
-    @StateStrategyType(SkipStrategy.class)
+    @StateStrategyType(OneExecutionStateStrategy.class)
     void showWarningMessage(@NotNull String message);
 
-    @StateStrategyType(SkipStrategy.class)
+    @StateStrategyType(OneExecutionStateStrategy.class)
     void showWarningMessage(@StringRes int resId);
 
-    @StateStrategyType(SkipStrategy.class)
+    @StateStrategyType(OneExecutionStateStrategy.class)
     void showErrorMessage(@NotNull String message);
 
-    @StateStrategyType(SkipStrategy.class)
+    @StateStrategyType(OneExecutionStateStrategy.class)
     void showErrorMessage(@StringRes int resId);
 }
