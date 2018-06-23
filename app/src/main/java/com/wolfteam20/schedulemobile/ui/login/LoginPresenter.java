@@ -6,11 +6,14 @@ import com.wolfteam20.schedulemobile.data.DataManagerContract;
 import com.wolfteam20.schedulemobile.data.network.models.TokenDTO;
 import com.wolfteam20.schedulemobile.ui.base.BasePresenter;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+
 import javax.inject.Inject;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
 /**
@@ -32,8 +35,12 @@ public class LoginPresenter extends BasePresenter<LoginViewContract> implements 
             getViewState().onError(R.string.no_network);
             return;
         }
+        Date currentDate = Calendar.getInstance().getTime();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm", Locale.getDefault());
+        String dateFormated = dateFormat.format(currentDate);
+
         getViewState().showLoading();
-        getCompositeDisposable().add(getDataManager().getToken(username, password, true)
+        getCompositeDisposable().add(getDataManager().getToken(username, password, true, dateFormated)
                 .subscribe(response ->
                         {
                             if (response.isSuccessful()) {

@@ -1,6 +1,7 @@
 package com.wolfteam20.schedulemobile.data;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 
 import com.wolfteam20.schedulemobile.data.db.DbHelperContract;
 import com.wolfteam20.schedulemobile.data.network.ApiScheduleContract;
@@ -303,8 +304,11 @@ public class DataManager implements DataManagerContract {
     }
 
     @Override
-    public Observable<Response<TokenDTO>> getToken(String username, String password, Boolean isMobile) {
-        return mApiScheduleContract.getToken(username, password, isMobile);
+    public Observable<Response<TokenDTO>> getToken(@NonNull String username,
+                                                   @NonNull String password,
+                                                   @NonNull Boolean isMobile,
+                                                   @NonNull String currentDate) {
+        return mApiScheduleContract.getToken(username, password, isMobile, currentDate);
     }
 
     @Override

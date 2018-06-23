@@ -51,13 +51,18 @@ public interface ApiScheduleContract {
     /**
      * Obtiene un token que contiene los privilegiso acorde al usuario
      *
-     * @param username Username
-     * @param password Password
+     * @param username    Username
+     * @param password    Password
+     * @param isMobile    Indica si estamos desde un movil
+     * @param currentDate Es la fecha actual del dispositivo
      * @return TokenDTO
      */
     @FormUrlEncoded
     @POST("token")
-    Observable<Response<TokenDTO>> getToken(@Field("username") String username, @Field("password") String password, @Field("isMobile") Boolean isMobile);
+    Observable<Response<TokenDTO>> getToken(@Field("username") @NotNull String username,
+                                            @Field("password") @NotNull String password,
+                                            @Field("isMobile") @NotNull Boolean isMobile,
+                                            @Field("currentDate") @NotNull String currentDate);
 
     /**
      * Obtiene el periodo academico actual

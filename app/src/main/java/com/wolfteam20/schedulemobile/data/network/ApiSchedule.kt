@@ -21,11 +21,12 @@ class ApiSchedule @Inject constructor(@ApplicationContext api: ApiScheduleContra
     private val mApi = api
 
     override fun getToken(
-        username: String?,
-        password: String?,
-        isMobile: Boolean?
+        username: String,
+        password: String,
+        isMobile: Boolean,
+        currentDate: String
     ): Observable<Response<TokenDTO>> {
-        return mApi.getToken(username, password, isMobile)
+        return mApi.getToken(username, password, isMobile, currentDate)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .doOnError(Timber::e)
