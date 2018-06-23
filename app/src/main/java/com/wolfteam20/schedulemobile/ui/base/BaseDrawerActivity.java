@@ -155,8 +155,9 @@ public abstract class BaseDrawerActivity extends MvpAppCompatActivity
                         .setTitle(R.string.cerrar_sesion)
                         .setMessage(R.string.cerrar_sesion_msg)
                         .setPositiveButton("Si", (dialogInterface, i) -> {
-                            getSharedPreferences(Constants.PREFERENCE_NAME, Context.MODE_PRIVATE)
-                                    .edit().remove(Constants.PREF_KEY_ACCESS_TOKEN).apply();
+                            getApplicationContext()
+                                    .getSharedPreferences(Constants.PREFERENCE_NAME, Context.MODE_PRIVATE)
+                                    .edit().clear().apply();
                             startActivity(LoginActivity.getIntent(getApplicationContext()));
                             finish();
                         })

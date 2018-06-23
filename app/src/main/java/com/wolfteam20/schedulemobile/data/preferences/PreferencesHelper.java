@@ -42,10 +42,7 @@ public class PreferencesHelper implements PreferencesHelperContract {
 
     @Override
     public String getToken() {
-        String token = "";
-        if (mPrefs.getString(Constants.PREF_KEY_ACCESS_TOKEN, null) != null)
-            token = mPrefs.getString(Constants.PREF_KEY_ACCESS_TOKEN, null);
-        return token;
+        return mPrefs.getString(Constants.PREF_KEY_ACCESS_TOKEN, "");
     }
 
     @Override

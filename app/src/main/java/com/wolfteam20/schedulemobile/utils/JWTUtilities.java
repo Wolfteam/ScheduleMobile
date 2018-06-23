@@ -11,11 +11,9 @@ import io.jsonwebtoken.Jwts;
 
 public class JWTUtilities {
 
-    private String mToken;
     private Claims mClaims;
 
     public JWTUtilities(String token) {
-        mToken = token;
         mClaims = getTokenClaims(token);
     }
 
